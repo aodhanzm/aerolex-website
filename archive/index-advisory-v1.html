@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AeroLex — AI workflow systems for document-heavy teams</title>
+<meta name="description" content="AeroLex builds practical engagement tracking, meeting-to-execution, and contract review systems for teams whose work doesn't fit standard SaaS. Founded by Noah Zepter." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+
+<!-- ============== TOP ============== -->
+<header class="top">
+  <div class="wrap row">
+    <a href="#top" class="brand" aria-label="AeroLex home">
+      <span class="glyph" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 80 80" fill="none">
+          <path d="M8 8 H20 M8 8 V20 M72 8 H60 M72 8 V20 M8 72 H20 M8 72 V60 M72 72 H60 M72 72 V60"
+                stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+          <text x="40" y="54" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="40" fill="currentColor" font-weight="400">Æ</text>
+        </svg>
+      </span>
+      AEROLEX
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="#problem">Problem</a>
+      <a href="#suite">Product</a>
+      <a href="#consulting">Consulting</a>
+      <a href="about/">About</a>
+      <a href="#contact">Contact</a>
+      <a href="https://demo.aerolex.dev" target="_blank" rel="noopener" style="color:var(--teal); font-weight:500;">Demo ↗</a>
+    </nav>
+    <a class="cta-mini" href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">Book a call →</a>
+  </div>
+</header>
+
+<!-- ============== HERO ============== -->
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="eyebrow"><span class="pulse"></span>AeroLex / AI workflow systems</div>
+        <h1 class="hero-h">
+          AI workflow systems for <em>document-heavy</em> teams.
+        </h1>
+        <p class="hero-sub">
+          AeroLex builds practical engagement tracking, meeting-to-execution, and contract review systems for teams whose work doesn't fit standard SaaS.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">
+            Book an intro call
+            <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 7H12M12 7L7.5 2.5M12 7L7.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a class="btn btn-ghost" href="#suite">See the suite ↓</a>
+        </div>
+      </div>
+
+      <aside class="hero-right">
+        <div class="product-card" aria-label="Command Center preview">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <figure>
+            <img class="shot" src="assets/command-center-preview.png" alt="Command Center engagement dashboard preview" />
+            <figcaption>
+              <span class="status"><span class="dot"></span>Command Center · in active build</span>
+              <span class="label-r">Wave 01 / 04</span>
+            </figcaption>
+          </figure>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROBLEM / WORKBENCH ============== -->
+<section class="bench" id="problem">
+  <div class="wrap">
+    <div class="section-head" style="margin-bottom: 32px;">
+      <div class="tag">§ 02 — The problem</div>
+      <h2 class="heading">Real work scatters across email, meetings, contracts, and Slack. The <em>synthesis layer</em> doesn't exist yet.</h2>
+    </div>
+    <div class="bench-frame reveal">
+      <div class="bench-bar">
+        <div class="label">
+          <span class="dots"><span></span><span></span><span></span></span>
+          aerolex / workbench.diagram
+        </div>
+        <div class="ts" id="ts">— SYNCED · AUTO</div>
+      </div>
+
+      <div class="bench-grid">
+
+        <!-- LEFT: messy inputs -->
+        <div class="bench-col" data-col="inputs">
+          <div class="col-head">
+            <div class="name">Inputs · scattered</div>
+            <div class="num">5 sources</div>
+          </div>
+
+          <div class="doc tilt-1">
+            <span class="src">Contracts</span>
+            <span class="ts">— v3.2.docx</span>
+            <div class="ttl">MSA — Walden &amp; Pierce</div>
+            <div class="lines"><i></i><i></i><i></i></div>
+            <span class="scribble">redline?</span>
+          </div>
+
+          <div class="doc tilt-2">
+            <span class="src">Email</span>
+            <span class="ts">— THU 14:08</span>
+            <div class="ttl">Re: scope question — needs context from Q1 thread</div>
+            <div class="lines"><i></i><i></i></div>
+          </div>
+
+          <div class="doc tilt-3">
+            <span class="src">Meeting notes</span>
+            <span class="ts">— 04 / 22</span>
+            <div class="ttl">Discovery call — partner only attended last 12 min</div>
+            <div class="lines"><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="doc tilt-4">
+            <span class="src">Client files</span>
+            <span class="ts">— SHARED</span>
+            <div class="ttl">/clients/walden/2024-Q4/...</div>
+            <div class="lines"><i></i><i></i></div>
+          </div>
+
+          <div class="doc tilt-5">
+            <span class="src">Project update</span>
+            <span class="ts">— SLACK</span>
+            <div class="ttl">"Where did we land on the indemnity carve-out?"</div>
+            <div class="lines"><i></i><i></i></div>
+          </div>
+        </div>
+
+        <!-- MIDDLE: AeroLex layer -->
+        <div class="bench-col" data-col="layer">
+          <div class="col-head">
+            <div class="name">AeroLex layer</div>
+            <div class="num">workflow.run</div>
+          </div>
+
+          <div class="layer">
+            <div class="layer-title">
+              <div class="t">Workflow runtime</div>
+              <div class="badge">Active</div>
+            </div>
+            <div class="steps" id="steps">
+              <div class="step"><span class="n">01</span><span class="lbl">Clean<span>/ normalize sources</span></span><span class="stat"></span></div>
+              <div class="step"><span class="n">02</span><span class="lbl">Structure<span>/ extract clauses, parties, dates</span></span><span class="stat"></span></div>
+              <div class="step"><span class="n">03</span><span class="lbl">Retrieve<span>/ pull prior precedent</span></span><span class="stat"></span></div>
+              <div class="step"><span class="n">04</span><span class="lbl">Draft<span>/ proposed redlines &amp; brief</span></span><span class="stat"></span></div>
+              <div class="step idle"><span class="n">05</span><span class="lbl">Review<span>/ partner sign-off</span></span><span class="stat"></span></div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:10.5px; color:var(--ink-mute); letter-spacing:0.06em;">
+            <span>HUMAN-IN-THE-LOOP</span>
+            <span>SOURCE TRACEABILITY · ON</span>
+          </div>
+        </div>
+
+        <!-- RIGHT: usable outputs -->
+        <div class="bench-col" data-col="outputs">
+          <div class="col-head">
+            <div class="name">Outputs · usable</div>
+            <div class="num">5 artifacts</div>
+          </div>
+
+          <!-- Redlined contract -->
+          <div class="out">
+            <div class="head">
+              <div class="ttl">Redlined contract</div>
+              <span class="chip flag">2 flags</span>
+            </div>
+            <div class="redline">
+              Indemnification shall apply <s>without limitation</s> <ins>subject to §8.4 caps</ins>.
+              <span class="note">— matches Walden &amp; Pierce precedent (2023, §8.4)</span>
+            </div>
+          </div>
+
+          <!-- Project status dashboard -->
+          <div class="out">
+            <div class="head">
+              <div class="ttl">Project status</div>
+              <span class="chip ok">on track</span>
+            </div>
+            <div class="dash-row"><span>Discovery</span><div class="dash-bar"><i style="width:100%"></i></div><span class="pct">100%</span></div>
+            <div class="dash-row"><span>Drafting</span><div class="dash-bar"><i style="width:62%"></i></div><span class="pct">62%</span></div>
+            <div class="dash-row"><span>Partner review</span><div class="dash-bar"><i style="width:18%"></i></div><span class="pct">18%</span></div>
+          </div>
+
+          <!-- Client brief -->
+          <div class="out">
+            <div class="head">
+              <div class="ttl">Client brief</div>
+              <span class="chip ok">ready</span>
+            </div>
+            <div class="brief-lines"><i></i><i></i><i></i><i></i></div>
+          </div>
+
+          <!-- Follow-up draft -->
+          <div class="out">
+            <div class="head">
+              <div class="ttl">Follow-up draft</div>
+              <span class="chip review">needs review</span>
+            </div>
+            <div style="font-family:var(--serif); font-size:12.5px; line-height:1.45; color:var(--ink);">
+              "Sharing the redlined MSA with §8.4 reconciled. Open question on the indemnity carve-out — copying Maya."
+            </div>
+          </div>
+
+          <!-- Action log -->
+          <div class="out" style="margin-bottom:0;">
+            <div class="head">
+              <div class="ttl">Action log</div>
+              <span class="chip ok">3 / 4</span>
+            </div>
+            <div class="actions-list">
+              <div class="action-i done"><span class="check"></span><span>Reconcile §8.4</span><span class="who">NZ</span></div>
+              <div class="action-i done"><span class="check"></span><span>Draft client brief</span><span class="who">SYS</span></div>
+              <div class="action-i done"><span class="check"></span><span>Send follow-up</span><span class="who">NZ</span></div>
+              <div class="action-i"><span class="check"></span><span>Partner sign-off</span><span class="who">JM</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PRODUCT SUITE ============== -->
+<section class="workflows" id="suite">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">§ 03 — Product suite</div>
+      <h2 class="heading">Four waves, built to <em>compound</em>. Each one ships standalone.</h2>
+    </div>
+
+    <div class="wf-grid">
+      <article class="wf-card">
+        <div class="num">Wave 01 · <span style="color:var(--teal);">in build</span></div>
+        <div>
+          <h3><a href="command-center/" style="color:inherit; border-bottom: 1px solid var(--line);">Command Center →</a></h3>
+          <p>Real-time engagement visibility with assignment dispatch. Partners see every active engagement on one screen — overdue, stalled, on-track — and dispatch work straight from it. Consultants acknowledge in one tap.</p>
+        </div>
+        <div class="footer">
+          <span class="pill signal">engagement tracking</span>
+          <span class="pill">dispatch + ack</span>
+          <span class="pill">workload view</span>
+        </div>
+      </article>
+
+      <article class="wf-card">
+        <div class="num">Wave 02 · roadmap</div>
+        <div>
+          <h3>Integrations &amp; Email Agent</h3>
+          <p>Meet teams where they already work. Slack and Teams notifications route Command Center assignments into your existing chat. The email agent reads inbound mail, classifies by engagement, and extracts action items for review.</p>
+        </div>
+        <div class="footer">
+          <span class="pill signal">slack / teams</span>
+          <span class="pill flag">email triage</span>
+          <span class="pill">action extraction</span>
+        </div>
+      </article>
+
+      <article class="wf-card">
+        <div class="num">Wave 03 · roadmap</div>
+        <div>
+          <h3>Meeting Pipeline</h3>
+          <p>Meeting-to-execution pipeline. Transcript in, structured minutes and assigned action items out. Dependency chains flag which items are blocked, by what, and surface them when the blocker clears.</p>
+        </div>
+        <div class="footer">
+          <span class="pill signal">transcript ingest</span>
+          <span class="pill">action dispatch</span>
+          <span class="pill">dependency graph</span>
+        </div>
+      </article>
+
+      <article class="wf-card">
+        <div class="num">Wave 04 · roadmap</div>
+        <div>
+          <h3>Intelligence &amp; Contract Review</h3>
+          <p>AI contract review with extracted dates, values, and flagged clauses. Cross-engagement pattern analysis. Knowledge search across firm data — "what did we tell this client about pricing two years ago?"</p>
+        </div>
+        <div class="footer">
+          <span class="pill">contract extraction</span>
+          <span class="pill signal">knowledge search</span>
+          <span class="pill flag">redline review</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CONSULTING ============== -->
+<section class="approach" id="consulting">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">§ 04 — Consulting</div>
+      <h2 class="heading">Process audits and custom builds for workflows <em>beyond the standard waves</em>.</h2>
+    </div>
+
+    <div style="max-width: 64ch;">
+      <p style="font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 18px;">
+        AeroLex runs a consulting practice alongside the product suite, for firms whose workflow pain doesn't map cleanly to Command Center, Email Agent, Meeting Pipeline, or Contract Review. Every engagement begins by documenting how the operation actually runs at the level a partner doesn't see day to day. Then identifying the single change that resolves the actual constraint without disturbing what already functions.
+      </p>
+      <p style="font-size: 16px; line-height: 1.65; color: var(--ink-soft); margin: 0;">
+        Project-based, scoped to one workflow per engagement. Capped at two concurrent engagements.
+      </p>
+    </div>
+
+    <div class="ap-note" style="margin-top: 36px; max-width: 64ch;">
+      <span class="lbl">Engagement note</span>
+      <p>Most consulting engagements run four to ten weeks and ship a single system the team uses on Monday. If a custom build generalizes into a product feature, it joins the roadmap.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FINAL CTA ============== -->
+<section class="final" id="contact">
+  <div class="wrap">
+    <div class="final-card">
+      <div class="final-eyebrow"><span class="pulse"></span>§ 05 — Contact</div>
+      <h2>Have a workflow that keeps stealing <em>senior time</em>?</h2>
+      <p>Book a call below, or email Noah directly. Twenty minutes, no slides.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">
+          Book an intro call
+          <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7H12M12 7L7.5 2.5M12 7L7.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="btn btn-ghost" href="mailto:noah@aerolex.dev">noah@aerolex.dev</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============== FOOT ============== -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="#top" class="brand">
+          <span class="glyph" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+              <path d="M8 8 H20 M8 8 V20 M72 8 H60 M72 8 V20 M8 72 H20 M8 72 V60 M72 72 H60 M72 72 V60"
+                    stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+              <text x="40" y="54" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="40" fill="currentColor" font-weight="400">Æ</text>
+            </svg>
+          </span>
+          AEROLEX
+        </a>
+        <p style="margin:14px 0 0; font-size:13px; color:var(--ink-soft); max-width: 30ch;">
+          AI workflow systems for document-heavy teams.
+        </p>
+      </div>
+      <div>
+        <h5>Site</h5>
+        <ul>
+          <li><a href="#problem">Problem</a></li>
+          <li><a href="#suite">Product suite</a></li>
+          <li><a href="command-center/">Command Center</a></li>
+          <li><a href="#consulting">Consulting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>About</h5>
+        <ul>
+          <li><a href="about/">About Noah →</a></li>
+          <li><a href="https://www.linkedin.com/in/noahzepter/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li><a href="https://substack.com/@aodhanizm" target="_blank" rel="noopener">Substack ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:noah@aerolex.dev">noah@aerolex.dev</a></li>
+          <li><a href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">Book a call ↗</a></li>
+          <li><a href="https://demo.aerolex.dev" target="_blank" rel="noopener">Live demo ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 AEROLEX · Built by <a href="about/" style="color:inherit; border-bottom:1px solid var(--line);">Noah Zepter</a></span>
+      <span id="footts">— LAST SYNC · 09 MAY 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Live-ish timestamp on the workbench
+  (function(){
+    var el = document.getElementById('ts');
+    if (!el) return;
+    function pad(n){return n<10?'0'+n:n;}
+    function tick(){
+      var d = new Date();
+      var s = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+      el.textContent = '— SYNCED · ' + s + ' UTC' + (-d.getTimezoneOffset()/60>=0?'+':'') + (-d.getTimezoneOffset()/60);
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+
+  // Reveal on scroll
+  (function(){
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function(e){ e.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    els.forEach(function(e){ io.observe(e); });
+  })();
+
+  // Cycle the active workflow step (subtle pulse on the runtime)
+  (function(){
+    var steps = document.querySelectorAll('#steps .step');
+    if (!steps.length) return;
+    var i = 0;
+    setInterval(function(){
+      steps.forEach(function(s, idx){
+        s.classList.toggle('idle', idx > i);
+      });
+      i = (i + 1) % (steps.length + 1);
+    }, 1600);
+  })();
+
+  // Smooth scroll for in-page anchors
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href');
+      if (id.length < 2) return;
+      var t = document.querySelector(id);
+      if (!t) return;
+      e.preventDefault();
+      window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 56, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

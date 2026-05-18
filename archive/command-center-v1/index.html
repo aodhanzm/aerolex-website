@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Command Center — AeroLex</title>
+<meta name="description" content="Real-time engagement visibility with assignment dispatch. Partners see every active engagement on one screen and dispatch work straight from it. Wave 1 of the AeroLex product suite, currently in active build." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+
+<!-- ============== TOP ============== -->
+<header class="top">
+  <div class="wrap row">
+    <a href="../" class="brand" aria-label="AeroLex home">
+      <span class="glyph" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 80 80" fill="none">
+          <path d="M8 8 H20 M8 8 V20 M72 8 H60 M72 8 V20 M8 72 H20 M8 72 V60 M72 72 H60 M72 72 V60"
+                stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+          <text x="40" y="54" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="40" fill="currentColor" font-weight="400">Æ</text>
+        </svg>
+      </span>
+      AEROLEX
+    </a>
+    <nav class="primary" aria-label="Primary">
+      <a href="../#problem">Problem</a>
+      <a href="../#suite">Product</a>
+      <a href="../#consulting">Consulting</a>
+      <a href="../about/">About</a>
+      <a href="../#contact">Contact</a>
+      <a href="https://demo.aerolex.dev" target="_blank" rel="noopener" style="color:var(--teal); font-weight:500;">Demo ↗</a>
+    </nav>
+    <a class="cta-mini" href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">Book a call →</a>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section class="sub-hero">
+  <div class="wrap">
+    <div class="crumb"><a href="../">AeroLex</a> &nbsp;/&nbsp; <a href="../#suite">Product suite</a> &nbsp;/&nbsp; Command Center</div>
+    <h1>Command Center.</h1>
+    <p class="lede">
+      Real-time engagement visibility with assignment dispatch. Partners see every active engagement on one screen (who's on it, what's overdue, what's stalled) and turn the dashboard into how work gets <em style="font-style: italic; color: var(--teal);">assigned, acknowledged, and closed</em>.
+    </p>
+
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">
+            See it for your firm
+            <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 7H12M12 7L7.5 2.5M12 7L7.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a class="btn btn-ghost" href="https://demo.aerolex.dev" target="_blank" rel="noopener">Open the demo →</a>
+        </div>
+        <p style="margin-top: 32px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink-mute);">
+          Wave 01 / 04 &nbsp;·&nbsp; <span style="color: var(--teal);">in active build</span> &nbsp;·&nbsp; ETA Q3 2026
+        </p>
+      </div>
+
+      <aside class="hero-right">
+        <div class="product-card" aria-label="Command Center preview">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <figure>
+            <img class="shot" src="../assets/command-center-preview.png" alt="Command Center engagement dashboard preview" />
+            <figcaption>
+              <span class="status"><span class="dot"></span>Engagement Status · live demo</span>
+              <span class="label-r">demo.aerolex.dev</span>
+            </figcaption>
+          </figure>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section style="padding: 64px 0 24px;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">§ 01 — The problem</div>
+      <h2 class="heading">Engagement state lives in five places at once. <em>None of them talks to the others.</em></h2>
+    </div>
+    <div style="max-width: 64ch;">
+      <p style="font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 16px;">
+        In a firm of 10, 20, or 50 people, engagement state lives across Slack threads, partner inboxes, meeting notes nobody filed, half-updated spreadsheets, and individual heads. Partners reconstruct it by asking the same five questions every Monday.
+      </p>
+      <p style="font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0 0 16px;">
+        Project management software solves a different problem. It tracks tasks. <em style="font-style: italic; color: var(--teal);">Engagement health</em> is a separate layer that PM software was never built for. It tells you what's open; it doesn't tell you what's stalled, who hasn't acknowledged an assignment, or what's blocked waiting on something else.
+      </p>
+      <p style="font-size: 17px; line-height: 1.65; color: var(--ink-2); margin: 0;">
+        Command Center is built for the second question. It assumes you already have email, Slack, and a calendar, and it routes through them instead of replacing them.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section style="padding: 56px 0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">§ 02 — What it does</div>
+      <h2 class="heading">What Command Center does, <em>in plain terms</em>.</h2>
+    </div>
+
+    <div class="feat-grid">
+      <div class="feat">
+        <div class="feat-tag">§ 02.1 &nbsp;Visibility</div>
+        <div>
+          <h3>See every active engagement, with status auto-calculated.</h3>
+          <p>Engagement state is computed from real activity: last action, next deadline, hand-off log. The status is generated from observable signals rather than partner self-reports. Three states surface immediately:</p>
+          <ul>
+            <li><strong>AT_RISK</strong>: next action overdue by 48+ hours</li>
+            <li><strong>STALLED</strong>: no activity in 7+ days</li>
+            <li><strong>ACTIVE</strong>: on track</li>
+          </ul>
+          <p>Partners see this in five seconds without chasing anyone.</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-tag">§ 02.2 &nbsp;Dispatch</div>
+        <div>
+          <h3>Assign work, get acknowledgment, track follow-through.</h3>
+          <p>Open an engagement, create a next action, assign it. Notification routes to the consultant via email (Wave 1) or Slack/Teams (Wave 2a) with full engagement context attached. The consultant responds with one of five options:</p>
+
+          <div class="response-table">
+            <div class="row"><div>Accept</div><div>I own this, starting now.</div></div>
+            <div class="row"><div>Accept (need help)</div><div>I'll do it but need someone else involved.</div></div>
+            <div class="row"><div>Accept (later date)</div><div>I'll take it, just not by that deadline. Here's when.</div></div>
+            <div class="row"><div>Decline</div><div>I can't or shouldn't own this. One sentence why.</div></div>
+            <div class="row"><div>Request call</div><div>I need to talk before I accept. Pause this item.</div></div>
+          </div>
+
+          <p style="margin-top: 18px;">All responses log to the dashboard. Nothing sits in limbo silently.</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-tag">§ 02.3 &nbsp;Workload</div>
+        <div>
+          <h3>One page showing who has capacity, before you assign.</h3>
+          <p>Every consultant, their active assignments, and their combined allocation percentage on one screen. Partners see at a glance who has room before dispatching work, instead of finding out after the fact that someone is at 130%.</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-tag">§ 02.4 &nbsp;Status checks</div>
+        <div>
+          <h3>Async standups with one-tap responses.</h3>
+          <p>Admin sends a structured prompt. Consultant taps once.</p>
+          <p style="font-family: var(--serif); font-style: italic; color: var(--ink-2); padding: 14px 18px; background: var(--paper); border-left: 2px solid var(--teal); margin: 14px 0;">
+            <strong style="font-style: normal;">Status check: TechCorp Operations Audit</strong><br/>
+            <span style="font-family: var(--mono); font-style: normal; font-size: 11px; color: var(--ink-mute);">Sent by Sarah Chen · Tuesday 9:00am</span><br/>
+            [On track] &nbsp;[Need more time] &nbsp;[Blocked] &nbsp;[Need to talk]
+          </p>
+          <p>If "Blocked" or "Need to talk" → one-sentence follow-up. Admin sees aggregated: <em style="font-style: italic; color: var(--teal);">"4 of 5 on track, 1 blocked: Elena, waiting on client data delivery."</em></p>
+          <p style="font-size: 14px; color: var(--ink-soft); margin-top: 12px;"><strong>Design rule:</strong> One tap for the common answer. One sentence max for anything else. If it requires more, it becomes a call.</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-tag">§ 02.5 &nbsp;Dependencies</div>
+        <div>
+          <h3>Action items that know what's blocking them.</h3>
+          <p>Mark Action 3 as blocked by Actions 1 and 2. The system enforces the chain. Blocked assignees are notified but told not to start. When the blocker clears, downstream assignees are auto-notified.</p>
+          <p>Admins see the full dependency graph before dispatching from a meeting, so nothing gets sent to someone who can't actually start.</p>
+        </div>
+      </div>
+
+      <div class="feat">
+        <div class="feat-tag">§ 02.6 &nbsp;Contract ingest</div>
+        <div>
+          <h3>Upload a PDF. Skip the form.</h3>
+          <p>Drop in a signed contract. Claude extracts client name, engagement type, contract value, start and end dates, and key deliverables, then pre-populates the New Engagement form. Consultant reviews and confirms before saving.</p>
+          <p style="font-size: 14px; color: var(--ink-soft);">Contract upload is a fast lane. The manual form is always available.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO USES IT -->
+<section style="padding: 56px 0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="tag">§ 03 — Who uses it</div>
+      <h2 class="heading">Designed so only <em>partners</em> open the dashboard.</h2>
+    </div>
+
+    <div class="wf-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+      <article class="wf-card">
+        <div class="num">Managing Partner</div>
+        <div>
+          <h3>Lives in the dashboard.</h3>
+          <p>Morning check: what's at risk. Dispatches assignments. Reviews status check responses. Sees workload before assigning.</p>
+        </div>
+        <div class="footer">
+          <span class="pill signal">primary user</span>
+        </div>
+      </article>
+
+      <article class="wf-card">
+        <div class="num">Consultant</div>
+        <div>
+          <h3>Never has to open the dashboard.</h3>
+          <p>Receives notifications. Taps acknowledgments. Logs actions on completion. Participates via whatever tool they're already in.</p>
+        </div>
+        <div class="footer">
+          <span class="pill">notification-only</span>
+        </div>
+      </article>
+
+      <article class="wf-card">
+        <div class="num">Analyst</div>
+        <div>
+          <h3>Same as consultant.</h3>
+          <p>Receives, acknowledges, executes. Doesn't need the dashboard. The system meets them where they already work.</p>
+        </div>
+        <div class="footer">
+          <span class="pill">notification-only</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- POSITIONING CLARIFIER -->
+<section style="padding: 32px 0;">
+  <div class="wrap">
+    <div style="max-width: 64ch; padding: 24px 28px; background: var(--paper); border: 1px solid var(--line); border-left: 2px solid var(--teal);">
+      <p style="font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--teal); margin: 0 0 10px;">A note on positioning</p>
+      <p style="font-size: 15.5px; line-height: 1.65; color: var(--ink-2); margin: 0;">
+        Command Center sits above your existing tools, not in place of them. Tasks themselves stay wherever you already manage them. Client relationships live inside engagements rather than a separate CRM. The dashboard plugs into Slack, Teams, and email so consultants keep working in the tools they already use.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO + VIDEO CTA -->
+<section style="padding: 56px 0;">
+  <div class="wrap">
+    <div class="sub-cta">
+      <div>
+        <div class="lbl">Try it</div>
+        <h3>The live demo shows the visibility layer in action.</h3>
+        <p style="font-size: 14.5px; color: var(--ink-soft); margin: 8px 0 0; max-width: 56ch;">
+          The current demo at demo.aerolex.dev is the read-only visibility tool, the foundation Command Center is built on. The dispatch and acknowledgment layer is in active build.
+        </p>
+      </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a class="btn btn-primary" href="https://demo.aerolex.dev" target="_blank" rel="noopener">Open the demo →</a>
+        <a class="btn btn-ghost" href="#" aria-disabled="true" style="opacity: 0.5; pointer-events: none;">2-min video soon</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <div class="final-card">
+      <div class="final-eyebrow"><span class="pulse"></span>Talk to Noah</div>
+      <h2>Walk through Command Center for <em>your firm</em>.</h2>
+      <p>Twenty minutes. Bring one workflow that's been costing senior hours.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">
+          Book an intro call
+          <svg class="arrow" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2 7H12M12 7L7.5 2.5M12 7L7.5 11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="btn btn-ghost" href="mailto:noah@aerolex.dev">noah@aerolex.dev</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <a href="../" class="brand">
+          <span class="glyph" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 80 80" fill="none">
+              <path d="M8 8 H20 M8 8 V20 M72 8 H60 M72 8 V20 M8 72 H20 M8 72 V60 M72 72 H60 M72 72 V60"
+                    stroke="currentColor" stroke-width="4" stroke-linecap="square"/>
+              <text x="40" y="54" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="40" fill="currentColor" font-weight="400">Æ</text>
+            </svg>
+          </span>
+          AEROLEX
+        </a>
+        <p style="margin:14px 0 0; font-size:13px; color:var(--ink-soft); max-width: 30ch;">
+          AI workflow systems for document-heavy teams.
+        </p>
+      </div>
+      <div>
+        <h5>Site</h5>
+        <ul>
+          <li><a href="../#problem">Problem</a></li>
+          <li><a href="../#suite">Product suite</a></li>
+          <li><a href="../command-center/">Command Center</a></li>
+          <li><a href="../#consulting">Consulting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>About</h5>
+        <ul>
+          <li><a href="../about/">About Noah →</a></li>
+          <li><a href="https://www.linkedin.com/in/noahzepter/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li><a href="https://substack.com/@aodhanizm" target="_blank" rel="noopener">Substack ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:noah@aerolex.dev">noah@aerolex.dev</a></li>
+          <li><a href="https://calendly.com/nzepter/30min" target="_blank" rel="noopener">Book a call ↗</a></li>
+          <li><a href="https://demo.aerolex.dev" target="_blank" rel="noopener">Live demo ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 AEROLEX · Built by <a href="../about/" style="color:inherit; border-bottom:1px solid var(--line);">Noah Zepter</a></span>
+      <span>EST. 2026</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
