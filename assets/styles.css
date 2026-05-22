@@ -1360,3 +1360,84 @@ footer.foot {
   color: var(--ink-soft);
   margin-top: 2px;
 }
+
+/* ============== Consent banner ============== */
+#aerolex-consent {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(20,24,28,0.04), 0 18px 48px -20px rgba(20,24,28,0.32);
+  border-radius: 4px;
+}
+#aerolex-consent .cb-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 18px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+#aerolex-consent .cb-msg {
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--ink-2);
+  margin: 0;
+  flex: 1;
+}
+#aerolex-consent .cb-link {
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+}
+#aerolex-consent .cb-link:hover {
+  border-bottom-color: var(--ink);
+}
+#aerolex-consent .cb-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+#aerolex-consent .cb-btn {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+  border: 1px solid transparent;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+#aerolex-consent .cb-decline {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+#aerolex-consent .cb-decline:hover {
+  border-color: var(--ink);
+}
+#aerolex-consent .cb-accept {
+  background: var(--ink);
+  color: var(--bg);
+}
+#aerolex-consent .cb-accept:hover {
+  background: var(--teal-deep);
+}
+@media (max-width: 640px) {
+  #aerolex-consent .cb-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+  #aerolex-consent .cb-actions {
+    justify-content: flex-end;
+  }
+}
