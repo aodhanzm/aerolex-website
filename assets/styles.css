@@ -153,6 +153,21 @@ nav.primary a.icon-link:hover { color: var(--teal); }
   color: var(--ink);
   border-color: var(--ink);
 }
+.lang-toggle-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lang-toggle.is-current {
+  color: var(--ink);
+  border-color: var(--ink);
+  cursor: default;
+  background: var(--bg-deep);
+}
+.lang-toggle.is-current:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
 .lang-toggle .flag {
   display: inline-block;
   width: 16px;
