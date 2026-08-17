@@ -62,7 +62,7 @@
       real feeling of not having the word you need yet.
     </p>
 
-    <a class="play" href="https://play.aerolex.dev/">Play in your browser</a>
+    <a class="play" id="play" href="https://play.aerolex.dev/">Play in your browser</a>
     <span class="play-note">
       Free while it is in testing. Works best on a laptop or desktop. Making an account needs an
       invite code. You can also play without one and skip the account entirely.
@@ -164,6 +164,20 @@
 
 </main>
 
+<!-- ============== THE HANDOFF ==============
+     Covers the dead moment between pressing Play and the game's own page appearing.
+
+     ⚠ WHY IT IS NEEDED AT ALL: pressing Play goes to a different address, and browsers keep
+     showing THIS page until the next one has painted. So for a beat after clicking, the site sits
+     there looking like the click did nothing - which is exactly when someone clicks again.
+
+     Styled to match the game's own opening screen on purpose, so the two waits read as one
+     continuous handoff rather than as a website and then a separate program. -->
+<div id="handoff" aria-hidden="true">
+  <div class="mark">THE SCENE</div>
+  <p>starting…</p>
+</div>
+
 <footer class="foot">
   <div class="wrap">
     <span>© 2026 · The Scene is made by <a href="mailto:noah@aerolex.dev">Noah Zepter</a></span>
@@ -174,6 +188,32 @@
     </nav>
   </div>
 </footer>
+
+<script>
+  // ---- The handoff screen ----
+  (function () {
+    var btn = document.getElementById('play');
+    var screen = document.getElementById('handoff');
+    if (!btn || !screen) return;
+
+    btn.addEventListener('click', function (e) {
+      // Leave the normal behaviour alone for anyone deliberately opening it elsewhere - a
+      // middle-click or ctrl-click means "new tab", and this page is not going anywhere, so
+      // covering it would be wrong.
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+
+      screen.classList.add('on');
+      // The browser still handles the navigation itself; this only paints over the wait.
+    });
+
+    // ⚠ HIDE IT AGAIN ON THE WAY BACK. Browsers restore a page from memory when you press Back,
+    // exactly as you left it - which would mean returning from the game to a site frozen on
+    // "starting…" forever, with no way to tell it is not still loading.
+    window.addEventListener('pageshow', function () {
+      screen.classList.remove('on');
+    });
+  })();
+</script>
 
 </body>
 </html>

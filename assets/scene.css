@@ -322,6 +322,45 @@ ul.plain li:last-child { border-bottom: none; }
 }
 
 /* ---------------------------------------------------------------------------------------
+   THE HANDOFF SCREEN
+   Shown the instant Play is pressed, covering the gap until the game's page paints.
+   Matches the game's own opening screen so the two waits feel like one.
+   --------------------------------------------------------------------------------------- */
+#handoff {
+  position: fixed;
+  inset: 0;
+  z-index: 100;   /* above everything, including the cookie banner */
+
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--ground);
+  text-align: center;
+}
+
+/* Only shown once Play is actually pressed. Using display rather than opacity means it cannot
+   swallow clicks while invisible. */
+#handoff.on { display: flex; }
+
+#handoff .mark {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+
+#handoff p {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink-quiet);
+}
+
+/* ---------------------------------------------------------------------------------------
    THE PRIVACY PAGE
    Long-form text, reusing everything above. Its own narrower column, because a wall of legal
    prose at the full page width is unreadable.
