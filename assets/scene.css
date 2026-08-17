@@ -1,0 +1,343 @@
+/* =========================================================================================
+   aerolex.dev - The Scene launchpad.
+
+   This is a NEW stylesheet, deliberately separate from styles.css. styles.css belongs to the
+   consulting site, which is archived rather than deleted - keeping them apart means the old site
+   can be restored one day without untangling two designs out of one file.
+
+   The palette matches the game's loading screen on purpose, so pressing Play does not feel like
+   leaving one product for another.
+
+   ⚠ The art chat owns how the GAME looks. This is the website, and it is placeholder-grade on
+   purpose: readable, dark, one accent, no invented art direction.
+   ========================================================================================= */
+
+:root {
+  --ground:      #0d0a14;   /* the page */
+  --ground-2:    #14101d;   /* panels sitting on the page */
+  --ink:         #efeaf6;   /* headings */
+  --ink-soft:    #b3a9c7;   /* body text */
+  --ink-quiet:   #6d6485;   /* labels, captions, footer */
+  --accent:      #9760e6;   /* the Play button and anything that wants a click */
+  --accent-deep: #7b45cc;
+  --line:        #241c33;   /* hairlines between sections */
+
+  --serif: "Georgia", "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One shared column width, so every section lines up down the page without each one
+   inventing its own margins. */
+.wrap {
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+a { color: var(--ink); }
+
+/* ---------------------------------------------------------------------------------------
+   HEADER
+   --------------------------------------------------------------------------------------- */
+.top {
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+}
+
+.top .wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.mark {
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.34em;
+  text-indent: 0.34em;   /* letter-spacing pads only the right edge; this re-balances it */
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.mark-sub {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--ink-quiet);
+}
+
+/* ---------------------------------------------------------------------------------------
+   HERO
+   --------------------------------------------------------------------------------------- */
+.hero { padding: 88px 0 72px; }
+
+.hero h1 {
+  font-family: var(--serif);
+  /* Scales with the window: big enough to carry the page on a laptop, never wide enough to
+     overflow a narrow one. The middle number is the size; the outer two are the limits. */
+  font-size: clamp(34px, 6vw, 58px);
+  line-height: 1.12;
+  color: var(--ink);
+  margin: 0 0 22px;
+  font-weight: 400;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero p {
+  font-size: clamp(16px, 2vw, 19px);
+  max-width: 60ch;   /* measured in characters, because line length is what makes prose readable */
+  margin: 0 0 36px;
+}
+
+/* ---- The Play button ----
+   The single most important element on the page. Everything else is sized down from it. */
+.play {
+  display: inline-block;
+  background: var(--accent);
+  color: #100c19;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: 16px 42px;
+  border-radius: 2px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.play:hover {
+  background: var(--accent-deep);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.play-note {
+  display: block;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--ink-quiet);
+}
+
+/* ---------------------------------------------------------------------------------------
+   SECTIONS
+   --------------------------------------------------------------------------------------- */
+section.band {
+  border-top: 1px solid var(--line);
+  padding: 64px 0;
+}
+
+.label {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+  margin-bottom: 26px;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: 27px;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.cols {
+  display: grid;
+  /* Three across on a wide screen, folding to one on a narrow one without a media query:
+     each column wants at least 220px, and the browser fits as many as will go. */
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px;
+}
+
+.cols h3 {
+  font-size: 16px;
+  color: var(--ink);
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.cols p { margin: 0; font-size: 15px; }
+
+/* ---------------------------------------------------------------------------------------
+   SCREENSHOTS
+   --------------------------------------------------------------------------------------- */
+.shots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.shot {
+  border: 1px solid var(--line);
+  background: var(--ground-2);
+  overflow: hidden;
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;   /* never squashes a picture to fit a box */
+}
+
+.shot figcaption {
+  font-size: 13px;
+  color: var(--ink-quiet);
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------------------
+   WHAT'S NEXT + PATCH NOTES
+   --------------------------------------------------------------------------------------- */
+ul.plain {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.plain li {
+  padding: 12px 0 12px 22px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  font-size: 15px;
+}
+
+/* A small accent tick instead of a bullet glyph, so the list reads as a set of intentions
+   rather than as a specification. */
+ul.plain li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+ul.plain li:last-child { border-bottom: none; }
+
+.notes { font-size: 15px; }
+
+.notes .ver {
+  font-family: var(--serif);
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.notes .when {
+  color: var(--ink-quiet);
+  font-size: 13px;
+  margin-left: 8px;
+}
+
+/* ---------------------------------------------------------------------------------------
+   FOOTER
+   --------------------------------------------------------------------------------------- */
+.foot {
+  border-top: 1px solid var(--line);
+  padding: 34px 0 60px;
+  font-size: 13px;
+  color: var(--ink-quiet);
+}
+
+.foot .wrap {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.foot a { color: var(--ink-quiet); }
+.foot a:hover { color: var(--ink); }
+
+.foot nav { display: flex; gap: 18px; flex-wrap: wrap; }
+
+/* ---------------------------------------------------------------------------------------
+   THE COOKIE BANNER
+   Carried over from the consulting site unchanged in behaviour - the script that builds it is
+   shared. Only its colours are restated here, because its old ones came from the old
+   stylesheet, which this page no longer loads.
+   --------------------------------------------------------------------------------------- */
+#aerolex-consent {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  background: var(--ground-2);
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+#aerolex-consent .cb-inner {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+#aerolex-consent .cb-msg {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+#aerolex-consent .cb-link { color: var(--accent); }
+
+#aerolex-consent .cb-actions { display: flex; gap: 10px; }
+
+#aerolex-consent .cb-btn {
+  font: inherit;
+  font-size: 13px;
+  padding: 8px 18px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+#aerolex-consent .cb-accept {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #100c19;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------------------------------------------------
+   THE PRIVACY PAGE
+   Long-form text, reusing everything above. Its own narrower column, because a wall of legal
+   prose at the full page width is unreadable.
+   --------------------------------------------------------------------------------------- */
+.prose { max-width: 700px; }
+.prose h2 { margin-top: 38px; font-size: 23px; }
+.prose h2:first-child { margin-top: 0; }
+.prose p { margin: 0 0 14px; }
+.prose ul { padding-left: 20px; margin: 0 0 14px; }
+.prose li { margin-bottom: 6px; }
+.prose a { color: var(--accent); }
+
+.crumb {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-quiet);
+  margin-bottom: 18px;
+}

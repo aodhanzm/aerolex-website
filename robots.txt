@@ -1,6 +1,11 @@
 User-agent: *
 Allow: /
-Disallow: /archive/
-Disallow: /logo-lockups.html
+
+# The consulting site was archived on 2026-08-17 when the game took over the domain. Those pages
+# are no longer published at all - the host will not serve a folder whose name starts with an
+# underscore - so there is nothing left here to disallow. This line stays because the old paths
+# are still in search-engine indexes for a while and a crawler asking for them should be told not
+# to bother re-checking.
+Disallow: /_archive/
 
 Sitemap: https://aerolex.dev/sitemap.xml
