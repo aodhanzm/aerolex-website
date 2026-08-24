@@ -1,0 +1,153 @@
+/* =========================================================================================
+   aerolex.dev - Volume I: Solmara launchpad.
+
+   New stylesheet, deliberately separate from scene.css (same reasoning that split scene.css
+   from the old consulting styles.css: two designs sharing one file eventually fight over the
+   same bare selectors). Only index.html loads this. scene.css keeps serving the privacy page
+   untouched - this file never redefines a bare element selector that page also relies on.
+
+   Layout and color for each section live inline in index.html, matching how the design was
+   authored. What lives here is everything inline styles can't express: hover states (no
+   :hover without a stylesheet), the two elements analytics.js builds at runtime (the cookie
+   banner and its buttons), and the handoff screen's show/hide toggle.
+   ========================================================================================= */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #071a33;
+  font-family: "Outfit", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+a { color: #1568c4; text-decoration: none; }
+a:hover { color: #d6357f; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes drift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---------------------------------------------------------------------------------------
+   HOVER STATES
+   Inline styles can't carry :hover, so anything the design gives a hover treatment gets a
+   class here instead. Values are copied straight from the approved canvas design.
+   --------------------------------------------------------------------------------------- */
+.btn-play:hover {
+  transform: translateY(-3px) scale(1.02);
+  filter: saturate(1.15) brightness(1.06);
+  box-shadow: 0 24px 44px -12px rgba(8,54,112,.85), 0 0 0 9px rgba(255,255,255,.28),
+              inset 0 3px 0 rgba(255,255,255,.75), inset 0 -10px 20px rgba(6,50,110,.35);
+}
+
+.card-night:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 56px -24px rgba(10,60,110,.55), inset 0 2px 0 #fff,
+              inset 0 0 34px rgba(140,224,255,.45);
+}
+
+.btn-carousel:hover {
+  transform: translateY(-50%) scale(1.07);
+  filter: brightness(1.08);
+}
+
+/* ---------------------------------------------------------------------------------------
+   THE COOKIE BANNER
+   Built at runtime by assets/analytics.js (#aerolex-consent, .cb-*) - unchanged behaviour,
+   365-day localStorage choice, same GA4 consent-mode wiring. Only the look is new here, to
+   match the rest of the page instead of the old dark-purple site.
+   --------------------------------------------------------------------------------------- */
+#aerolex-consent {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 90;
+  background: linear-gradient(180deg, rgba(13,43,80,.96), rgba(4,16,31,.98));
+  border-top: 2px solid rgba(140,215,255,.28);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
+  padding: 16px 0;
+}
+
+#aerolex-consent .cb-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+#aerolex-consent .cb-msg {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #b6d3ea;
+}
+
+#aerolex-consent .cb-link { color: #8fd0ef; }
+
+#aerolex-consent .cb-actions { display: flex; gap: 10px; }
+
+#aerolex-consent .cb-btn {
+  font-family: "Chakra Petch", monospace;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  padding: 9px 20px;
+  border-radius: 999px;
+  border: 2px solid rgba(180,225,255,.35);
+  background: transparent;
+  color: #b6d3ea;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+
+#aerolex-consent .cb-btn:hover { border-color: rgba(180,225,255,.7); color: #eaf6ff; }
+
+#aerolex-consent .cb-accept {
+  border: 2px solid #fff;
+  background: linear-gradient(180deg, #8fdcfb 0%, #33a2ea 44%, #1568c4 100%);
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(4,44,96,.5);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.5);
+}
+
+#aerolex-consent .cb-accept:hover { filter: brightness(1.08); border-color: #fff; color: #fff; }
+
+/* ---------------------------------------------------------------------------------------
+   THE HANDOFF SCREEN
+   Shown the instant Play is pressed, covering the gap until the game's own page paints.
+   Same mechanism as the previous site (a .on class toggled on click, cleared on pageshow so
+   browser back/forward cache doesn't leave it stuck) - only the artwork changed.
+   --------------------------------------------------------------------------------------- */
+#handoff {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  background: radial-gradient(80% 60% at 50% 40%, #0d3260 0%, #04101f 100%);
+  text-align: center;
+}
+
+#handoff.on { display: flex; }
+
+#handoff .wordmark { width: 420px; max-width: 80vw; filter: drop-shadow(0 12px 30px rgba(0,120,230,.55)); }
+
+#handoff .solsello-spin { width: 46px; opacity: .9; animation: spin 3.2s linear infinite; }
+
+#handoff p {
+  margin: 0;
+  font-family: "Chakra Petch", monospace;
+  font-size: 12px;
+  letter-spacing: .3em;
+  color: #8fb2ce;
+  text-transform: uppercase;
+}
