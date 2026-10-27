@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Private friends' tool: keep it out of search engines -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>The Sanctum</title>
+    <script>
+      // Apply this browser's Text & display choices before anything is drawn, so the page never
+      // flashes the wrong theme or text size. Mirrors applyDisplay in src/state/display.ts.
+      try {
+        var d = JSON.parse(localStorage.getItem("astro-map:display") || "{}");
+        var r = document.documentElement;
+        r.dataset.readFont = d.readFont === "plex" ? "plex" : "cormorant";
+        r.dataset.lineSpacing = d.lineSpacing === "roomy" ? "roomy" : "normal";
+        r.dataset.appearance = d.appearance === "night" || d.appearance === "day" ? d.appearance : "auto";
+        r.dataset.motion = d.motion === "reduce" ? "reduce" : "auto";
+        if (typeof d.textScale === "number") r.style.setProperty("--text-scale", String(Math.min(1.4, Math.max(0.85, d.textScale))));
+      } catch (e) {
+        /* storage blocked: the stylesheet's defaults apply */
+      }
+    </script>
+    <script type="module" crossorigin src="/sanctum/assets/index-3oTAzLxF.js"></script>
+    <link rel="stylesheet" crossorigin href="/sanctum/assets/index-Cy4h_j3l.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
