@@ -22,6 +22,6 @@ This repository publishes `main` through GitHub Pages. Changes are being prepare
 
 First implementation complete. Browser checks passed for the desktop layout and 390px/320px phone layouts, mobile navigation and anchors, the native Chinese preview modal (including Escape and focus restoration), the resume route, and cookie-settings reopening/decline. No browser console errors or horizontal overflow were observed. All 24 local destinations/assets referenced by the three new/relocated HTML pages returned HTTP 200; SVG/sitemap XML parsing, JavaScript syntax, and Git whitespace checks passed.
 
-The producer draft and AI Solutions v4 resume disagree on Verbilink dates and current role. The homepage and resume therefore use general game-production/curriculum wording without a date or specific title until the owner answers the structured question. Project-preview imagery is also open for owner preference.
+NZ confirmed the AI Solutions v4 Verbilink timeline on 2026-10-29: Project Manager from September 2025 to August 2026, then Product Advisor from September 2026 to present. Both the homepage and printable resume now show these roles and dates. Project-preview imagery remains open for owner preference.
 
 An existing untracked `sanctum/about/` directory appeared during the session; it is separate work and is not part of this homepage change. Nothing has been pushed to the publishing branch.
