@@ -1307,3 +1307,134 @@ p {
     margin:15mm;
   }
 }
+
+/* The project-led introduction is shared by either proposed color direction. */
+.hero.hero-project-led {
+  padding: 35px 0 32px;
+}
+.hero-project-led .hero-copy {
+  max-width: none;
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  column-gap: 45px;
+  align-items: start;
+}
+.hero-project-led .eyebrow {
+  grid-column: 1 / -1;
+  margin-bottom: 18px;
+}
+.hero-project-led h1 {
+  grid-column: 1;
+  grid-row: 2 / 5;
+  font-size: clamp(54px, 6.1vw, 94px);
+  line-height: .95;
+  letter-spacing: -.035em;
+  margin: 0;
+}
+.hero-project-led .hero-lead {
+  grid-column: 2;
+  font-size: 27px;
+  line-height: 1.3;
+  max-width: 29ch;
+}
+.hero-project-led .hero-note {
+  grid-column: 2;
+  margin-top: 10px;
+  color: var(--gold-bright);
+}
+.hero-project-led .hero-actions {
+  grid-column: 2;
+  margin-top: 20px;
+  gap: 12px;
+}
+.world-triptych {
+  margin: 30px 0 0;
+  border: 1px solid var(--line);
+  background: var(--bg-deep);
+}
+.world-triptych > img {
+  width: 100%;
+  height: auto;
+}
+.world-triptych figcaption {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.world-triptych figcaption a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 18px;
+  font-family: var(--serif);
+  font-size: 25px;
+  line-height: 1.25;
+  transition: background .2s;
+}
+.world-triptych figcaption a + a {
+  border-left: 1px solid var(--line);
+}
+.world-triptych figcaption a:hover {
+  background: rgba(195, 163, 114, .09);
+}
+.world-triptych .world-number {
+  font-family: var(--sans);
+  font-size: 9px;
+  color: var(--gold);
+}
+.world-triptych figcaption a > span:last-child {
+  margin-left: auto;
+  color: var(--gold);
+  font-family: var(--sans);
+  font-size: 15px;
+}
+.background-intro {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 23px;
+}
+@media (max-width: 1100px) {
+  .hero-project-led .hero-copy {
+    grid-template-columns: 1.25fr 1fr;
+    column-gap: 30px;
+  }
+  .hero-project-led .hero-actions {
+    flex-wrap: wrap;
+  }
+  .hero-project-led .hero-lead {
+    font-size: 24px;
+  }
+}
+@media (max-width: 760px) {
+  .hero.hero-project-led {
+    padding: 28px 0;
+  }
+  .hero-project-led .hero-copy {
+    display: block;
+  }
+  .hero-project-led h1 {
+    font-size: clamp(48px, 9.3vw, 70px);
+  }
+  .hero-project-led .hero-lead {
+    font-size: 23px;
+    margin-top: 19px;
+  }
+  .hero-project-led .hero-note {
+    font-size: 12px;
+  }
+  .hero-project-led .hero-actions {
+    margin-top: 20px;
+  }
+  .world-triptych {
+    margin-top: 25px;
+  }
+  .world-triptych figcaption a {
+    padding: 10px 8px;
+    font-size: 16px;
+    gap: 5px;
+  }
+  .world-triptych .world-number,
+  .world-triptych figcaption a > span:last-child {
+    display: none;
+  }
+}
