@@ -16,16 +16,21 @@
 <script async src="../assets/analytics.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Privacy · The Scene</title>
+<title>Privacy · AeroLex</title>
 <meta name="description" content="How aerolex.dev handles visitor data. Short, plain, honest." />
 <link rel="stylesheet" href="../assets/scene.css" />
+<style>
+  .privacy-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 22px 0 0; }
+  .privacy-app { border-top: 1px solid var(--line); padding-top: 32px; margin: 36px 0; scroll-margin-top: 24px; }
+  .privacy-app h3 { color: var(--ink); font-size: 17px; margin: 25px 0 8px; }
+</style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a href="/" class="mark">THE SCENE</a>
-    <span class="mark-sub">Volume I: Solmara</span>
+    <a href="/" class="mark">AEROLEX</a>
+    <span class="mark-sub">The Scene &amp; The Sanctum</span>
   </div>
 </header>
 
@@ -34,7 +39,12 @@
   <div class="wrap">
     <div class="crumb"><a href="/">Home</a> &nbsp;/&nbsp; Privacy</div>
     <h2 style="font-size: 34px; margin-bottom: 6px;">Privacy</h2>
-    <p style="color: var(--ink-quiet); font-size: 14px;">Updated 17 August 2026.</p>
+    <p style="color: var(--ink-quiet); font-size: 14px;">Updated 29 October 2026.</p>
+    <nav class="privacy-links" aria-label="Privacy topics">
+      <a href="#website">Website analytics</a>
+      <a href="#scene">The Scene</a>
+      <a href="#sanctum">The Sanctum</a>
+    </nav>
   </div>
 </section>
 
@@ -47,19 +57,64 @@
       for aerolex.dev. Contact: <a href="mailto:noah@aerolex.dev">noah@aerolex.dev</a>.
     </p>
 
-    <h2>What this site collects</h2>
+    <h2 id="website">What this site collects</h2>
     <p>
-      This page and the pages around it use Google Analytics 4 to measure aggregate traffic. No
-      other data-collection tool is in use here. This site has no login, no payment flow and no
-      forms.
+      The public marketing pages and this privacy page use Google Analytics 4 to measure
+      aggregate traffic. These pages have no login, payment flow or forms. Accounts inside
+      The Scene and The Sanctum are separate features, described below.
     </p>
-    <p>
+    <p id="scene">
       <strong>The game is a separate thing.</strong> Playing it is optional, and creating an account
       inside it is optional again. If you create one, the game stores an email address, a username
       and your progress so that your progress survives closing the tab. You can delete that account
       from inside the game, and doing so hands you a copy of the vocabulary you earned before it
       goes. If you play without an account, nothing about you leaves your own browser.
     </p>
+
+    <section class="privacy-app" id="sanctum" aria-labelledby="sanctum-title">
+      <h2 id="sanctum-title">The Sanctum</h2>
+      <p>
+        <a href="/sanctum/about/">The Sanctum</a> is an invite-only astrology and journaling app
+        operated by AeroLex. This section covers its accounts and cloud sync. The public
+        website's analytics are described in the other sections of this notice.
+      </p>
+      <h3>Your account</h3>
+      <p>
+        Signing up with email uses your email address, chosen display name and password through
+        our authentication provider, Supabase. If you use Google sign-in, Google supplies basic
+        identity and profile information, such as your name, email address and profile image.
+        We use that information to identify and maintain your Sanctum account. The app does not
+        request access to your Gmail messages, Google Drive files or Google Calendar, and does
+        not use Google profile information for advertising.
+      </p>
+      <h3>Your saved work</h3>
+      <p>
+        Charts can include names, birth dates, birth times and birth places. Entries can contain
+        whatever personal information you choose to record, including your notes, readings and
+        practice. The app keeps this work in the browser. Once you sign in and choose to upload
+        existing work, or save new work while signed in, it is also stored with Supabase and
+        synced to your account. Browser storage remembers your sign-in and which account owns
+        the device's copy.
+      </p>
+      <h3>Who handles it</h3>
+      <p>
+        Supabase provides authentication and cloud storage. Resend delivers account confirmation
+        and password-reset emails. Google handles Google sign-in when you choose it. The app's
+        database rules restrict members to their own saved records. The operator has
+        administrative access to the database; these records are not end-to-end encrypted
+        against the operator.
+      </p>
+      <h3>Your copies and choices</h3>
+      <p>
+        You can export your work from Charts &amp; files. Signing out can keep this device's copy
+        or clear it. Delete my account removes your active cloud account and its records and
+        clears the browser where you perform the deletion. Downloaded backup files and copies
+        retained in other browsers need to be managed separately. Provider logs and backups
+        may have their own retention periods; this section does not promise their immediate
+        erasure.
+      </p>
+      <p>For account or privacy questions, contact <a href="mailto:noah@aerolex.dev">noah@aerolex.dev</a>.</p>
+    </section>
 
     <h2>What the analytics capture</h2>
     <ul>
@@ -120,7 +175,7 @@
 
     <h2>Links away from here</h2>
     <p>
-      This site links to an email address and to the game itself. Once you follow a link somewhere
+      This site links to an email address, The Scene and The Sanctum. Once you follow a link somewhere
       else, that destination's own privacy practices apply.
     </p>
 
@@ -140,7 +195,7 @@
 
 <footer class="foot">
   <div class="wrap">
-    <span>© 2026 · The Scene is made by <a href="mailto:noah@aerolex.dev">Aodhán Martínez</a></span>
+    <span>© 2026 · AeroLex · Made by <a href="mailto:noah@aerolex.dev">Aodhán Martínez</a></span>
     <nav>
       <a href="/privacy/">Privacy</a>
       <a href="#" data-action="cookie-settings">Cookie settings</a>
