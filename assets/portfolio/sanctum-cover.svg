@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 810">
+<defs><radialGradient id="bg"><stop stop-color="#18363a"/><stop offset="1" stop-color="#09171f"/></radialGradient><radialGradient id="moon"><stop stop-color="#d9b672"/><stop offset=".7" stop-color="#6d6145"/><stop offset="1" stop-color="#25373b"/></radialGradient></defs>
+<rect width="720" height="810" fill="url(#bg)"/>
+<g fill="none" stroke="#b7975d"><path d="M18 18h684v774H18Z" opacity=".6"/><path d="M30 30h660v750H30Z" opacity=".25"/><path d="m18 76 58-58m568 0 58 58M18 734l58 58m568 0 58-58" opacity=".6"/></g>
+<g fill="#c9ad7a" font-family="Georgia,serif" text-anchor="middle"><text x="360" y="79" font-size="15" letter-spacing="7">THE SANCTUM</text><text x="360" y="115" font-size="11" letter-spacing="3" opacity=".6">THE CELESTIAL REALM</text></g>
+<g fill="none" stroke="#c1a16a"><circle cx="360" cy="383" r="231" opacity=".65"/><circle cx="360" cy="383" r="217" opacity=".4"/><circle cx="360" cy="383" r="175" opacity=".7"/><circle cx="360" cy="383" r="153" opacity=".3"/><circle cx="360" cy="383" r="104" opacity=".35"/><circle cx="360" cy="383" r="61" opacity=".4"/>
+<path d="M129 383h462M360 152v462M160 267l400 232M160 499l400-232M244 183l232 400M244 583l232-400" opacity=".25"/>
+<path d="m239 251 278 76-225 210 49-308 137 257-239-235" stroke="#76a2a0" opacity=".4"/>
+<path d="m256 321 179 146-54-225-125 79 179 146" opacity=".5"/>
+</g>
+<g fill="#d6bd8c" font-family="Georgia,serif" font-size="27" text-anchor="middle"><text x="360" y="190">♈︎</text><text x="461" y="216">♉︎</text><text x="533" y="290">♊︎</text><text x="560" y="393">♋︎</text><text x="533" y="495">♌︎</text><text x="461" y="569">♍︎</text><text x="360" y="597">♎︎</text><text x="259" y="569">♏︎</text><text x="186" y="495">♐︎</text><text x="160" y="393">♑︎</text><text x="186" y="290">♒︎</text><text x="259" y="216">♓︎</text></g>
+<g fill="#d6bd8c"><circle cx="293" cy="303" r="5"/><circle cx="472" cy="341" r="6"/><circle cx="302" cy="526" r="5"/><circle cx="388" cy="283" r="4"/><circle cx="413" cy="458" r="4"/></g>
+<circle cx="360" cy="383" r="32" fill="url(#moon)" stroke="#cfad70" stroke-width=".7"/>
+<g fill="#c9ad7a" font-family="Georgia,serif" text-anchor="middle"><text x="360" y="691" font-size="24">A little space to reflect.</text><text x="360" y="727" font-size="11" letter-spacing="3" opacity=".65">ASTROLOGY · JOURNALING · CURIOSITY</text></g>
+<g fill="#c4a676" opacity=".5"><circle cx="93" cy="155" r="1"/><circle cx="620" cy="204" r="1.5"/><circle cx="66" cy="626" r="1"/><circle cx="639" cy="637" r="1"/></g>
+</svg>

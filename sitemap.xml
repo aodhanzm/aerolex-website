@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Only what is actually published. The consulting pages moved to _archive/ on 2026-08-17 and are
-  no longer served, so listing them here would be pointing search engines at pages that return
-  nothing - which is a slower way to fall out of an index than simply not listing them.
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <url>
-    <loc>https://aerolex.dev/</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <url>
-    <loc>https://aerolex.dev/privacy/</loc>
-    <lastmod>2026-08-17</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
-  </url>
-
+  <url><loc>https://aerolex.dev/</loc><lastmod>2026-10-29</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://aerolex.dev/the-scene/</loc><lastmod>2026-10-29</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://aerolex.dev/resume/</loc><lastmod>2026-10-29</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://aerolex.dev/privacy/</loc><lastmod>2026-08-17</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
 </urlset>
