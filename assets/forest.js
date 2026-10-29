@@ -21,21 +21,24 @@
       description: 'Beyond the pines, a town on the coast. A Spanish-learning game built around conversations, choices, and the people you meet.',
       contribution: 'Game production · Curriculum design · Product advisory',
       project: '/the-scene/', enter: 'https://play.aerolex.dev/', availability: 'Playable beta · Desktop recommended',
-      imageLabel: 'Illustrated coastal town in Solmara at sunset'
+      image: '/assets/forest/the-scene-clearing-v1.png', mobileFocus: '37%',
+      imageLabel: 'Solmara’s colorful coastal city with a carved cliff monument, waterfalls, cable cars and a sun arch at sunset'
     },
     {
       id: 'project-sanctum', name: 'The Sanctum', category: '02 / A SPACE FOR REFLECTION',
       description: 'A quiet observatory beyond the trees. A personal space for astrology, journaling, and following your curiosity.',
       contribution: 'Product design · Development',
       project: '/sanctum/about/', enter: '/sanctum/', availability: 'Private tool · Invitation required to join',
-      imageLabel: 'Illustrated candlelit observatory and journal beneath a starry sky'
+      image: '/assets/forest/the-sanctum-clearing-v1.png', mobileFocus: '30%',
+      imageLabel: 'A Grecian island archipelago with a temple of Athena, a brass-domed observatory and illuminated marble terraces beneath the stars'
     },
     {
       id: 'project-chinese', name: 'Hànyǔ Courtyard', category: '03 / CHINESE LEARNING',
       description: 'A lantern-lit courtyard at the end of the path. A learning app for understanding characters, building sentences, and writing by hand.',
       contribution: 'Learning experience · App design',
       project: '#chinese-project', enter: null, availability: 'In development · Explore the design concept',
-      imageLabel: 'Illustrated Chinese scholar’s courtyard with lanterns and a writing desk'
+      image: '/assets/forest/hanyu-courtyard-clearing-v1.png', mobileFocus: '48%',
+      imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains'
     }
   ];
   const card = stage.querySelector('.world-introduction');
@@ -59,7 +62,7 @@
   let selected = -1;
   let transition = 0;
   let busy = false;
-  let worldArt = null;
+  const worldArt = new Map();
 
   function reflectMotion() {
     document.body.classList.toggle('forest-motion-reduced', motionReduced);
@@ -85,17 +88,17 @@
     start.setAttribute('aria-disabled', String(value));
   }
   function wait(ms) { return new Promise(resolve => setTimeout(resolve, motionReduced ? 0 : ms)); }
-  function loadWorldArt() {
-    if (!worldArt) {
-      worldArt = new Promise((resolve, reject) => {
+  function loadWorldArt(source) {
+    if (!worldArt.has(source)) {
+      worldArt.set(source, new Promise((resolve, reject) => {
         const image = new Image();
         const timeout = setTimeout(() => reject(new Error('Image loading timed out')), 12000);
         image.onload = () => { clearTimeout(timeout); resolve(); };
         image.onerror = () => { clearTimeout(timeout); reject(new Error('Image could not load')); };
-        image.src = '/assets/portfolio/hero-triptych-v1.png';
-      }).catch(error => { worldArt = null; throw error; });
+        image.src = source;
+      }).catch(error => { worldArt.delete(source); throw error; }));
     }
-    return worldArt;
+    return worldArt.get(source);
   }
   function reflectStops() {
     stopButtons.forEach((button, index) => {
@@ -116,11 +119,12 @@
     card.inert = true;
     announcement.textContent = 'Following the path to ' + worlds[index].name + '…';
     try {
-      await Promise.all([loadWorldArt(), wait(selected === -1 ? 650 : 1000)]);
-      if (token !== transition) return;
       const world = worlds[index];
+      await Promise.all([loadWorldArt(world.image), wait(selected === -1 ? 650 : 1000)]);
+      if (token !== transition) return;
       selected = index;
-      backdrop.style.setProperty('--world-index', String(index));
+      backdrop.style.backgroundImage = 'url("' + world.image + '")';
+      backdrop.style.setProperty('--world-focus', world.mobileFocus);
       backdrop.setAttribute('aria-label', world.imageLabel);
       backdrop.setAttribute('aria-hidden', 'false');
       category.textContent = world.category;

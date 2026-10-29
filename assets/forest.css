@@ -43,12 +43,9 @@
 .forest-backdrop img { width: 100%; height: 100%; object-fit: cover; object-position: center 57%; }
 .world-backdrop {
   z-index: -5;
-  --world-size: max(100vw, 100svh);
-  --world-index: 0;
-  background-image: url('/assets/portfolio/hero-triptych-v1.png');
   background-repeat: no-repeat;
-  background-size: calc(var(--world-size) * 3) var(--world-size);
-  background-position: calc((100vw - var(--world-size)) / 2 - var(--world-index) * var(--world-size)) center;
+  background-size: cover;
+  background-position: center;
 }
 .forest-atmosphere {
   z-index: -3;
@@ -222,6 +219,7 @@
   .forest-home .forest-header .mobile-nav { top: 75px; }
   .forest-stage, .forest-ready .forest-stage { min-height: 680px; }
   .forest-backdrop img { object-position: 51% center; }
+  .world-backdrop { background-position: var(--world-focus, 50%) center; }
   .tree-curtain { width: 32%; }
   .tree-curtain img { width: 312.5%; object-fit: fill; }
   .tree-right img { transform: translateX(-68%); }
