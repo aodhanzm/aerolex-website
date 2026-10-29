@@ -27,7 +27,7 @@
       id: 'project-sanctum', name: 'The Sanctum', category: '02 / A SPACE FOR REFLECTION',
       description: 'A quiet observatory beyond the trees. A personal space for astrology, journaling, and following your curiosity.',
       contribution: 'Product design · Development',
-      project: '#project-sanctum', enter: '/sanctum/', availability: 'Private tool · Access code required',
+      project: '/sanctum/about/', enter: '/sanctum/', availability: 'Private tool · Invitation required to join',
       imageLabel: 'Illustrated candlelit observatory and journal beneath a starry sky'
     },
     {
@@ -223,10 +223,7 @@
   });
   viewLink.addEventListener('click', event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    if (selected === 1) {
-      event.preventDefault();
-      openPanel('projects', 'project-sanctum');
-    } else if (selected === 2) {
+    if (selected === 2) {
       event.preventDefault();
       const concept = document.querySelector('.project-dialog');
       concept.showModal();
