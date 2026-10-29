@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1720">
+  <meta name="theme-color" content="#101c17">
   <title>AeroLex · Projects by Noah Zepter-Martínez</title>
   <meta name="description" content="The work of Noah Aodhán Zepter-Martínez: games, learning tools, AI workflows, and a background in bioinformatics. Explore The Scene, The Sanctum, and Hànyǔ Courtyard.">
   <link rel="canonical" href="https://aerolex.dev/">
@@ -11,47 +11,69 @@
   <meta property="og:description" content="Games, learning tools, and AI workflows. A personal portfolio of work and ongoing projects.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://aerolex.dev/">
-  <meta property="og:image" content="https://aerolex.dev/assets/art/og-plaza-del-sol.jpg">
+  <meta property="og:image" content="https://aerolex.dev/assets/forest/forest-path-v1.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/svg+xml" href="/assets/portfolio/mark.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;450;500;600;650&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/portfolio.css">
+  <link rel="stylesheet" href="/assets/forest.css">
   <script defer src="/assets/portfolio.js"></script>
+  <script defer src="/assets/forest.js"></script>
   <script async src="/assets/analytics.js"></script>
 </head>
-<body id="top">
+<body id="top" class="forest-home">
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header wrap">
-    <a class="brand" href="/" aria-label="AeroLex home"><img src="/assets/portfolio/mark.svg" alt="" width="40" height="32"><span>AEROLEX</span></a>
-    <nav class="desktop-nav" aria-label="Main navigation"><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#contact">Contact</a></nav>
+  <header class="site-header wrap forest-header">
+    <a class="brand" href="#trailhead" data-trail-home aria-label="AeroLex forest entrance"><img src="/assets/portfolio/mark.svg" alt="" width="40" height="32"><span>AEROLEX</span></a>
+    <nav class="desktop-nav" aria-label="Main navigation"><a href="#projects" data-forest-panel="projects">Projects</a><a href="#about" data-forest-panel="about">About</a><a href="mailto:noah@aerolex.dev">Contact</a></nav>
     <a class="button button-small header-resume" href="/resume/">Résumé <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav"><span>Menu</span><span class="menu-glyph" aria-hidden="true"><i></i><i></i></span></button>
-    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#education">Education</a><a href="#contact">Contact</a><a href="/resume/">View résumé ↗</a></nav>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation" hidden><a href="#projects" data-forest-panel="projects">Projects</a><a href="#about" data-forest-panel="about">About &amp; experience</a><a href="/resume/">Résumé ↗</a><a href="mailto:noah@aerolex.dev">Contact</a></nav>
   </header>
 
-  <main id="main" class="wrap">
-    <section class="hero hero-project-led" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow">AEROLEX / WORK &amp; PROJECTS</p>
-        <h1 id="hero-title">Games, tools<br>&amp; other worlds<span class="gold">.</span></h1>
-        <p class="hero-lead">Projects in language learning, reflection, and play.</p>
-        <p class="hero-note">By Noah Zepter-Martínez</p>
-        <div class="hero-actions"><a class="button button-primary" href="#projects">Explore the projects <span aria-hidden="true">↓</span></a><a class="button" href="/resume/">View résumé <span aria-hidden="true">↗</span></a></div>
+  <main id="main">
+    <section id="trailhead" class="forest-stage" aria-label="An interactive journey through the AeroLex forest" data-phase="entrance">
+      <div class="world-backdrop" role="img" aria-label="Illustrated project world" aria-hidden="true"></div>
+      <div class="forest-backdrop" aria-hidden="true"><img src="/assets/forest/forest-path-v1.png" alt="" width="1672" height="941" fetchpriority="high"></div>
+      <div class="forest-atmosphere" aria-hidden="true"></div>
+      <div class="tree-curtain tree-left" aria-hidden="true"><img src="/assets/forest/foreground-trees-v1.png" alt="" width="1672" height="941" decoding="async"></div>
+      <div class="tree-curtain tree-right" aria-hidden="true"><img src="/assets/forest/foreground-trees-v1.png" alt="" width="1672" height="941" decoding="async"></div>
+      <div class="forest-shade" aria-hidden="true"></div>
+
+      <div class="entrance-copy">
+        <p class="eyebrow forest-eyebrow">AEROLEX / A COLLECTION OF WORLDS</p>
+        <h1>A little curiosity.<br>A different path.</h1>
+        <p class="entrance-description">Follow the trail. There’s something<br class="forest-desktop-break"> being built beyond the trees.</p>
+        <a class="trail-start" href="#projects" data-start-trail><span>Follow the path</span><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 30V7m-7 7 7-7 7 7" stroke="currentColor" stroke-width="1.2"/><path d="M8 31h20" stroke="currentColor" stroke-width=".8"/></svg></a>
+        <p class="trail-hint">THREE CLEARINGS. THREE DIFFERENT WORLDS.</p>
       </div>
-      <figure class="world-triptych">
-        <img src="/assets/portfolio/hero-triptych-v1.png" alt="Three illustrated project worlds: Solmara’s sunset plaza, The Sanctum’s observatory, and a lantern-lit Chinese scholar’s courtyard" width="2172" height="724" fetchpriority="high">
-        <figcaption><a href="#project-scene"><span class="world-number">01</span><span>The Scene</span><span aria-hidden="true">↘</span></a><a href="#project-sanctum"><span class="world-number">02</span><span>The Sanctum</span><span aria-hidden="true">↘</span></a><a href="#project-chinese"><span class="world-number">03</span><span>Hànyǔ Courtyard</span><span aria-hidden="true">↘</span></a></figcaption>
-      </figure>
+
+      <article class="world-introduction" aria-labelledby="world-title" hidden>
+        <p class="eyebrow world-category" id="world-category">A CLEARING AHEAD</p>
+        <h2 id="world-title" tabindex="-1">The Scene</h2>
+        <p class="world-description" id="world-description"></p>
+        <p class="world-role" id="world-role"></p>
+        <div class="world-actions"><a class="button button-primary" id="world-project-link" href="/the-scene/">View project <span aria-hidden="true">↗</span></a><a class="button" id="world-enter-link" href="https://play.aerolex.dev/" target="_blank" rel="noopener noreferrer">Enter world <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div>
+        <p class="world-availability" id="world-availability"></p>
+        <button class="continue-trail" type="button" data-next-clearing>Continue along the path <span aria-hidden="true">→</span></button>
+      </article>
+
+      <p class="trail-announcement" id="trail-announcement" role="status" aria-live="polite"></p>
+      <div class="forest-bottom">
+        <div class="forest-credit"><span>THE WORK OF</span><a href="#about" data-forest-panel="about">Noah Zepter-Martínez</a></div>
+        <nav class="trail-stops" aria-label="Forest clearings"><button type="button" data-clearing="0" aria-label="Visit The Scene clearing"><span class="stop-number">01</span><span class="stop-name">The Scene</span></button><span class="trail-rule" aria-hidden="true"></span><button type="button" data-clearing="1" aria-label="Visit The Sanctum clearing"><span class="stop-number">02</span><span class="stop-name">The Sanctum</span></button><span class="trail-rule" aria-hidden="true"></span><button type="button" data-clearing="2" aria-label="Visit Hànyǔ Courtyard clearing"><span class="stop-number">03</span><span class="stop-name">Hànyǔ Courtyard</span></button></nav>
+        <div class="forest-options"><button type="button" id="motion-control" aria-pressed="false">Reduce motion</button><button type="button" data-trail-home class="back-to-trailhead" hidden>Forest entrance <span aria-hidden="true">↶</span></button></div>
+      </div>
     </section>
 
-    <section id="projects" class="projects section" aria-labelledby="projects-title">
-      <div class="section-heading"><div><p class="eyebrow section-kicker">01 / SELECTED WORK</p><h2 id="projects-title">Three different worlds.</h2></div><p class="section-note">Things I wanted to exist.<br> Projects I’m building to find out how.</p></div>
+    <section id="projects" class="projects section wrap" aria-labelledby="projects-title">
+      <div class="section-heading"><div><p class="eyebrow section-kicker">01 / SELECTED WORK</p><h2 id="projects-title" tabindex="-1">Three different worlds.</h2></div><p class="section-note">Things I wanted to exist.<br> Projects I’m building to find out how.</p></div>
       <div class="project-grid">
         <article class="project-card" id="project-scene">
           <a class="project-visual scene-visual" href="/the-scene/" aria-label="Explore The Scene, a Spanish language-learning game">
-            <img src="/assets/art/plaza-del-sol.webp" alt="An illustrated tropical plaza in Solmara, the setting for The Scene" width="1024" height="1024" decoding="async">
+            <img src="/assets/art/plaza-del-sol.webp" alt="An illustrated tropical plaza in Solmara, the setting for The Scene" width="1024" height="1024" decoding="async" loading="lazy">
             <span class="visual-index" aria-hidden="true">01</span><span class="visual-corner" aria-hidden="true">↗</span>
             <div class="scene-overlay" aria-hidden="true"><span class="visual-overline">VOLUME I</span><span class="scene-wordmark">The Scene</span><span class="scene-place">WELCOME TO SOLMARA</span></div>
             <span class="visual-caption">WORLD ART · IN DEVELOPMENT</span>
@@ -59,12 +81,12 @@
           <div class="project-title-row"><h3><a href="/the-scene/">The Scene</a></h3><span class="status"><i aria-hidden="true"></i>PLAYABLE BETA</span></div>
           <p class="project-description">A Spanish-learning game built around conversations.</p>
           <p class="project-role">Game production · Learning design</p>
-          <a class="text-link" href="/the-scene/">Explore The Scene <span aria-hidden="true">↗</span></a>
+          <div class="directory-actions"><a class="text-link" href="/the-scene/">View project <span aria-hidden="true">↗</span></a><a class="directory-enter" href="https://play.aerolex.dev/" target="_blank" rel="noopener noreferrer">Play beta ↗<span class="sr-only"> (opens in a new tab)</span></a></div>
         </article>
 
         <article class="project-card" id="project-sanctum">
           <a class="project-visual sanctum-visual" href="/sanctum/" aria-label="Explore The Sanctum, a private reflection tool">
-            <img src="/assets/portfolio/sanctum-cover.svg" alt="An illustrated brass celestial chart representing The Sanctum" width="720" height="810" decoding="async">
+            <img src="/assets/portfolio/sanctum-cover.svg" alt="An illustrated brass celestial chart representing The Sanctum" width="720" height="810" decoding="async" loading="lazy">
             <span class="visual-index" aria-hidden="true">02</span><span class="visual-corner" aria-hidden="true">↗</span><span class="visual-caption">ILLUSTRATED PROJECT PREVIEW</span>
           </a>
           <div class="project-title-row"><h3><a href="/sanctum/">The Sanctum</a></h3><span class="status status-private">PRIVATE TOOL</span></div>
@@ -75,7 +97,7 @@
 
         <article class="project-card" id="project-chinese">
           <a class="project-visual chinese-visual" href="#chinese-project" data-open-project aria-label="Read about Hànyǔ Courtyard, a Chinese learning app in development">
-            <img src="/assets/portfolio/chinese-concept.png" alt="Concept for a Chinese learning app with lanterns, wooden architecture, and parchment lessons" width="1536" height="1024" decoding="async">
+            <img src="/assets/portfolio/chinese-concept.png" alt="Concept for a Chinese learning app with lanterns, wooden architecture, and parchment lessons" width="1536" height="1024" decoding="async" loading="lazy">
             <span class="visual-index" aria-hidden="true">03</span><span class="visual-corner" aria-hidden="true">+</span><span class="visual-caption">DESIGN CONCEPT</span>
           </a>
           <div class="project-title-row"><h3><a href="#chinese-project" data-open-project>Hànyǔ Courtyard</a></h3><span class="status status-planned">IN DEVELOPMENT</span></div>
@@ -86,11 +108,11 @@
       </div>
     </section>
 
-    <section class="background section" aria-label="Professional and academic background">
+    <section id="about" class="background section wrap" aria-label="Professional and academic background">
       <div id="experience" class="experience-column">
         <p class="eyebrow section-kicker">02 / THE BACKGROUND</p>
         <p class="background-intro">I’m Noah Aodhán Zepter-Martínez. My work brings together game production, language education, AI workflows, and a background in bioinformatics.</p>
-        <div class="background-heading"><h2>Experience</h2><a class="quiet-link" href="/resume/">Full résumé <span aria-hidden="true">↗</span></a></div>
+        <div class="background-heading"><h2 id="about-title" tabindex="-1">About &amp; experience</h2><a class="quiet-link" href="/resume/">Full résumé <span aria-hidden="true">↗</span></a></div>
         <div class="experience-list">
           <article class="experience-item"><div class="entry-marker" aria-hidden="true">01</div><div class="entry-main"><h3>Verbilink</h3><p class="entry-role">Product Advisor · The Scene</p><p class="entry-date">September 2026–present</p><p class="entry-role">Previously: Project Manager</p><p class="entry-date">September 2025–August 2026</p><p>Game production, curriculum design, and advisory on art and animation.</p></div></article>
           <article class="experience-item"><div class="entry-marker" aria-hidden="true">02</div><div class="entry-main"><h3>AeroLex</h3><p class="entry-role">AI consulting &amp; software</p><p>Workflow design, AI integration, and custom software for businesses.</p></div></article>
@@ -110,11 +132,14 @@
       <p class="eyebrow">ON THE DRAWING BOARD</p><h2 id="chinese-project-title">Hànyǔ Courtyard</h2><p>A Chinese learning app inspired by a scholar’s courtyard. The plan brings together character explanations, guided sentence lessons, quizzes, and handwriting practice.</p><p class="muted">Currently in design. The preview shows a concept, rather than a released app.</p>
     </section>
 
-    <section id="contact" class="contact section" aria-labelledby="contact-title"><div><p class="eyebrow section-kicker">04 / SAY HELLO</p><h2 id="contact-title">Get in touch<span class="gold">.</span></h2></div><div class="contact-links"><a class="contact-email" href="mailto:noah@aerolex.dev">noah@aerolex.dev <span aria-hidden="true">↗</span></a><a class="quiet-link" href="https://www.linkedin.com/in/noahzepter/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div></section>
+    <section id="contact" class="contact section wrap" aria-labelledby="contact-title"><div><p class="eyebrow section-kicker">04 / SAY HELLO</p><h2 id="contact-title">Get in touch<span class="gold">.</span></h2></div><div class="contact-links"><a class="contact-email" href="mailto:noah@aerolex.dev">noah@aerolex.dev <span aria-hidden="true">↗</span></a><a class="quiet-link" href="https://www.linkedin.com/in/noahzepter/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div></section>
   </main>
 
   <footer class="site-footer wrap"><a class="brand footer-brand" href="/">AEROLEX</a><p>© 2026 Noah Zepter-Martínez</p><nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a><a href="#top" data-back-top>Back to top <span aria-hidden="true">↑</span></a></nav></footer>
 
   <dialog class="project-dialog" aria-labelledby="dialog-title"><button class="dialog-close" type="button" data-close-project aria-label="Close project preview">Close <span aria-hidden="true">×</span></button><div class="dialog-image"><img src="/assets/portfolio/chinese-concept.png" alt="Full concept image for the Chinese learning app" width="1536" height="1024"></div><div class="dialog-copy"><p class="eyebrow">IN DEVELOPMENT · DESIGN CONCEPT</p><h2 id="dialog-title">Hànyǔ Courtyard</h2><p>I wanted a way to understand Chinese characters and put words together into sentences. This project brings those pieces into one place, with guided lessons, quizzes, and space to write by hand.</p><p class="muted">The name and interface are still being developed.</p></div></dialog>
+  <dialog id="forest-projects-dialog" class="forest-dialog" aria-labelledby="projects-title"><div class="forest-dialog-toolbar"><p class="eyebrow">AEROLEX / THE CLEARINGS</p><button type="button" data-close-forest-panel aria-label="Close projects">Back to the forest <span aria-hidden="true">×</span></button></div></dialog>
+  <dialog id="forest-about-dialog" class="forest-dialog" aria-labelledby="about-title"><div class="forest-dialog-toolbar"><p class="eyebrow">AEROLEX / ABOUT THE MAKER</p><button type="button" data-close-forest-panel aria-label="Close about">Back to the forest <span aria-hidden="true">×</span></button></div></dialog>
+  <noscript><style>.forest-bottom,.trail-hint{display:none}.forest-stage{min-height:700px}</style><p class="no-script-note wrap">Explore the projects and résumé below. The animated forest journey is available with JavaScript enabled.</p></noscript>
 </body>
 </html>

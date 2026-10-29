@@ -1,0 +1,291 @@
+/* A Pacific Northwest forest, with the interface kept separate from the artwork. */
+.forest-home, .resume-page {
+  --bg: #101c17;
+  --bg-deep: #09130f;
+  --ivory: #eef0e5;
+  --muted: #b2bfb2;
+  --gold: #a6b69a;
+  --gold-bright: #d5dfbd;
+  --line: rgba(190, 207, 175, .28);
+}
+.forest-home { background: var(--bg-deep); }
+.forest-home::before { display: none; }
+.forest-home .forest-header {
+  position: absolute;
+  top: 0;
+  left: var(--gutter);
+  right: var(--gutter);
+  width: auto;
+  max-width: none;
+  z-index: 20;
+  border-bottom: 1px solid rgba(231, 235, 215, .26);
+}
+.forest-home .forest-header .brand img { filter: grayscale(1) brightness(1.6); }
+.forest-home .forest-header .desktop-nav { gap: 34px; }
+.forest-home .forest-header .button { border-color: rgba(231, 235, 215, .5); }
+.forest-home .forest-header a { text-shadow: 0 1px 14px #06110d; }
+.forest-home .forest-header .mobile-nav { background: #0a1712f5; }
+.forest-stage {
+  height: 100svh;
+  min-height: 620px;
+  width: 100%;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #09140e;
+}
+.forest-backdrop, .world-backdrop, .forest-atmosphere, .forest-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.forest-backdrop { z-index: -4; opacity: 1; transition: opacity 1.5s ease, transform 2.3s ease; }
+.forest-backdrop img { width: 100%; height: 100%; object-fit: cover; object-position: center 57%; }
+.world-backdrop {
+  z-index: -5;
+  --world-size: max(100vw, 100svh);
+  --world-index: 0;
+  background-image: url('/assets/portfolio/hero-triptych-v1.png');
+  background-repeat: no-repeat;
+  background-size: calc(var(--world-size) * 3) var(--world-size);
+  background-position: calc((100vw - var(--world-size)) / 2 - var(--world-index) * var(--world-size)) center;
+}
+.forest-atmosphere {
+  z-index: -3;
+  background: radial-gradient(ellipse at 53% 58%, rgba(216, 228, 196, .1), transparent 53%);
+  transition: opacity 1.5s;
+}
+.tree-curtain {
+  position: absolute;
+  top: -1%;
+  bottom: -1%;
+  width: 50%;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+  transition: transform 1.8s cubic-bezier(.35, .02, .2, 1), opacity 1.8s ease;
+  will-change: transform;
+}
+.tree-left { left: 0; transform-origin: left bottom; }
+.tree-right { right: 0; transform-origin: right bottom; }
+.tree-curtain img { height: 100%; width: 200%; max-width: none; object-fit: fill; object-position: center; }
+.tree-right img { transform: translateX(-50%); }
+.forest-shade {
+  z-index: 0;
+  background: linear-gradient(180deg, rgba(3, 14, 10, .54), rgba(4, 17, 11, .26) 35%, rgba(4, 17, 11, .08) 58%, rgba(3, 13, 9, .8)), radial-gradient(ellipse at center, transparent 25%, #020c076b);
+}
+.entrance-copy {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 47%;
+  width: min(760px, calc(100% - 44px));
+  transform: translate(-50%, -50%);
+  text-align: center;
+  text-shadow: 0 2px 24px #031108;
+  transition: opacity .5s, transform .8s, visibility .5s;
+}
+.forest-eyebrow { color: #e0e8d2; font-size: 9px; letter-spacing: .32em; margin-bottom: 23px; }
+.entrance-copy h1 { font-size: clamp(56px, 6.3vw, 102px); line-height: .98; letter-spacing: -.035em; }
+.entrance-description { font-family: var(--serif); font-size: 24px; line-height: 1.4; color: #e2e9d8; margin: 22px auto 0; }
+.trail-start {
+  display: inline-flex;
+  align-items: center;
+  gap: 27px;
+  font-family: var(--serif);
+  font-size: 23px;
+  border-bottom: 1px solid #e3ead7a3;
+  padding: 9px 0;
+  margin-top: 25px;
+  transition: gap .3s, color .2s;
+}
+.trail-start svg { width: 25px; height: 30px; }
+.trail-start:hover { gap: 37px; color: #fff; }
+.trail-hint { font-size: 8px; letter-spacing: .22em; margin: 15px auto 0; color: #d1dcc5; }
+.forest-bottom {
+  position: absolute;
+  z-index: 6;
+  bottom: 26px;
+  left: var(--gutter);
+  right: var(--gutter);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 25px;
+  text-shadow: 0 1px 10px #061009;
+}
+.forest-credit { min-width: 170px; }
+.forest-credit > span { display: block; font-size: 7px; letter-spacing: .25em; color: #becab6; margin-bottom: 5px; }
+.forest-credit > a { font-size: 12px; color: #e5ebdc; }
+.trail-stops { display: flex; align-items: center; gap: 12px; padding-bottom: 1px; }
+.trail-stops button, .forest-options button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: #d9e1ce;
+  padding: 0;
+  cursor: pointer;
+}
+.trail-stops button { display: flex; gap: 8px; align-items: center; font-size: 10px; white-space: nowrap; padding: 10px 0; }
+.stop-number { font-size: 9px; display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid #bdc9ad66; border-radius: 50%; transition: background .3s, color .3s; }
+.trail-stops button:hover .stop-number, .trail-stops button[aria-current="step"] .stop-number { background: #dae4ce; color: #18271a; }
+.trail-rule { height: 1px; width: 16px; background: #b4c29f5e; }
+.forest-options { min-width: 160px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-bottom: 5px; }
+.forest-options button { font-size: 9px; color: #c6d2bc; }
+.forest-options button:hover { color: #fff; }
+.forest-options button[hidden] { display: none; }
+.trail-stops button:disabled, .continue-trail:disabled { opacity: .5; cursor: wait; }
+.trail-announcement { position: absolute; z-index: 5; bottom: 105px; left: 50%; transform: translateX(-50%); font-size: 11px; letter-spacing: .1em; color: #e7efdd; text-align: center; width: 80%; pointer-events: none; text-shadow: 0 1px 12px #021006; }
+.world-introduction {
+  position: absolute;
+  z-index: 4;
+  bottom: 112px;
+  right: var(--gutter);
+  width: min(435px, calc(100% - var(--gutter) * 2));
+  background: linear-gradient(140deg, rgba(8, 21, 15, .92), rgba(8, 21, 15, .79));
+  backdrop-filter: blur(12px);
+  padding: 29px 32px 24px;
+  border: 1px solid #c4d3af4f;
+  opacity: 0;
+  transform: translateY(20px);
+  visibility: hidden;
+  transition: opacity .6s .6s, transform .7s .5s, visibility .6s;
+}
+.world-introduction[hidden] { display: none; }
+.world-category { font-size: 8px; letter-spacing: .22em; color: #d8e0c9; margin-bottom: 12px; }
+.world-introduction h2 { font-size: clamp(39px, 4.5vw, 62px); margin-bottom: 14px; }
+.world-introduction h2:focus { outline: none; }
+.world-description { font-family: var(--serif); font-size: 23px; line-height: 1.4; color: #e7eddf; }
+.world-role { font-size: 10px; color: #b5c3aa; margin-top: 15px; line-height: 1.7; }
+.world-actions { display: flex; gap: 11px; margin-top: 21px; }
+.world-actions .button { min-height: 42px; padding: 11px 16px; gap: 15px; font-size: 11px; }
+.world-actions .button-primary { color: #15241a; background: #e6ecd9; border-color: #e6ecd9; }
+.world-actions .button[hidden] { display: none; }
+.world-availability { font-size: 9px; color: #b5c3aa; margin-top: 11px; }
+.continue-trail { appearance: none; background: none; border: 0; padding: 15px 0 0; margin-top: 16px; border-top: 1px solid #c7d4b333; color: #e2e9d6; font-family: var(--serif); font-size: 20px; width: 100%; display: flex; justify-content: space-between; cursor: pointer; text-align: left; }
+.forest-stage.is-walking .forest-backdrop { transform: scale(1.09); }
+.forest-stage.is-away .entrance-copy { opacity: 0; visibility: hidden; transform: translate(-50%, -47%); pointer-events: none; }
+.forest-stage.is-revealed .forest-backdrop, .forest-stage.is-revealed .forest-atmosphere { opacity: 0; }
+.forest-stage.is-revealed .tree-left { transform: translateX(-101%) rotate(-3deg); opacity: .35; }
+.forest-stage.is-revealed .tree-right { transform: translateX(101%) rotate(3deg); opacity: .35; }
+.forest-stage.is-revealed .world-introduction { opacity: 1; transform: translateY(0); visibility: visible; }
+.forest-stage.is-revealed .forest-shade { background: linear-gradient(180deg, #03130b8f, transparent 37%, #03110c30 60%, #04110bd4); }
+.forest-ready .forest-stage { min-height: 620px; }
+.forest-ready .forest-header { position: fixed; }
+.forest-ready > .site-footer { display: none; }
+.forest-home .section.wrap { margin-block: 0; }
+.forest-home .project-dialog { border-color: var(--gold); }
+.forest-home .project-dialog::backdrop { background: #030c08dc; }
+/* Existing portfolio content becomes quick-access dialogs; its non-JS layout remains in the document. */
+.forest-dialog {
+  width: min(1200px, calc(100vw - 48px));
+  max-height: calc(100svh - 70px);
+  border: 1px solid #b9cba378;
+  background: #101d17;
+  color: var(--ivory);
+  padding: 0;
+  overflow-y: auto;
+}
+.forest-dialog::backdrop { background: #030b08b8; backdrop-filter: blur(10px); }
+.forest-dialog-toolbar { position: sticky; top: 0; z-index: 3; display: flex; justify-content: space-between; align-items: center; gap: 20px; background: #101d17f5; backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); padding: 16px 28px; }
+.forest-dialog-toolbar button { border: 0; background: none; color: var(--ivory); cursor: pointer; display: flex; gap: 15px; align-items: center; font-size: 11px; }
+.forest-dialog-toolbar button span { font-size: 24px; }
+.forest-dialog > .section.wrap { width: auto; margin-inline: 28px; border-top: 0; }
+.forest-dialog .section-heading { margin-top: 0; }
+.forest-dialog .section-note { font-size: 18px; }
+.forest-dialog .background { padding-top: 28px; }
+.forest-dialog .background h2 { font-size: 38px; }
+.forest-dialog .contact { border-top: 1px solid var(--line); }
+.forest-dialog .contact h2 { font-size: 65px; }
+.forest-dialog .project-title-row { flex-wrap: wrap; justify-content: flex-start; }
+.forest-dialog .project-title-row h3 { font-size: 31px; width: 100%; }
+.forest-dialog .project-visual { aspect-ratio: 1 / .85; }
+.forest-dialog .project-description { font-size: 20px; min-height: 82px; }
+.forest-find-clearing { border: 0; background: none; color: #c5d4b5; padding: 0; margin-top: 16px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; cursor: pointer; }
+.forest-find-clearing:hover { color: #fff; }
+.directory-actions { display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; }
+.directory-enter { color: #bacbab; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
+.forest-home .project-notes:not(:target) { display: none; }
+.forest-ready .project-notes { display: none !important; }
+.forest-home .no-script-note { margin-block: 30px; color: var(--muted); }
+.forest-home .back-to-trailhead[hidden] { display: none; }
+.forest-home .forest-motion-reduced *, .forest-home.forest-motion-reduced * { transition-duration: .01ms !important; transition-delay: 0ms !important; animation: none !important; }
+@media (max-width: 1100px) {
+  .forest-credit { min-width: 145px; }
+  .forest-options { min-width: 125px; }
+  .stop-name { display: none; }
+  .trail-stops { gap: 12px; }
+  .trail-rule { width: 22px; }
+}
+@media (max-width: 760px) {
+  .forest-home .forest-header { left: 22px; right: 22px; }
+  .forest-home .forest-header .mobile-nav { top: 75px; }
+  .forest-stage, .forest-ready .forest-stage { min-height: 680px; }
+  .forest-backdrop img { object-position: 51% center; }
+  .tree-curtain { width: 32%; }
+  .tree-curtain img { width: 312.5%; object-fit: fill; }
+  .tree-right img { transform: translateX(-68%); }
+  .entrance-copy { top: 44%; width: calc(100% - 44px); }
+  .forest-eyebrow { font-size: 8px; letter-spacing: .22em; margin-bottom: 22px; }
+  .entrance-copy h1 { font-size: clamp(47px, 10.5vw, 69px); }
+  .entrance-description { font-size: 22px; margin-top: 20px; }
+  .trail-start { font-size: 23px; margin-top: 20px; }
+  .trail-hint { font-size: 7px; letter-spacing: .13em; }
+  .forest-bottom { left: 22px; right: 22px; bottom: 21px; display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+  .forest-credit { min-width: 0; grid-column: 1; grid-row: 2; }
+  .forest-credit > a { font-size: 11px; }
+  .forest-options { min-width: 0; align-items: flex-end; grid-column: 2; grid-row: 2; }
+  .trail-stops { grid-column: 1 / -1; grid-row: 1; justify-content: center; }
+  .trail-stops button { padding: 6px 0; }
+  .stop-name { display: inline; font-size: 9px; }
+  .trail-rule { width: 12px; }
+  .trail-stops { gap: 7px; }
+  .stop-number { width: 22px; height: 22px; font-size: 8px; }
+  .world-introduction { right: 22px; bottom: 132px; width: calc(100% - 44px); max-height: calc(100svh - 235px); overflow-y: auto; padding: 23px 22px 20px; }
+  .world-introduction h2 { font-size: 43px; }
+  .world-description { font-size: 21px; }
+  .world-role { font-size: 9px; }
+  .world-actions { gap: 10px; }
+  .world-actions .button { padding: 10px 13px; font-size: 10px; gap: 10px; }
+  .continue-trail { font-size: 20px; margin-top: 13px; padding-top: 12px; }
+  .trail-announcement { bottom: 145px; font-size: 10px; }
+  .forest-dialog { width: calc(100vw - 24px); max-height: calc(100svh - 24px); }
+  .forest-dialog-toolbar { padding: 11px 18px; gap: 10px; }
+  .forest-dialog-toolbar .eyebrow { font-size: 7px; }
+  .forest-dialog-toolbar button { font-size: 10px; gap: 9px; }
+  .forest-dialog > .section.wrap { margin-inline: 20px; }
+  .forest-dialog .project-description { min-height: 0; }
+  .forest-dialog .project-visual { aspect-ratio: 1 / .75; }
+  .forest-dialog .background { gap: 25px; }
+  .forest-dialog .background h2 { font-size: 34px; }
+  .forest-dialog .contact h2 { font-size: 53px; }
+}
+@media (max-width: 380px) {
+  .stop-name { display: none; }
+  .trail-stops { gap: 15px; }
+  .trail-rule { width: 25px; }
+  .world-introduction { padding-inline: 18px; }
+  .world-actions { flex-wrap: wrap; }
+  .world-introduction h2 { font-size: 37px; }
+}
+@media (max-height: 650px) and (min-width: 761px) {
+  .forest-stage, .forest-ready .forest-stage { min-height: 560px; }
+  .forest-header { height: 72px; }
+  .entrance-copy { top: 46%; }
+  .entrance-copy h1 { font-size: 60px; }
+  .entrance-description { margin-top: 14px; font-size: 21px; }
+  .trail-start { margin-top: 13px; }
+  .world-introduction { bottom: 80px; max-height: calc(100svh - 165px); overflow-y: auto; padding: 22px; }
+  .world-introduction h2 { font-size: 40px; }
+  .world-description { font-size: 20px; }
+  .forest-bottom { bottom: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .forest-stage *, .forest-stage *::before, .forest-stage *::after { transition: none !important; animation: none !important; }
+}
+
+/* Keep privacy choices reachable from the quick-access panel. */
+.forest-legal { display: flex; gap: 25px; border-top: 1px solid var(--line); padding: 18px 28px; font-size: 11px; color: var(--muted); }
+.forest-legal a:hover { color: var(--ivory); }
+.trail-stops button { min-height: 44px; }
+.forest-dialog-toolbar button { min-height: 38px; }
