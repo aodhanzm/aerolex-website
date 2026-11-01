@@ -11,3 +11,5 @@ The source owns NOVEL.md, ADVENTURE.md, STATUS.md, DEPLOY.md, content/source/lic
 Release details and rollback baseline are in the source release record. This is an isolated Chinese artifact/homepage-link publication; other website products and DNS/Pages settings are preserved.
 
 App implementation source: 83b1fca. Pre-release website main: cc4679bdd600a1741bb4d60d257e7963ecdaf349. Verified 97 source checks, production build, all eight app routes, direct entry/refresh, homepage directory navigation and neighboring website responses before publication.
+
+Built-in pinyin update: source 5ac719e. Chinese-answer fields now suggest character/word candidates (xiang, pengyou), with static unit-first priority and a direct-input switch. Space/Enter inserts a candidate without checking the exercise; optional English meanings record assistance. Older saves default the additive input preference on. The CC-CEDICT input-data adaptation is attributed CC BY-SA 4.0 and downloadable in the picker; 23 letter groups load on demand. Verified 106 checks, production build and actual static dictionary loading. No audio/content review approval or account system is added.
