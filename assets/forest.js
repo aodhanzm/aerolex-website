@@ -34,9 +34,9 @@
     },
     {
       id: 'project-chinese', name: 'Hànyǔ Courtyard', category: '03 / CHINESE LEARNING',
-      description: 'A lantern-lit courtyard at the end of the path. A learning app for understanding characters, building sentences, and writing by hand.',
+      description: 'An inherited courtyard, a proud rival, and a market errand. Discover useful Mandarin through a visual novel and language mini-games.',
       contribution: 'Learning experience · App design',
-      project: '#chinese-project', enter: null, availability: 'In development · Explore the design concept',
+      project: '#chinese-project', enter: '/chinese/#/journey', availability: 'Playable reading & writing prototype · Audio/content review pending',
       image: '/assets/forest/hanyu-courtyard-clearing-v1.png', mobileFocus: '48%',
       imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains'
     }
@@ -133,7 +133,7 @@
       role.textContent = 'My contribution: ' + world.contribution;
       availability.textContent = world.availability;
       viewLink.href = world.project;
-      viewLink.innerHTML = (index === 2 ? 'View concept' : 'View project') + ' <span aria-hidden="true">↗</span>';
+      viewLink.innerHTML = (index === 2 ? 'About the playtest' : 'View project') + ' <span aria-hidden="true">↗</span>';
       enterLink.hidden = !world.enter;
       if (world.enter) enterLink.href = world.enter;
       next.innerHTML = (index === worlds.length - 1 ? 'Return to the forest' : 'Continue along the path') + ' <span aria-hidden="true">→</span>';

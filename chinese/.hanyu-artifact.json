@@ -1,0 +1,33 @@
+{
+  "app": "hanyu-courtyard",
+  "files": [
+    {
+      "path": "assets/adventure-cast-v1-DbzApEsG.png",
+      "sha256": "41203e7740f69f5e3a5e14b5f87cc236d9fd2255d890309e5fabaacc9c384274"
+    },
+    {
+      "path": "assets/adventure-home-v1-DiaMfAlQ.png",
+      "sha256": "3e4f210f5b03f8216f9496ab2d2095002a77bb34164f2db767500b756290fec1"
+    },
+    {
+      "path": "assets/adventure-market-v1-D8BUJo-A.png",
+      "sha256": "5332f2772b0adcdbb55a74258b6710d49be901b983fcc9f9c0db78ffe1ef0d9d"
+    },
+    {
+      "path": "assets/courtyard-v1-DwAYTY3h.png",
+      "sha256": "39c24092bbf22227ee535293eae547bb842882372ed1dda0f90d7a7e261add9f"
+    },
+    {
+      "path": "assets/index-BNgibdIX.js",
+      "sha256": "f3030188e10f3bff57b0a15d74b95aef77cbd3e8f60b9b20118103c6ec721820"
+    },
+    {
+      "path": "assets/index-CFQK_dWN.css",
+      "sha256": "2aef2bd9e7833296cddfe2ed72068831655e4ca1ad3bf9adb1c2baaf35a31660"
+    },
+    {
+      "path": "index.html",
+      "sha256": "76b8a483a812ab9cc5f76c6a7d610436d7ed0e495b083783ba264d634c1cd46a"
+    }
+  ]
+}
