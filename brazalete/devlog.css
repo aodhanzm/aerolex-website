@@ -1,0 +1,49 @@
+/* Quiz invitation and dev-log video library below the brazalete (added 2026-11-11).
+   Uses the same light blue glass look as the tool above so the page reads as one piece. */
+
+/* Header links on the right ("Dev log", "Back to aerolex.dev") sit in a row with a gap. */
+.top-links { display: flex; gap: 22px; flex-wrap: wrap; }
+
+/* Quiz invitation: text on the left, button on the right; stacks on phones (see bottom of file). */
+.quiz-invite { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 20px; padding: 26px 30px; margin-top: 26px; }
+.quiz-invite h2 { font-size: 24px; margin: 4px 0 8px; letter-spacing: -.02em; }
+.quiz-invite p:not(.eyebrow) { margin: 0; max-width: 62ch; }
+/* The quiz button is larger than the tool's small controls, since it's the page's main next step. */
+.quiz-button { font-size: 16px; font-weight: 650; padding: 13px 22px; }
+
+/* Small pill label used for "Coming soon" on the quiz button and on placeholder video cards. */
+.soon-tag { display: inline-block; font-size: 11px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; color: #4a6c80; border: 1px solid #a9c4d4; border-radius: 999px; padding: 5px 11px; background: #f6fbfe; }
+
+/* Dev-log section: a little separation from the tool, and a heading block with a readable line length. */
+.devlog { margin-top: 46px; }
+.devlog-head { max-width: 70ch; margin-bottom: 18px; }
+.devlog-head h2 { font-size: clamp(24px, 3vw, 32px); margin: 4px 0 8px; letter-spacing: -.03em; }
+
+/* Each shelf: a small heading, then a row of cards that wraps onto new lines as needed. */
+.shelf { margin-top: 22px; }
+.shelf h3 { font-size: 13px; font-weight: 750; letter-spacing: .14em; text-transform: uppercase; color: #4a6c80; margin-bottom: 12px; }
+/* Cards are at least 260px wide; as many fit across as the screen allows. */
+.shelf-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+
+/* One video card: the picture/player on top, title and note underneath. */
+.video-card h4 { font-size: 16px; font-weight: 650; margin: 10px 2px 2px; }
+.video-note { font-size: 14px; color: #4a6c80; margin: 2px 2px 0; }
+/* The video area keeps YouTube's 16:9 shape, with rounded corners matching the glass cards. */
+.video-frame { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 16px; overflow: hidden; background: #19374b; }
+/* Placeholder cards: a pale frame with a dashed outline and the "Coming soon" label in the middle. */
+.is-soon .video-frame { display: grid; place-items: center; background: #ffffff80; border: 1px dashed #a9c4d4; }
+/* Real videos: the preview picture fills the frame, and a round play symbol sits on top. */
+.video-play { position: relative; padding: 0; min-height: 0; cursor: pointer; }
+.video-play img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+.video-play:hover img { transform: scale(1.03); }
+.play-mark { position: absolute; inset: 0; margin: auto; width: 62px; height: 62px; display: grid; place-items: center; border-radius: 50%; background: #ffffffe0; color: #19374b; font-size: 22px; padding-left: 4px; box-shadow: 0 6px 20px #0003; }
+
+/* Footer gets breathing room now that the library sits above it. */
+footer { margin-top: 40px; }
+
+/* Phones: quiz text, button and tag stack vertically; cards go full width. */
+@media (max-width: 740px) {
+  .quiz-invite { grid-template-columns: minmax(0, 1fr); padding: 22px 20px; justify-items: start; }
+  .shelf-row { grid-template-columns: minmax(0, 1fr); }
+  .top-links { gap: 14px; }
+}
