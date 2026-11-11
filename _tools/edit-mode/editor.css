@@ -1,0 +1,23 @@
+/* Look of the edit-mode toolbar and panel. Plain colours so it reads clearly over any page. */
+/* Toolbar: fixed in the bottom-left corner, above everything else on the page. */
+#edit-bar { position: fixed; left: 12px; bottom: 12px; z-index: 2147483646; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; max-width: calc(100vw - 24px); padding: 8px; border-radius: 10px; background: #111; color: #fff; font: 13px/1.3 system-ui, sans-serif; box-shadow: 0 6px 24px #0007; }
+#edit-bar button, #edit-panel button { font: 600 13px system-ui, sans-serif; padding: 7px 11px; border-radius: 7px; border: 1px solid #555; background: #222; color: #fff; cursor: pointer; }
+#edit-bar button:hover, #edit-panel button:hover { background: #333; }
+.edit-status { color: #ffd479; }
+/* While edit mode is on, hovering editable text shows a dashed outline; the selected one gets a solid outline. */
+html.edit-on [data-edit-src]:hover { outline: 2px dashed #ffb000 !important; outline-offset: 2px; cursor: pointer; }
+.edit-selected { outline: 2px solid #ff3d7f !important; outline-offset: 2px; cursor: move !important; }
+/* Panel: fixed on the right side, scrolls if the screen is short. */
+#edit-panel { position: fixed; top: 12px; right: 12px; z-index: 2147483646; width: min(330px, calc(100vw - 24px)); max-height: calc(100vh - 24px); overflow: auto; padding: 14px; border-radius: 12px; background: #111; color: #eee; font: 13px/1.4 system-ui, sans-serif; box-shadow: 0 8px 30px #0008; }
+#edit-panel[hidden] { display: none; }
+#edit-panel h2 { font: 700 15px system-ui, sans-serif; margin: 0 0 10px; color: #fff; }
+#edit-panel label { display: grid; gap: 4px; margin-bottom: 9px; color: #bbb; }
+#edit-panel textarea, #edit-panel input, #edit-panel select { font: 14px system-ui, sans-serif; padding: 6px 8px; border-radius: 6px; border: 1px solid #555; background: #1c1c1c; color: #fff; width: 100%; box-sizing: border-box; }
+#edit-panel textarea:disabled { opacity: .5; }
+.edit-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+#edit-panel .edit-check { display: flex; align-items: center; gap: 6px; align-self: end; }
+#edit-panel .edit-check input { width: auto; }
+.edit-note, .edit-hint { color: #999; font-size: 12px; margin: 0 0 8px; }
+.edit-nudge { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; color: #bbb; }
+.edit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.edit-actions [data-act="save-text"], .edit-actions [data-act="save-style"] { background: #ff3d7f; border-color: #ff3d7f; }
