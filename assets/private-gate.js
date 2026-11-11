@@ -19,7 +19,7 @@
 
   // The fingerprint settings. SALT is random text mixed into the password so the fingerprint can't be
   // looked up in a table; HASH is the fingerprint itself. Both empty = no password set yet (stays locked).
-  var GATE = { salt: '', hash: '', iterations: 250000 };
+  var GATE = { salt: '60d8e877776010bcc6b27c9a0c9430df', hash: '35babf75baced0e5d8fdf3730bdd7fe5d480b099726f26f1e10d776866a5516c', iterations: 250000 };
 
   // Name of the note this browser keeps once unlocked (it stores the fingerprint, never the password).
   var STORAGE_KEY = 'aerolex-private-gate';

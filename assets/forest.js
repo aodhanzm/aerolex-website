@@ -16,28 +16,39 @@
   document.body.classList.add('forest-ready');
 
   const worlds = [
+    // The three clearings, in path order (changed 2026-11-11: The Brazalete replaces The Scene, which is private for now).
+    // viewLabel / enterLabel are each clearing's own button wording; enter: null hides the second button.
     {
-      id: 'project-scene', name: 'The Scene', category: '01 / LANGUAGE-LEARNING GAME',
-      description: 'Beyond the pines, a town on the coast. A Spanish-learning game built around conversations, choices, and the people you meet.',
-      contribution: 'Game production · Curriculum design · Product advisory',
-      project: '/the-scene/', enter: 'https://play.aerolex.dev/', availability: 'Playable beta · Desktop recommended',
-      image: '/assets/forest/the-scene-clearing-v1.png', mobileFocus: '37%',
-      imageLabel: 'Solmara’s colorful coastal city with a carved cliff monument, waterfalls, cable cars and a sun arch at sunset'
+      id: 'project-brazalete', name: 'The Brazalete', category: '01 / SPANISH GRAMMAR TOOL',
+      description: 'A brass wristband for building Spanish verbs. Turn the rings to choose mood, tense and person, and watch the word change shape as you go.',
+      contribution: 'Interaction design · Learning design · Development',
+      // Both buttons lead to the Brazalete page: one to the dev-log videos further down it, one to the tool at the top.
+      project: '/brazalete/#dev-log', viewLabel: 'Watch the dev log',
+      enter: '/brazalete/', enterLabel: 'Try the Brazalete',
+      availability: 'Free to try · No account needed',
+      // Backdrop made from NZ's original brazalete concept art (device close-up, edges blended into a dark background).
+      image: '/assets/forest/brazalete-clearing-v1.webp', mobileFocus: '42%',
+      imageLabel: 'A brass and enamel wristband with a glowing wheel of coloured segments for choosing verb forms'
     },
     {
       id: 'project-sanctum', name: 'The Sanctum', category: '02 / A SPACE FOR REFLECTION',
       description: 'A quiet observatory beyond the trees. A personal space for astrology, journaling, and following your curiosity.',
       contribution: 'Product design · Development',
-      project: '/sanctum/about/', enter: '/sanctum/', availability: 'Private tool · Invitation required to join',
+      project: '/sanctum/about/', viewLabel: 'View project',
+      enter: '/sanctum/', enterLabel: 'Enter world',
+      availability: 'Private tool · Invitation required to join',
       image: '/assets/forest/the-sanctum-clearing-v1.png', mobileFocus: '30%',
       imageLabel: 'A Grecian island archipelago with a temple of Athena, a brass-domed observatory and illuminated marble terraces beneath the stars'
     },
     {
+      // Name is a placeholder until NZ's naming session picks the new one.
       id: 'project-chinese', name: 'Hànyǔ Courtyard', category: '03 / CHINESE LEARNING',
-      description: 'An inherited courtyard, a proud rival, and a market errand. Discover useful Mandarin through a visual novel and language mini-games.',
-      contribution: 'Learning experience · App design',
-      // "Enter world" opens the current walkable-estate playtest ("#/estate"), not the old visual-novel chapter ("#/journey").
-      project: '#chinese-project', enter: '/chinese/#/estate', availability: 'Playable reading & writing prototype · Audio/content review pending',
+      description: 'An inherited estate in the mountains, a kettle that needs tea, and your first words of Mandarin. A Chinese-learning game I’m designing now.',
+      contribution: 'Learning experience · Game design',
+      // Visitors only see the design concept. The playable build is NZ-only (behind the password), so there is no "Enter world" here.
+      project: '#chinese-project', viewLabel: 'See the design',
+      enter: null,
+      availability: 'In design · Concept art and mockups',
       image: '/assets/forest/hanyu-courtyard-clearing-v1.png', mobileFocus: '48%',
       imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains'
     }
@@ -134,9 +145,18 @@
       role.textContent = 'My contribution: ' + world.contribution;
       availability.textContent = world.availability;
       viewLink.href = world.project;
-      viewLink.innerHTML = (index === 2 ? 'About the playtest' : 'View project') + ' <span aria-hidden="true">↗</span>';
+      // Each clearing names its own first button (e.g. "Watch the dev log", "See the design").
+      viewLink.innerHTML = world.viewLabel + ' <span aria-hidden="true">↗</span>';
+      // Hide the second button for clearings that have nothing to enter (Hanyu, for now).
       enterLink.hidden = !world.enter;
-      if (world.enter) enterLink.href = world.enter;
+      if (world.enter) {
+        enterLink.href = world.enter;
+        // Only The Scene's old game opened in a new tab; every current destination is on this site, so open in place.
+        enterLink.removeAttribute('target');
+        enterLink.removeAttribute('rel');
+        // Button wording plus the arrow; the old "(opens in a new tab)" note is gone because it no longer does.
+        enterLink.innerHTML = world.enterLabel + ' <span aria-hidden="true">↗</span>';
+      }
       next.innerHTML = (index === worlds.length - 1 ? 'Return to the forest' : 'Continue along the path') + ' <span aria-hidden="true">→</span>';
       card.hidden = false;
       reflectStops();
@@ -243,7 +263,8 @@
   legal.querySelector('[data-action="cookie-settings"]').addEventListener('click', () => biography.close());
   biography.append(legal);
   const initialHash = location.hash;
-  if (['#projects', '#project-scene', '#project-sanctum', '#project-chinese'].includes(initialHash)) {
+  // Links like aerolex.dev/#project-brazalete open the projects panel at that card (The Scene's card was replaced).
+  if (['#projects', '#project-brazalete', '#project-sanctum', '#project-chinese'].includes(initialHash)) {
     openPanel('projects', initialHash.startsWith('#project-') ? initialHash.slice(1) : null);
   } else if (initialHash === '#chinese-project') {
     document.querySelector('.project-dialog').showModal();
