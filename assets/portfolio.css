@@ -807,7 +807,8 @@ p {
   margin-bottom:54px;
 }
 .resume-main {
-  max-width:950px;
+  /* Wider than before (was 950px) to make room for the side panel next to the work history. */
+  max-width:1180px;
 }
 .resume-intro {
   border-bottom:1px solid var(--gold);
@@ -815,14 +816,18 @@ p {
   margin-bottom:30px;
 }
 .resume-intro h1 {
-  /* Name heading, about 20% bigger than before (was 53px–85px) so the résumé reads more easily. */
-  font-size:clamp(64px,8.4vw,102px);
+  /* The name always stays on one line: it never wraps... */
+  white-space:nowrap;
+  /* ...and its size follows the screen width so it fits: the full name is about 12.5 letter-heights wide,
+     so the available width divided by 12.8 always fits, with a little room to spare. It tops out at 84px. */
+  font-size:min(84px, calc((100vw - var(--gutter) * 2) / 12.8));
   margin:12px 0 10px;
 }
 .resume-tagline {
   font-family:var(--serif);
-  /* Tagline under the name, 20% bigger (was 25px). */
-  font-size:30px;
+  /* Tagline under the name: 30px on wide screens (was 25px). On phones it shrinks with the screen
+     (available width ÷ 20.5) so it stays on one line and never looks bigger than the name above it. */
+  font-size:min(30px, calc((100vw - var(--gutter) * 2) / 20.5));
 }
 .resume-contact {
   display:flex;
@@ -850,8 +855,8 @@ p {
 }
 .resume-meta {
   color:var(--gold);
-  /* Job title, place and dates line, 20% bigger (was 11px). */
-  font-size:13px;
+  /* Job title, place and dates line ("Product Advisor, The Scene · Remote · ..."), enlarged twice on NZ's request (was 11px, then 13px). */
+  font-size:16px;
   margin:7px 0;
 }
 .resume-entry p:last-child,.resume-summary {
@@ -891,6 +896,92 @@ p {
    The homepage keeps its own size because this rule only applies inside the résumé page. */
 .resume-page .eyebrow {
   font-size:12px;
+}
+/* Two-column body: work history takes the remaining space, the side panel is a fixed 300px on the right. */
+.resume-body {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 300px;
+  gap:72px;
+  align-items:start;
+}
+/* Side panel: a thin line on its left separates it from the work history, and it stays in view while scrolling. */
+.resume-side {
+  position:sticky;
+  top:32px;
+  margin-top:30px;
+  padding-left:36px;
+  border-left:1px solid var(--line);
+}
+/* Each group in the side panel (Education, Tools, Languages) gets breathing room below it. */
+.side-block {
+  margin-bottom:38px;
+}
+/* Side headings are small, spaced-out capitals in the accent colour, so they read as labels, not big titles. */
+.side-block h2 {
+  font:500 13px/1.6 var(--sans);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:16px;
+}
+.side-item {
+  margin-bottom:16px;
+}
+/* Degree names in the same serif as the headings on the left, so both columns feel related. */
+.side-item h3 {
+  font-size:24px;
+  line-height:1.2;
+}
+/* School and year under each degree. */
+.side-item p {
+  color:#c9cfcb;
+  font-size:15px;
+  margin-top:4px;
+}
+/* Tools as small outlined tags that wrap onto as many lines as needed. */
+.tool-tags {
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.tool-tags li {
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 12px;
+  font-size:14px;
+  color:var(--ivory);
+}
+/* Languages: one row each, language on the left, level on the right, separated by a faint line. */
+.language-list {
+  margin:0;
+}
+.language-list div {
+  display:flex;
+  justify-content:space-between;
+  padding:9px 0;
+  border-bottom:1px solid var(--line);
+  font-size:16px;
+}
+.language-list dd {
+  margin:0;
+  color:var(--gold);
+}
+/* On narrower screens the side panel drops below the work history instead of sitting beside it. */
+@media(max-width:900px) {
+  .resume-body {
+    grid-template-columns:1fr;
+    gap:0;
+  }
+  .resume-side {
+    position:static;
+    padding-left:0;
+    border-left:0;
+    border-top:1px solid var(--line);
+    padding-top:28px;
+  }
 }
 @media(min-width:1600px) {
   .hero {
@@ -1302,6 +1393,31 @@ p {
   .resume-meta,.resume-contact {
     color:#635139;
     font-size:9pt;
+  }
+  /* Printed/PDF résumé keeps the side panel, just narrower, with tighter spacing. */
+  .resume-body {
+    grid-template-columns:minmax(0,1fr) 170pt;
+    gap:24pt;
+  }
+  /* Paper isn't scrolled, so the panel doesn't need to stick; the dividing line turns a printable tan. */
+  .resume-side {
+    position:static;
+    padding-left:16pt;
+    border-color:#c9b48f;
+  }
+  /* The side panel's light-on-dark text colours would vanish on white paper, so darken them for print. */
+  .side-block h2,.language-list dd {
+    color:#635139;
+  }
+  .side-item p,.tool-tags li,.language-list div {
+    color:#283037;
+    font-size:9.5pt;
+  }
+  .side-item h3 {
+    font-size:13pt;
+  }
+  .tool-tags li,.language-list div {
+    border-color:#c9b48f;
   }
   .resume-grid {
     gap:24px;
