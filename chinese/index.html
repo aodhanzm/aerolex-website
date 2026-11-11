@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- 2026-11-11: the playable build is NZ-only on aerolex.dev. This loads the website's shared password
+         screen before anything else, so the game stays hidden until unlocked. The file lives on the website,
+         not in this project, so in local development it simply isn't found and the game opens normally. -->
+    <script src="/assets/private-gate.js"></script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
