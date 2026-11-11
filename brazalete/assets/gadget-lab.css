@@ -584,8 +584,26 @@ body.lightning .prompt-es { min-height: 18px; color: #e08090; font-size: 13px; }
 
 /* Participio / gerundio: no person, so the six sextants go dark and the hub
    alone carries the form (the takeover styling on .hub.takeover). */
-.ring-person.dormant .seg { fill: #0d0a18; filter: none; }
-.ring-person.dormant .seg-sub, .ring-person.dormant .glyph { opacity: .25; }
+.ring-person.dormant .seg { fill: #0d0a18; filter: none; stroke: #1c1730; }
+/* NZ, 2026-11-11: fully dark, not dimmed. Figures and pronouns nearly vanish so no person seems to shape the form. */
+.ring-person.dormant .seg-sub, .ring-person.dormant .glyph { opacity: .07; }
+/* The hub's yellow (indicative) colour for these forms: drawn even without the "live" pulse styling. */
+.hub.takeover .hub-plate { stroke: var(--hub, var(--accent)); filter: drop-shadow(0 0 12px var(--hub, var(--accent))); }
+
+/* The −ra/−se lever (NZ, 2026-11-11; designed 2026-11-10). A small blue switch on the device's upper-left edge,
+   present only on subjunctive + imperfect. Its label is the family it will switch to. */
+.device { position: relative; } /* Lets the lever sit at a fixed spot on the device drawing. */
+.ending-lever { position: absolute; top: 9%; left: 6%; z-index: 2; display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 12px 6px 8px;
+  border: 2px solid #4fb4ff; border-radius: 14px; background: #10203a; color: #bfe4ff; font: 800 13px 'Segoe UI', sans-serif;
+  box-shadow: 0 0 10px #4fb4ff55; cursor: pointer; transform-origin: right center; }
+.ending-lever:hover { background: #18325a; }
+.ending-lever:focus-visible { outline: 3px solid #bfe4ff; outline-offset: 3px; }
+/* The little arm: a blue bar that reads as a physical lever beside its label. */
+.lever-arm { width: 16px; height: 6px; border-radius: 3px; background: #4fb4ff; box-shadow: 0 0 6px #4fb4ff; }
+/* Unfolds out from behind the rim the moment it appears (placeholder movement; final animation still to be designed). */
+.ending-lever.unfold { animation: lever-unfold .45s cubic-bezier(.2,1.4,.4,1); }
+@keyframes lever-unfold { from { transform: scaleX(0) translateX(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ending-lever.unfold { animation: none; } }
 
 /* The sentence's "no" space: filled by the NO antenna, never by hand. */
 .slot.polarity:not(.filled) { border-color: rgba(255, 90, 110, .45); border-style: dashed; }

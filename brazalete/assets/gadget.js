@@ -38,6 +38,8 @@ const Gadget = (() => {
   const state = {
     publicForms: null, // Only the standalone explorer supplies regional forms; the game keeps its original behaviour.
     variety: 'tu', // Keep the existing game on Tú until the explorer explicitly chooses Vos.
+    ending: 'ra', // Imperfect-subjunctive family shown: 'ra' (first-visit default) or 'se', flipped by the blue lever.
+    leverWasOut: false, // Was the lever showing on the last drawing? Lets it unfold only when it first appears.
     word: null,           // { kind:'verb'|'adj', lemma } or null when the intake is empty
     // Remembered per kind — a real device keeps its knobs where you left them.
     // The tense dial starts at TENSE_HOME (presente), not index 0, because the
@@ -91,7 +93,20 @@ const Gadget = (() => {
 
   // Is this mood / tense shut by the current mission's lens?
   const moodLocked = id => !!(state.lens && state.lens.moods && !state.lens.moods.includes(id));
-  const tenseLocked = t => !!(t.locked || (state.lens && state.lens.tenses && !state.lens.tenses.includes(t.id)));
+  // Which bottom buttons each mood allows (NZ, 2026-11-11). Indicative: all of them (null = no limit).
+  // Subjunctive: present, imperfect, future. Imperative: present only. So the conditional, preterite,
+  // gerund and participle can only be chosen in the indicative.
+  const MOOD_TENSES = { ind: null, sub: ['pres', 'impf', 'fut'], imp: ['pres'] };
+  // Is tense `t` shut by the mood the ring is on right now?
+  const moodBlocks = (moodId, tenseId) => !!(MOOD_TENSES[moodId] && !MOOD_TENSES[moodId].includes(tenseId));
+  const moodBlocksTense = t => { const m = MOODS[state.dials.verb[0]]; return !!m && moodBlocks(m.id, t.id); };
+  const tenseLocked = t => !!(t.locked || (state.lens && state.lens.tenses && !state.lens.tenses.includes(t.id)) || moodBlocksTense(t));
+  // After the mood ring turns, if the tense it was on isn't allowed in the new mood, the tense slides back
+  // to PRESENTE (allowed in every mood), so the device never rests on a powered-down button.
+  function settleTense() {
+    if (!state.word || state.word.kind !== 'verb') return;
+    if (tenseLocked(TENSES[state.dials.verb[2]])) state.dials.verb[2] = TENSE_HOME;
+  }
 
   function dialSpecs() {
     if (!state.word) return [];
@@ -124,6 +139,8 @@ const Gadget = (() => {
       const mood = MOODS[dials[0]].id;
       const tense = TENSES[dials[2]];
       if (!tense || tense.locked) return null;
+      // A tense the mood doesn't allow (e.g. subjunctive + conditional) has no form (NZ, 2026-11-11).
+      if (moodBlocks(mood, tense.id)) return null;
       // Participio and gerundio do not change by person or mood: one form, held
       // by the hub alone (the sextants go dark — see deviceSvg).
       if (tense.nonFinite) return v.nf ? v.nf[tense.id] : null;
@@ -137,6 +154,9 @@ const Gadget = (() => {
 
   function formFor(word, dials, neg) { // Extend the same lookup only when the public explorer opts in.
     let form = baseFormFor(word, dials, neg); // Keep every existing Tú table as the maintained source.
+    // The −ra/−se lever (NZ, 2026-11-11; designed 2026-11-10): in the imperfect subjunctive, the −se family
+    // replaces −ra in all six forms: comiera → comiese, comiéramos → comiésemos. Applies in the game too.
+    if (form && state.ending === 'se' && word && word.kind === 'verb' && MOODS[dials[0]].id === 'sub' && TENSES[dials[2]].id === 'impf') form = toSe(form);
     if (!state.publicForms || !word || word.kind !== 'verb') return form; // Leave the game and adjective lookup unchanged.
     const v = VERBS[word.lemma], mood = MOODS[dials[0]].id, tense = TENSES[dials[2]]; // Read the selected grammatical combination.
     const regional = state.publicForms[word.lemma]; // Use an explicit checked entry rather than guessing an irregular form.
@@ -149,6 +169,20 @@ const Gadget = (() => {
     if (tense.nonFinite || (mood === 'imp' && !neg)) return form; // Participles stay bare; stored affirmative commands already include their pronoun.
     return OBJECT_PRONOUNS.ref[dials[1]] + ' ' + form; // Show complete finite reflexive phrases without asking visitors to repair a missing pronoun.
   } // Negation is still added once by the existing readout and confirmation presentation.
+
+  // Swap a −ra imperfect-subjunctive ending for its −se twin: −ra→−se, −ras→−ses, −ramos→−semos, −rais→−seis, −ran→−sen.
+  // Every stored imperfect-subjunctive form ends this way, irregulars included (fuera→fuese, tuviera→tuviese).
+  const toSe = f => f.replace(/ra(s|mos|is|n)?$/, (m, end) => 'se' + (end || ''));
+  // Is the lever showing right now? Only with a verb loaded on subjunctive + imperfect.
+  const leverOut = () => !!(state.word && state.word.kind === 'verb' && MOODS[state.dials.verb[0]].id === 'sub' && TENSES[state.dials.verb[2]].id === 'impf');
+  // Flip the lever: all six forms change family at once, and the lever then offers the other one.
+  function toggleEnding() {
+    if (!leverOut() || !allowed('ending')) return;
+    state.ending = state.ending === 'se' ? 'ra' : 'se';
+    SFX.click(2);
+    render();
+    if (state.onSet) state.onSet('ending', state.ending);
+  }
 
   function personAt(p, i) { // Give public labels clear regional meanings without changing the stored person order.
     if (!state.publicForms) return p; // Preserve every original game label and tutorial expectation.
@@ -286,6 +320,7 @@ const Gadget = (() => {
     // The guided round may refuse this exact stop: the press doesn't take, with a dull click.
     if (!guarded(dialIndex, order[p])) return;
     dials[dialIndex] = order[p];
+    if (dialIndex === 0) settleTense();   // A new mood may not allow the current tense (see MOOD_TENSES).
     state.active = dialIndex;
     SFX.click(dialIndex);
     render();
@@ -306,6 +341,7 @@ const Gadget = (() => {
     const dials = currentDials();
     if (dials[dialIndex] !== stopIndex) SFX.click(dialIndex);
     dials[dialIndex] = stopIndex;
+    if (dialIndex === 0) settleTense();   // A new mood may not allow the current tense (see MOOD_TENSES).
     const order = STEP_ORDER[state.word.kind];
     const at = order.indexOf(dialIndex);
     state.active = at >= 0 && at < order.length - 1 ? order[at + 1] : dialIndex;
@@ -476,8 +512,9 @@ const Gadget = (() => {
       const dark = level === 0 && !lit;                               // never heard: completely dark
       // The guided round's pointer: this section pulses until it is the one selected.
       const cued = !off && state.cue && state.cue.person === i && dials[1] !== i;
-      // A dark section cannot look selected: there is nothing lit in it to select.
-      const sel = i === personSel && !dark;
+      // A dark section cannot look selected: there is nothing lit in it to select. Nor can any section while a
+      // gerund or participle is chosen (NZ, 2026-11-11): those forms belong to no person, so none may look picked.
+      const sel = i === personSel && !dark && !dormant;
       // Each section's pieces sit in one group, so a single class can darken, dim or light the lot.
       s += `<g class="sext cal-${level}${lit ? ' flash' : ''}${cued ? ' cue' : ''}" style="--seg:${st.colour}">`;
       s += `<path d="${annulus(R_HUB, R_PERSON_OUT, c - 29, c + 29)}" class="seg seg-person${sel ? ' sel' : ''}" `
@@ -514,7 +551,10 @@ const Gadget = (() => {
     // outer ring; the hub sits inside the person circle and hands out one
     // person's form, so it wears that person's colour — the sextant you picked
     // and the button you press next visibly match.
-    const hubHue = personSel >= 0 && personSpec.stops[personSel] ? personSpec.stops[personSel].colour : null;
+    // Exception (NZ, 2026-11-11): a gerund or participle wears the INDICATIVE yellow instead, because the form
+    // stands alone, tied to no person, so no person's colour should appear to shape it.
+    const hubHue = nonFinite ? MOODS.find(m => m.id === 'ind').colour
+      : personSel >= 0 && personSpec.stops[personSel] ? personSpec.stops[personSel].colour : null;
     // The guided round points at the hub once the right person is chosen: the next press is CONFIRM.
     const hubCued = !off && hubForm && state.cue && state.cue.person != null && dials[1] === state.cue.person;
     s += `<g data-part="hub" class="hub hub-btn${hubForm ? ' live' : ''}${nonFinite ? ' takeover' : ''}${hubCued ? ' cue' : ''}${focusCls('hub')}" `
@@ -681,7 +721,12 @@ const Gadget = (() => {
     html += `</div>`;
 
     if (specs.length === 3) {
-      html += `<div class="device${state.publicForms ? ' device-public' : ''}">${deviceSvg(specs, dials, accent)}${state.publicForms ? `<button id="variety-switch" type="button" class="variety-switch" data-variety-switch aria-label="Switch to ${state.variety === 'tu' ? 'Vos (Argentina / Uruguay)' : 'Tú'}" title="Switch to ${state.variety === 'tu' ? 'Vos' : 'Tú'}">${state.variety === 'tu' ? 'Vos' : 'Tú'}</button>` : ''}</div>`; // The physical switch offers the other variety while the person sector names the current one.
+      // The −ra/−se lever: only on subjunctive + imperfect. It shows the family it will switch TO, like the Tú/Vos
+      // switch. It unfolds (animation class) only on the drawing where it first appears, not on every redraw.
+      const out = leverOut();
+      const lever = out ? `<button id="ending-lever" type="button" class="ending-lever${state.leverWasOut ? '' : ' unfold'}" data-ending-lever aria-label="Switch the imperfect subjunctive to ${state.ending === 'se' ? '−ra' : '−se'} endings" title="Switch to ${state.ending === 'se' ? '−ra' : '−se'} endings"><span class="lever-arm" aria-hidden="true"></span>${state.ending === 'se' ? '−ra' : '−se'}</button>` : '';
+      state.leverWasOut = out;
+      html += `<div class="device${state.publicForms ? ' device-public' : ''}">${deviceSvg(specs, dials, accent)}${lever}${state.publicForms ? `<button id="variety-switch" type="button" class="variety-switch" data-variety-switch aria-label="Switch to ${state.variety === 'tu' ? 'Vos (Argentina / Uruguay)' : 'Tú'}" title="Switch to ${state.variety === 'tu' ? 'Vos' : 'Tú'}">${state.variety === 'tu' ? 'Vos' : 'Tú'}</button>` : ''}</div>`; // The physical switch offers the other variety while the person sector names the current one.
     } else if (specs.length === 2) {
       html += `<div class="device adj-device">${adjDeviceSvg(specs, dials)}</div>`;
     } else {
@@ -740,6 +785,7 @@ const Gadget = (() => {
         return;
       }
       if (t.closest && t.closest('[data-variety-switch]')) { toggleVariety(); return; } // Let the on-device button use the same gated input route as the other hardware.
+      if (t.closest && t.closest('[data-ending-lever]')) { toggleEnding(); return; } // The −ra/−se lever flips all six imperfect-subjunctive forms.
       // The SÍ / NO antennae.
       const ant = t.closest && t.closest('[data-neg]');
       if (ant) { setNeg(ant.dataset.neg === '1'); return; }
@@ -760,7 +806,11 @@ const Gadget = (() => {
     set variety(v) { state.variety = v === 'vos' ? 'vos' : 'tu'; render(); }, // Preserve all dial settings when informal address changes.
     get variety() { return state.variety; }, // Let the explorer save the selected variety.
     toggleVariety, // Expose the same physical-switch action to documented keyboard access.
-    captureState() { return JSON.parse(JSON.stringify({ word: state.word, dials: state.dials, active: state.active, neg: state.neg, variety: state.variety, lens: state.lens, liveReadout: state.liveReadout })); }, // Preserve both word modes before a temporary walkthrough.
+    toggleEnding, // The −ra/−se lever, for keyboard access and walkthroughs.
+    moodAllows: (moodId, tenseId) => !moodBlocks(moodId, tenseId), // Lets the public page grey out the same buttons the device does.
+    set ending(v) { state.ending = v === 'se' ? 'se' : 'ra'; render(); }, // Restore a remembered ending family.
+    get ending() { return state.ending; }, // Let the explorer remember the chosen family for later visits.
+    captureState() { return JSON.parse(JSON.stringify({ word: state.word, dials: state.dials, active: state.active, neg: state.neg, variety: state.variety, ending: state.ending, lens: state.lens, liveReadout: state.liveReadout })); }, // Preserve both word modes (and the ending family) before a temporary walkthrough.
     restoreState(saved) { Object.assign(state, JSON.parse(JSON.stringify(saved))); render(); }, // Restore exploration exactly without submitting an answer or firing input hooks.
     mount, load, clear, randomise, step, set, setActive, cycleActive, eject, formFor, colourFor, render,
     setNeg, toggleNeg: () => setNeg(!state.neg),
