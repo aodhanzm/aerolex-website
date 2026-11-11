@@ -815,18 +815,21 @@ p {
   margin-bottom:30px;
 }
 .resume-intro h1 {
-  font-size:clamp(53px,7vw,85px);
+  /* Name heading, about 20% bigger than before (was 53px–85px) so the résumé reads more easily. */
+  font-size:clamp(64px,8.4vw,102px);
   margin:12px 0 10px;
 }
 .resume-tagline {
   font-family:var(--serif);
-  font-size:25px;
+  /* Tagline under the name, 20% bigger (was 25px). */
+  font-size:30px;
 }
 .resume-contact {
   display:flex;
   gap:24px;
   flex-wrap:wrap;
-  font-size:12px;
+  /* Email / website / LinkedIn row, 20% bigger (was 12px). */
+  font-size:14px;
   color:var(--gold);
   margin-top:17px;
 }
@@ -834,24 +837,28 @@ p {
   margin:30px 0;
 }
 .resume-section h2 {
-  font-size:33px;
+  /* Section headings ("Experience", "Education"), 20% bigger (was 33px). */
+  font-size:40px;
   margin-bottom:22px;
 }
 .resume-entry {
   margin-bottom:26px;
 }
 .resume-entry h3 {
-  font-size:25px;
+  /* Company / degree names, 20% bigger (was 25px). */
+  font-size:30px;
 }
 .resume-meta {
   color:var(--gold);
-  font-size:11px;
+  /* Job title, place and dates line, 20% bigger (was 11px). */
+  font-size:13px;
   margin:7px 0;
 }
 .resume-entry p:last-child,.resume-summary {
   color:#c9cfcb;
   line-height:1.8;
-  font-size:14px;
+  /* Main paragraph text, 20% bigger (was 14px). */
+  font-size:17px;
 }
 .resume-summary {
   max-width:75ch;
@@ -875,9 +882,15 @@ p {
   cursor:pointer;
 }
 .resume-note {
-  font-size:11px;
+  /* Small note text, 20% bigger (was 11px). */
+  font-size:13px;
   color:var(--muted);
   margin-top:15px;
+}
+/* The small "EXPERIENCE & EDUCATION" label above the name, bigger on the résumé page only (was 10px).
+   The homepage keeps its own size because this rule only applies inside the résumé page. */
+.resume-page .eyebrow {
+  font-size:12px;
 }
 @media(min-width:1600px) {
   .hero {

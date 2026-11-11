@@ -36,7 +36,8 @@
       id: 'project-chinese', name: 'Hànyǔ Courtyard', category: '03 / CHINESE LEARNING',
       description: 'An inherited courtyard, a proud rival, and a market errand. Discover useful Mandarin through a visual novel and language mini-games.',
       contribution: 'Learning experience · App design',
-      project: '#chinese-project', enter: '/chinese/#/journey', availability: 'Playable reading & writing prototype · Audio/content review pending',
+      // "Enter world" opens the current walkable-estate playtest ("#/estate"), not the old visual-novel chapter ("#/journey").
+      project: '#chinese-project', enter: '/chinese/#/estate', availability: 'Playable reading & writing prototype · Audio/content review pending',
       image: '/assets/forest/hanyu-courtyard-clearing-v1.png', mobileFocus: '48%',
       imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains'
     }
