@@ -1,0 +1,181 @@
+<!doctype html>
+<!-- Hanyu Courtyard's project page (portfolio launch, 2026-11-12). Visitors see the design only: an introduction, a guided
+     look at how a first session plays, pictures, and an honest list of what is built and what is planned.
+     There is no link to the playable build anywhere on this page; that stays behind the password for playtesters. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1720">
+  <!-- The words search engines and link previews show for this page. -->
+  <title>Hanyu Courtyard · A Mandarin-learning adventure · Noah Zepter-Martínez</title>
+  <meta name="description" content="Hanyu Courtyard is a Mandarin-learning adventure in design and private playtesting: you inherit a neglected estate and restore it one conversation, one character and one brushstroke at a time.">
+  <link rel="canonical" href="https://aerolex.dev/hanyu-courtyard/">
+  <!-- Link-preview tags (the title, sentence and picture shown when this page is shared on LinkedIn, X or in a message). -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AeroLex · Noah Zepter-Martínez">
+  <meta property="og:title" content="Hanyu Courtyard · A Mandarin-learning adventure">
+  <meta property="og:description" content="You inherit a neglected estate and restore it one conversation, one character and one brushstroke at a time. Design work by Noah Zepter-Martínez.">
+  <meta property="og:url" content="https://aerolex.dev/hanyu-courtyard/">
+  <meta property="og:image" content="https://aerolex.dev/assets/og/hanyu-courtyard.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A painted Chinese courtyard at dusk with a lantern-lit pavilion, from the Hanyu Courtyard design.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hanyu Courtyard · A Mandarin-learning adventure">
+  <meta name="twitter:description" content="You inherit a neglected estate and restore it one conversation, one character and one brushstroke at a time.">
+  <meta name="twitter:image" content="https://aerolex.dev/assets/og/hanyu-courtyard.jpg">
+  <!-- Browser-tab icons: a sharp vector one for modern browsers, a small picture for older ones, and one for phone home screens. -->
+  <link rel="icon" type="image/svg+xml" href="/assets/portfolio/mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
+  <!-- The site's two fonts, loaded the same way as on the homepage. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;450;500;600;650&display=swap" rel="stylesheet">
+  <!-- Shared site styles first, then the reading-page styles added for the portfolio launch. -->
+  <link rel="stylesheet" href="/assets/portfolio.css?v=resume-learning-20261112">
+  <link rel="stylesheet" href="/assets/pages.css?v=launch-20261112">
+  <!-- Small shared script (the "Back to top" link) and the consent-gated visitor counter used across the site. -->
+  <script defer src="/assets/portfolio.js"></script>
+  <script async src="/assets/analytics.js"></script>
+</head>
+<body id="top" class="page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <!-- Top bar shared by every reading page: logo, three links, résumé button. -->
+  <header class="site-header wrap page-header">
+    <a class="brand" href="/" aria-label="AeroLex home"><img src="/assets/portfolio/mark.svg" alt="" width="40" height="32"><span>AEROLEX</span></a>
+    <nav class="page-nav" aria-label="Main navigation"><a href="/#projects">Work</a><a href="/about/">About</a><a href="/about/#contact">Get in touch</a></nav>
+    <a class="button button-small" href="/resume/">Résumé <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main" class="page-main">
+    <!-- Where this page sits in the site. -->
+    <p class="crumbs"><a href="/#projects">Work</a> / Hanyu Courtyard</p>
+
+    <!-- Opening: what it is, in one sentence, then why it exists and what a visitor can and can't see here. -->
+    <section class="page-hero" aria-labelledby="title">
+      <div>
+        <p class="eyebrow">Mandarin-learning adventure · In design and private playtesting</p>
+        <h1 id="title">Hanyu Courtyard</h1>
+        <p class="lead">You inherit a neglected estate in the mountains and promise to bring it back. Every errand on the way takes a little more Mandarin than the last.</p>
+        <p>I wanted to understand Chinese characters, why each one looks the way it does, instead of memorising them as small pictures. I couldn’t find a course that let me do that inside a story I wanted to keep playing. So I’m designing one.</p>
+        <p>It’s in private playtesting, which is why this page shows the design and not the game itself.</p>
+        <div class="page-actions">
+          <a class="button button-primary" href="#first-session">See how a first session plays <span aria-hidden="true">↓</span></a>
+          <a class="button" href="/stories/hanyu-courtyard/">Read the design story <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <figure class="hero-figure">
+        <img src="/assets/hanyu/hero.webp" alt="A painted scholar’s study with a carved wooden desk, opening onto a lantern-lit courtyard garden with mountains beyond" width="1600" height="900" fetchpriority="high">
+        <figcaption>The estate, as the first concept painting imagined it. AI-generated from my prompts and style references.</figcaption>
+      </figure>
+    </section>
+
+    <!-- Three quick facts a hiring manager looks for: what I did, where it stands, what it's made with. -->
+    <dl class="facts">
+      <div><dt>My part</dt><dd>Learning design, game design and story. Built with AI as a build partner.</dd></div>
+      <div><dt>Where it stands</dt><dd>The first unit plays start to finish in a private build. Four more units are designed.</dd></div>
+      <div><dt>Made with</dt><dd>React and TypeScript. Handwriting is checked by the open-source Hanzi Writer.</dd></div>
+    </dl>
+
+    <!-- The guided tutorial. Visitors can't play, so this walks them through a first session: what you do, and what to notice. -->
+    <section class="page-section" id="first-session" aria-labelledby="session-title">
+      <p class="eyebrow">01 / A guided look</p>
+      <h2 id="session-title">How a first session plays</h2>
+      <p class="section-intro">Five moments from the opening, in order. Each one has a small design choice hiding in it, so I’ve pointed at the thing to notice.</p>
+      <ol class="steps">
+        <li>
+          <div class="step-copy">
+            <h3>Arrive on the road</h3>
+            <p>You start outside the estate wall at dusk. The scene is one long painting you slide across, and your character walks to wherever you click.</p>
+            <p class="notice"><strong>Notice:</strong> there’s no map and no menu to learn first. The first thing you do is walk toward a gate because you want to see what’s behind it.</p>
+          </div>
+          <figure><img src="/assets/hanyu/road.webp" alt="The game’s opening scene: a dirt road beside a tiled estate wall at sunset, with a prompt explaining that you click to walk" width="1440" height="900" loading="lazy" decoding="async"></figure>
+        </li>
+        <li>
+          <div class="step-copy">
+            <h3>Meet Zhou</h3>
+            <p>Zhou Ming, the groundskeeper, is mending a table in the courtyard. He greets you in Mandarin before anyone has taught you a word of it.</p>
+            <p class="notice"><strong>Notice:</strong> the story asks for the word first, and the lesson answers it. You learn <span lang="zh">你好</span> because someone just said it to you.</p>
+          </div>
+          <figure><img src="/assets/hanyu/courtyard.webp" alt="The front courtyard: a red timber hall with a portrait beside its doors, the player’s character and the groundskeeper Zhou standing on the paving stones" width="1440" height="900" loading="lazy" decoding="async"></figure>
+        </li>
+        <li>
+          <div class="step-copy">
+            <h3>Take a character apart</h3>
+            <p><span lang="zh">你</span>, “you”, arrives in two coloured pieces: a part that marks words about people, and an old word for “you”.</p>
+            <p class="notice"><strong>Notice:</strong> the meaning comes from the parts. That gives you something to reason from the next time you meet a character with the same piece in it.</p>
+          </div>
+          <figure><img src="/assets/hanyu/character-parts.webp" alt="A lesson card showing the character for ‘you’ in two colours, with each part named: a person part, and an old word for ‘you’" width="1152" height="772" loading="lazy" decoding="async"></figure>
+        </li>
+        <li>
+          <div class="step-copy">
+            <h3>Pick its tone</h3>
+            <p>Mandarin has four tones, and each one gets a colour and a line drawn in the shape your voice makes. You choose the one you think you heard.</p>
+            <p class="notice"><strong>Notice:</strong> tone three is green and it dips. From here on, that character is painted green everywhere in the game, so the tone travels with it.</p>
+          </div>
+          <figure><img src="/assets/hanyu/tone.webp" alt="The character for ‘you’ above four cards, each showing a tone as a coloured line: level amber, rising blue, dipping green, falling red" width="1152" height="772" loading="lazy" decoding="async"></figure>
+        </li>
+        <li>
+          <div class="step-copy">
+            <h3>Watch it written, then paint it</h3>
+            <p>The strokes play in order once. Then you paint the character yourself on rice paper, over a faint outline at first and later from memory.</p>
+            <p class="notice"><strong>Notice:</strong> the game checks the order and direction of every stroke and forgives a wobbly hand. A wrong stroke fades and you try again. Nothing restarts.</p>
+          </div>
+          <figure><img src="/assets/hanyu/brush-desk.webp" alt="The brush desk: a square of rice paper with a faint outline of the character to paint over, beside an inkstone and a water dish" width="1152" height="772" loading="lazy" decoding="async"></figure>
+        </li>
+      </ol>
+    </section>
+
+    <!-- The "see it" area: more pictures of the design, since the build itself is private. -->
+    <section class="page-section" aria-labelledby="see-title">
+      <p class="eyebrow">02 / See it</p>
+      <h2 id="see-title">More from the design</h2>
+      <p class="section-intro">These are stills from the private build and the concept painting it grew from.</p>
+      <div class="gallery">
+        <figure class="wide"><img src="/assets/hanyu/concept.webp" alt="Concept for a Chinese learning app with lanterns, wooden architecture and parchment lesson pages" width="1536" height="1024" loading="lazy" decoding="async"><figcaption>The first concept: lessons on parchment inside a lantern-lit study. AI-generated from my prompt, then used as the style reference for everything after.</figcaption></figure>
+        <figure><img src="/assets/hanyu/stroke-order.webp" alt="A lesson card titled ‘Watch the stroke order’, with the character for ‘you’ drawn in green on a practice grid" width="1152" height="772" loading="lazy" decoding="async"><figcaption>Stroke order, shown in the character’s tone colour. The plum branch in the corner opens one blossom for each character learned.</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- Honest status: what a player can do today, and what only exists on paper. -->
+    <section class="page-section" aria-labelledby="status-title">
+      <p class="eyebrow">03 / Where it really stands</p>
+      <h2 id="status-title">What’s built, and what’s planned</h2>
+      <div class="built-planned">
+        <div>
+          <span class="tag">Built</span>
+          <h3>Unit one, start to finish</h3>
+          <ul>
+            <li>The road, the gate and the front courtyard as painted scenes you walk through.</li>
+            <li>The first conversation with Zhou, and fifteen characters taught one at a time.</li>
+            <li>Tone colours, graded brush writing, and typing a word by its sound.</li>
+            <li>A journal that replays finished scenes, plus flashcard and grammar pages.</li>
+          </ul>
+          <p style="margin-top:14px">I’ve played it through three times and rebuilt parts of it after each one.</p>
+        </div>
+        <div>
+          <span class="tag tag-planned">Planned</span>
+          <h3>The estate that review rebuilds</h3>
+          <ul>
+            <li>Four more units: the market, making tea, the ancestral hall and the altar.</li>
+            <li>Daily review that restores the estate room by room. This is the idea the whole game is built around, and it isn’t playable yet.</li>
+            <li>Recorded audio, and a native speaker’s review of every Chinese line. Today’s lines are my drafts.</li>
+            <li>Playtests with learners other than me.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- The way onward: the design-process story for this project. -->
+    <a class="next-card" href="/stories/hanyu-courtyard/">
+      <span><span class="eyebrow">Design story · about a 4 minute read</span><strong>How Hanyu Courtyard got its shape</strong></span>
+      <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </main>
+
+  <!-- Footer shared by every reading page. -->
+  <footer class="site-footer wrap"><a class="brand footer-brand" href="/">AEROLEX</a><p>© 2026 Noah Zepter-Martínez</p><nav aria-label="Footer navigation"><a href="/about/#contact">Get in touch</a><a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a><a href="#top" data-back-top>Back to top <span aria-hidden="true">↑</span></a></nav></footer>
+</body>
+</html>

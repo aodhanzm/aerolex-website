@@ -1,0 +1,203 @@
+/* Styles for the reading pages added in the portfolio launch (2026-11-12): project pages, design-process stories,
+   and About / Get in touch. They build on portfolio.css (colours, fonts, buttons) and only add what those pages need.
+   Every page that uses this file has <body class="page">, so nothing here can change the homepage or the résumé. */
+
+/* Reading pages use larger text than the homepage (which is mostly headings over pictures): 17px, with relaxed line spacing. */
+body.page { font-size: 17px; line-height: 1.7; }
+/* Paragraphs get a comfortable maximum line length, so long lines never stretch across a wide monitor. */
+.page p { max-width: 68ch; }
+
+/* ── Top bar: logo on the left, a few links, the résumé button ─────────────────────────────────────── */
+/* The bar reuses the homepage's header look; items wrap onto a second row on narrow screens instead of hiding behind a menu. */
+.page-header { height: auto; min-height: 84px; padding: 14px 0; flex-wrap: wrap; row-gap: 8px; }
+/* The links sit to the right of the logo. "margin-left: auto" pushes them (and the button after them) to the right edge. */
+.page-nav { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-left: auto; font-size: 13px; }
+/* Each link is at least 44px tall so it is easy to tap on a phone. */
+.page-nav a { display: inline-flex; align-items: center; min-height: 44px; transition: color .2s; }
+/* Links turn bright gold on hover, and the link for the page you are on stays gold. */
+.page-nav a:hover, .page-nav a[aria-current="page"] { color: var(--gold-bright); }
+/* The résumé button keeps a small gap from the links. */
+.page-header .button { margin-left: 8px; }
+
+/* ── Page frame ─────────────────────────────────────────────────────────────────────────────────── */
+/* The main column: centred, never wider than 1180px, with breathing room above and below. */
+.page-main { width: calc(100% - var(--gutter) * 2); max-width: 1180px; margin: 0 auto; padding: 46px 0 80px; }
+/* A trail of links back up the site ("Work / Hanyu Courtyard"), in small quiet capitals. */
+.crumbs { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 26px; }
+.crumbs a { color: var(--gold-bright); }
+.crumbs a:hover { text-decoration: underline; }
+
+/* ── Opening block of a page: words on the left, a picture on the right ───────────────────────────── */
+/* Two columns on wide screens; the rule further down stacks them on phones. */
+.page-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+/* The page title: large serif, tight line spacing. */
+.page-hero h1, .story-head h1 { font-size: clamp(44px, 5.2vw, 78px); line-height: 1; letter-spacing: -.03em; margin: 12px 0 18px; }
+/* The opening sentence under the title: bigger serif text, like a standfirst in a magazine. */
+.lead { font-family: var(--serif); font-size: clamp(22px, 2vw, 28px); line-height: 1.35; color: #f3eee0; }
+/* Ordinary paragraphs after the opening sentence get a gap above them. */
+.page-hero p + p, .prose p + p { margin-top: 16px; }
+/* The row of buttons under the opening words. */
+.page-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+/* The picture beside the opening words: thin gold frame, rounded just a little, never taller than it is wide by much. */
+.hero-figure { margin: 0; border: 1px solid var(--line); background: var(--bg-deep); }
+.hero-figure img { width: 100%; height: auto; }
+/* Captions under pictures: small and quiet. */
+figcaption { font-size: 12px; line-height: 1.5; color: var(--muted); padding: 10px 12px 12px; }
+
+/* ── Quick facts strip: role, status, made with ───────────────────────────────────────────────────── */
+/* Three short facts side by side, separated by thin gold lines; they stack on phones. */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin: 48px 0 0; padding: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.facts > div { padding: 18px 22px 20px; border-left: 1px solid var(--line); }
+.facts > div:first-child { border-left: 0; padding-left: 0; }
+/* The small label above each fact. */
+.facts dt { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+/* The fact itself. */
+.facts dd { margin: 0; font-size: 15px; line-height: 1.5; }
+
+/* ── Section headings inside a page ───────────────────────────────────────────────────────────────── */
+/* Each section starts with space above, a small numbered label and a serif heading. */
+.page-section { margin-top: 76px; }
+.page-section > h2 { font-size: clamp(32px, 3.2vw, 46px); margin: 8px 0 14px; }
+.page-section > .section-intro { color: #d5d3c8; margin-bottom: 30px; }
+
+/* ── Guided walkthrough: numbered steps, each with a picture ──────────────────────────────────────── */
+/* The steps are a real numbered list (good for screen readers) drawn as cards. */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; counter-reset: step; }
+/* One step: number and words on the left, picture on the right. */
+.steps > li { counter-increment: step; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(20px, 3vw, 44px); align-items: center; padding: 26px; border: 1px solid var(--line); background: rgba(8, 19, 27, .6); }
+/* Every second step flips, picture on the left, so the page doesn't read as one long column. */
+.steps > li:nth-child(even) > .step-copy { order: 2; }
+/* The big step number, drawn from the list's own counting. */
+.step-copy::before { content: "0" counter(step); display: block; font-family: var(--serif); font-size: 44px; line-height: 1; color: var(--gold); margin-bottom: 10px; }
+.step-copy h3 { font-size: 27px; margin-bottom: 10px; }
+/* The "notice this" line in each step: set apart with a gold bar so a skimming reader catches it. */
+.notice { margin-top: 14px; padding-left: 14px; border-left: 2px solid var(--gold); color: #e9e2cf; font-size: 15px; }
+/* Step pictures: framed like the hero picture. */
+.steps figure { margin: 0; border: 1px solid var(--line); background: var(--bg-deep); }
+.steps figure img { width: 100%; height: auto; }
+/* Steps without a picture use the full width for their words. */
+.steps > li.step-wide { grid-template-columns: 1fr; }
+
+/* ── Picture gallery ─────────────────────────────────────────────────────────────────────────────── */
+/* A grid of framed pictures with captions; three across on wide screens. */
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.gallery figure { margin: 0; border: 1px solid var(--line); background: var(--bg-deep); }
+.gallery img { width: 100%; height: auto; }
+/* A gallery picture marked "wide" spans two columns. */
+.gallery .wide { grid-column: span 2; }
+
+/* ── "What's built / what's planned" box ──────────────────────────────────────────────────────────── */
+/* Two columns in one framed box, so a reader can see at a glance what exists today and what doesn't yet. */
+.built-planned { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); }
+.built-planned > div { padding: 26px 28px 28px; }
+.built-planned > div + div { border-left: 1px solid var(--line); }
+.built-planned h3 { font-size: 25px; margin-bottom: 12px; }
+/* Plain lists inside the box, with a little space between lines. */
+.built-planned ul, .prose ul { margin: 0; padding-left: 20px; }
+.built-planned li, .prose li { margin-top: 7px; }
+/* A small status word before each heading: green-gold for built, grey for planned. */
+.tag { display: inline-block; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--line); color: var(--gold-bright); margin-bottom: 12px; }
+.tag-planned { color: var(--muted); }
+
+/* ── Link card to the design story or another page ───────────────────────────────────────────────── */
+/* A wide clickable band: label, title and an arrow. The whole band is the link. */
+.next-card { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 76px; padding: 30px 32px; border: 1px solid var(--gold); background: rgba(195, 163, 114, .06); transition: background .2s; }
+.next-card:hover { background: rgba(195, 163, 114, .14); }
+.next-card strong { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 2.6vw, 36px); line-height: 1.1; margin-top: 6px; }
+/* The arrow at the end of the band. */
+.next-card .arrow { font-size: 30px; color: var(--gold-bright); }
+
+/* ── Design-process stories (long reads) ──────────────────────────────────────────────────────────── */
+/* The story's opening: title, one-sentence summary and reading time, in a narrower column for easy reading. */
+.story-head { max-width: 860px; }
+/* "4 minute read · Updated November 2026", small and quiet. */
+.story-meta { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-top: 18px; }
+/* The table of contents: a short row of jump links so a hiring manager can scan the story's shape. */
+.story-toc { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 30px 0 0; padding: 0; list-style: none; }
+.story-toc a { display: inline-flex; align-items: center; min-height: 40px; padding: 6px 14px; border: 1px solid var(--line); font-size: 13px; transition: border-color .2s, color .2s; }
+.story-toc a:hover { border-color: var(--gold-bright); color: var(--gold-bright); }
+/* Story text sits in a single readable column. */
+.prose { max-width: 760px; }
+.prose h3 { font-size: 28px; margin: 34px 0 10px; }
+/* A decision: big number in the margin, then the heading and text. */
+.decision { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 18px; margin-top: 44px; }
+.decision > .num { font-family: var(--serif); font-size: 46px; line-height: 1; color: var(--gold); }
+.decision h3 { font-size: 29px; margin: 4px 0 10px; }
+/* Pictures inside a story: framed, with room above and below; they may be wider than the text column. */
+.story-figure { margin: 26px 0 8px; border: 1px solid var(--line); background: var(--bg-deep); max-width: 980px; }
+.story-figure img { width: 100%; height: auto; }
+/* Before / after: two framed pictures side by side with labels; they stack on phones. */
+.before-after { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 26px; max-width: 980px; }
+.before-after figure { margin: 0; border: 1px solid var(--line); background: var(--bg-deep); }
+.before-after img { width: 100%; height: auto; }
+/* A highlighted aside for an honest caveat ("this is a hunch, not a result"). */
+.aside { margin-top: 22px; padding: 16px 20px; border-left: 2px solid var(--gold); background: rgba(195, 163, 114, .07); font-size: 15.5px; max-width: 760px; }
+/* Links inside running text are gold and underlined so they are clearly links. */
+.prose a, .aside a, .page-hero p a, .section-intro a, .built-planned a, .contact-card p a, figcaption a { color: var(--gold-bright); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── About and Get in touch ───────────────────────────────────────────────────────────────────────── */
+/* About opens with a portrait beside the words; the portrait column is narrower than a project picture. */
+.about-hero { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); align-items: start; }
+.about-hero .hero-figure img { aspect-ratio: 4 / 5; object-fit: cover; }
+/* The three ways to get in touch, as three equal cards. */
+.contact-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 26px; }
+.contact-card { padding: 26px 26px 28px; border: 1px solid var(--line); background: rgba(8, 19, 27, .6); display: flex; flex-direction: column; gap: 10px; }
+.contact-card h3 { font-size: 26px; }
+.contact-card p { font-size: 15px; color: #d5d3c8; }
+/* The button sits at the bottom of each card, however long the text above it is. */
+.contact-card .button { margin-top: auto; align-self: flex-start; }
+/* A clearly marked placeholder (used only if a link still needs NZ's confirmation). */
+.placeholder-note { font-size: 13px; color: #f0c98a; border: 1px dashed #f0c98a; padding: 8px 12px; }
+
+/* ── Footer ───────────────────────────────────────────────────────────────────────────────────────── */
+/* The footer text on reading pages is a little larger than the homepage's 9px, for legibility. */
+.page .site-footer { font-size: 12px; flex-wrap: wrap; row-gap: 10px; }
+.page .site-footer nav { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-left: auto; }
+.page .site-footer nav a { display: inline-flex; align-items: center; min-height: 40px; }
+
+/* ── Chinese text ─────────────────────────────────────────────────────────────────────────────────── */
+/* Chinese characters use a font made for them (the site's serif has no Chinese letters, so they would fall back unevenly). */
+[lang="zh"] { font-family: "Noto Serif SC", "Songti SC", "SimSun", "Microsoft YaHei", serif; }
+
+/* ── Tablets and small laptops ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 980px) {
+  /* The gallery drops to two pictures across. */
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* The three contact cards become one column so their text has room. */
+  .contact-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Phones ───────────────────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  /* Slightly smaller reading text and tighter page padding. */
+  body.page { font-size: 16px; }
+  .page-main { padding: 28px 0 56px; }
+  /* The links move under the logo and spread across the full width; the résumé button joins that row. */
+  .page-nav { width: 100%; margin-left: 0; order: 3; gap: 0 22px; font-size: 13px; }
+  .page-header .button { margin-left: auto; }
+  /* Everything that was side by side becomes one column. */
+  .page-hero, .about-hero, .steps > li, .built-planned, .before-after, .facts { grid-template-columns: 1fr; }
+  /* On phones each step shows its words first, then its picture, whatever the desktop order was. */
+  .steps > li:nth-child(even) > .step-copy { order: 0; }
+  .steps > li { padding: 20px 18px; }
+  /* Stacked facts and boxes swap their side borders for top borders. */
+  .facts > div { border-left: 0; border-top: 1px solid var(--line); padding-left: 0; }
+  .facts > div:first-child { border-top: 0; }
+  .built-planned > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .built-planned > div { padding: 22px 20px 24px; }
+  /* The gallery becomes a single column, and "wide" pictures no longer span. */
+  .gallery { grid-template-columns: 1fr; }
+  .gallery .wide { grid-column: auto; }
+  /* Decision numbers sit above their heading instead of beside it. */
+  .decision { grid-template-columns: 1fr; }
+  .decision > .num { font-size: 38px; }
+  .page-section { margin-top: 56px; }
+  /* The link band stacks its arrow under the words. */
+  .next-card { padding: 24px 20px; margin-top: 56px; }
+  /* The footer links start on their own line. */
+  .page .site-footer nav { margin-left: 0; width: 100%; }
+}
+
+/* ── Printing and reduced motion ──────────────────────────────────────────────────────────────────── */
+/* People who ask their device for less motion get no hover transitions here. */
+@media (prefers-reduced-motion: reduce) { .page * { transition: none !important; } }

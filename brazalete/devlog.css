@@ -47,3 +47,32 @@ footer { margin-top: 40px; }
   .shelf-row { grid-template-columns: minmax(0, 1fr); }
   .top-links { gap: 14px; }
 }
+
+/* ── Portfolio launch additions (2026-11-12): introduction, quick start and the design-story link ───── */
+/* The two-sentence introduction under the title: a readable line length and a little space above. */
+.about-tool { max-width: 68ch; margin-top: 10px; color: #33566b; }
+/* Quick start: a heading, then three cards side by side (they stack on phones, see below). */
+.quickstart { margin-bottom: 20px; }
+.quickstart h2 { font-size: 20px; letter-spacing: -.02em; margin: 0 0 12px; }
+/* The three steps are a real numbered list drawn as glass cards, numbered by the list's own counter. */
+.quickstart ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; counter-reset: qs; }
+.quickstart li { counter-increment: qs; padding: 18px 20px 20px; }
+/* The step number sits before each card's heading in the page's blue. */
+.quickstart h3 { font-size: 17px; margin: 0 0 6px; }
+.quickstart h3::before { content: counter(qs) ". "; color: #2b7fb8; }
+.quickstart li p { margin: 0; font-size: 14px; }
+/* The "notice this" line in each step is set off with a blue bar so a skimming visitor catches it. */
+.quickstart .notice { margin-top: 10px; padding-left: 10px; border-left: 3px solid #7dbef0; color: #33566b; }
+/* Under the cards: a button that starts the verb walkthrough, and a text link to the design story. */
+.quickstart-next { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin: 14px 0 0; font-size: 14px; }
+.quickstart-next a { font-weight: 650; }
+/* The design-story band: label and title on the left, an arrow on the right; the whole band is one link. */
+.story-card { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 40px; padding: 24px 30px; text-decoration: none; color: inherit; transition: box-shadow .2s; }
+.story-card:hover { box-shadow: 0 12px 34px #3d678026, inset 0 1px #ffffff; }
+.story-card strong { display: block; font-size: clamp(20px, 2.4vw, 26px); letter-spacing: -.02em; margin-top: 4px; }
+.story-arrow { font-size: 26px; color: #2b7fb8; }
+/* Phones: the three quick-start cards stack, and the band's padding tightens. */
+@media (max-width: 740px) {
+  .quickstart ol { grid-template-columns: minmax(0, 1fr); }
+  .story-card { padding: 20px; }
+}

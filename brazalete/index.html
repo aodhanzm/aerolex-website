@@ -6,7 +6,23 @@
 <meta name="color-scheme" content="light"> <!-- Keep the approved blue and glass surround consistent. -->
 <title>El brazalete · AeroLex</title> <!-- Name the tool in the browser tab; The Scene is private for now (2026-11-11), so the site name replaces it. -->
 <meta name="description" content="El brazalete: a free tool for building Spanish verbs, adjectives and pronouns by turning its rings. No account needed. Plus a dev log of how it was designed."> <!-- Summary shown by search engines and link previews. -->
-<link rel="icon" href="data:,"> <!-- Avoid an unnecessary favicon request. -->
+<link rel="canonical" href="https://aerolex.dev/brazalete/"> <!-- Tell search engines this page's one true address (2026-11-12). -->
+<meta property="og:type" content="website"> <!-- Link-preview tags (2026-11-12): what LinkedIn, X and messaging apps show when this page is shared. -->
+<meta property="og:site_name" content="AeroLex · Noah Zepter-Martínez"> <!-- Whose site the preview belongs to. -->
+<meta property="og:title" content="El brazalete · Build Spanish verbs by turning its rings"> <!-- Preview headline. -->
+<meta property="og:description" content="A free Spanish grammar tool you operate instead of read: verbs, adjectives and pronouns. No account needed. Designed and built by Noah Zepter-Martínez."> <!-- Preview sentence. -->
+<meta property="og:url" content="https://aerolex.dev/brazalete/"> <!-- The address the preview links to. -->
+<meta property="og:image" content="https://aerolex.dev/assets/og/brazalete.jpg"> <!-- Preview picture, 1200 by 630, kept in the website repo. -->
+<meta property="og:image:width" content="1200"> <!-- Picture width, so apps can lay the preview out before it loads. -->
+<meta property="og:image:height" content="630"> <!-- Picture height. -->
+<meta property="og:image:alt" content="The brazalete: a brass wristband with a glowing wheel of six coloured sections for building Spanish verbs."> <!-- Describes the picture for screen readers. -->
+<meta name="twitter:card" content="summary_large_image"> <!-- Ask X for the large-picture preview. -->
+<meta name="twitter:title" content="El brazalete · Build Spanish verbs by turning its rings"> <!-- X headline. -->
+<meta name="twitter:description" content="A free Spanish grammar tool you operate instead of read. No account needed."> <!-- X sentence. -->
+<meta name="twitter:image" content="https://aerolex.dev/assets/og/brazalete.jpg"> <!-- X picture. -->
+<link rel="icon" type="image/svg+xml" href="/assets/portfolio/mark.svg"> <!-- Browser-tab icon from the website (replaces the earlier "no icon"); missing in the standalone local preview, which is harmless. -->
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png"> <!-- Small picture icon for older browsers. -->
+<link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png"> <!-- Icon used when someone saves the page to a phone home screen. -->
 <link rel="stylesheet" href="assets/gadget-lab.css"> <!-- Reuse the maintained device drawing and styles. -->
 <link rel="stylesheet" href="explorer.css"> <!-- Add the approved public surround and accessible companion controls. -->
 <script defer src="assets/data.js"></script> <!-- Load only the allowlisted word tables, never game story data. -->
@@ -23,9 +39,10 @@
 <body> <!-- Start directly in free exploration. -->
 <a class="skip" href="#workspace">Skip to the tool</a> <!-- Let keyboard visitors bypass navigation. -->
 <div class="page"> <!-- Hold the blue glass layout within a readable width. -->
-<header class="top"><a href="https://aerolex.dev/" class="scene-link">AEROLEX</a><nav class="top-links" aria-label="On this page"><a href="#dev-log">Dev log</a><a href="https://aerolex.dev/">← Back to aerolex.dev</a></nav></header> <!-- 2026-11-11: links point to the AeroLex homepage instead of The Scene (private for now), plus a jump to the dev log further down. -->
+<header class="top"><a href="/" class="scene-link">AEROLEX</a><nav class="top-links" aria-label="Site and page links"><a href="#start-here">Start here</a><a href="#dev-log">Dev log</a><a href="/stories/brazalete/">Design story</a><a href="/about/">About Noah</a><a href="/">← All work</a></nav></header> <!-- 2026-11-12 (portfolio launch): the bar now also leads to the quick start, the design story and the About page; site links start with "/" so they work on the live site and in the local release preview alike. -->
 <main> <!-- Keep the working device as the primary page content. -->
-<div class="intro"><div><p class="eyebrow">A little Spanish, at your fingertips</p><h1>El brazalete</h1><p>Choose a word. Turn the controls. See what changes.</p></div><button id="sound" type="button" aria-pressed="false">Sound off</button></div> <!-- Make sound optional and silent on a first visit. -->
+<div class="intro"><div><p class="eyebrow">A little Spanish, at your fingertips</p><h1>El brazalete</h1><p>Choose a word. Turn the controls. See what changes.</p><p class="about-tool">The brazalete is a Spanish grammar tool you operate instead of read. I built it so my students could get daily practice on the forms that kept tripping them up: verb endings, adjective agreement and pronouns. It’s free, and it doesn’t ask for an account.</p></div><button id="sound" type="button" aria-pressed="false">Sound off</button></div> <!-- Make sound optional and silent on a first visit. -->
+<section class="quickstart" id="start-here" aria-labelledby="start-title"><h2 id="start-title">Start here: three things to try</h2><ol><li class="glass"><h3>Load a word</h3><p>Pick one from the word list, or tap an example under “Try a change”.</p><p class="notice"><b>Notice:</b> the centre shows the plain infinitive until you choose who’s doing it.</p></li><li class="glass"><h3>Turn three controls</h3><p>The outer ring is the mood. The plate underneath is the tense. The six sections are the person.</p><p class="notice"><b>Notice:</b> turn the ring or the plate and all six forms change together.</p></li><li class="glass"><h3>Press CONFIRM</h3><p>The centre button keeps the form you built and shows it under the device.</p><p class="notice"><b>Notice:</b> turning a control never submits anything. Nothing counts until you confirm.</p></li></ol><p class="quickstart-next"><button type="button" data-tutorial="verbs">Walk me through a verb</button><a href="/stories/brazalete/">Read how it was designed →</a></p></section> <!-- Quick start added 2026-11-12 (portfolio launch): what to click first and what to notice. The button starts the existing Verbs walkthrough. Draft wording pending NZ's review. -->
 <details class="glass tutorial-menu" id="tutorials"><summary>Tutorials · Learn the tools</summary><div><p>Choose a short walkthrough. You can leave at any time and return to your exploration.</p><nav aria-label="Replayable tutorials"><button type="button" data-tutorial="intro">Introduction</button><button type="button" data-tutorial="verbs">Verbs</button><button type="button" data-tutorial="adjectives">Adjectives</button><button type="button" data-tutorial="direct">Direct objects</button><button type="button" data-tutorial="indirect">Indirect objects</button><button type="button" data-tutorial="reflexive">Reflexives</button><button type="button" data-tutorial="variety">Tú / Vos switch</button></nav></div></details> <!-- Keep every walkthrough optional and independently replayable. -->
 <div class="workspace" id="workspace"> <!-- Put word selection beside the device's own regional switch. -->
 <aside class="sidebar" aria-label="Word library"> <!-- Keep word loading separate from conjugation controls. -->
@@ -53,8 +70,9 @@
 <section class="shelf" aria-labelledby="shelf-episodes"><h3 id="shelf-episodes">Episodes</h3><div class="shelf-row" data-shelf="episodes"></div></section> <!-- The main series, in order. -->
 <section class="shelf" aria-labelledby="shelf-process"><h3 id="shelf-process">Design process</h3><div class="shelf-row" data-shelf="process"></div></section> <!-- Supplementary videos: sketches, dead ends, work sessions. -->
 </section>
+<a class="glass story-card" href="/stories/brazalete/"><span><span class="eyebrow">Design story · about a 4 minute read</span><strong>How a conjugation chart became something you wear</strong></span><span class="story-arrow" aria-hidden="true">→</span></a> <!-- Added 2026-11-12: leads to the Brazalete's design-process story on the website. -->
 </main> <!-- End the working explorer. -->
-<footer><span>Made by <a href="https://aerolex.dev/">aerolex.dev</a></span><nav aria-label="More from AeroLex"><a href="mailto:noah@aerolex.dev">Have a design project?</a></nav></footer> <!-- "Play the game" removed 2026-11-11 at NZ's request; the design-enquiry link stays. -->
+<footer><span>Designed and built by <a href="/about/">Noah Zepter-Martínez</a> · <a href="/">aerolex.dev</a></span><nav aria-label="More from AeroLex"><a href="/hanyu-courtyard/">Hanyu Courtyard</a><a href="/sanctum/about/">The Sanctum</a><a href="/about/#contact">Have a design project? Get in touch</a></nav></footer> <!-- 2026-11-12: the footer names the maker, links the other two projects, and sends enquiries to the Get in touch section (email, LinkedIn, booking). "Play the game" stays removed. -->
 </div> <!-- End the page frame. -->
 <noscript>This tool needs JavaScript to turn the controls and look up forms.</noscript> <!-- Explain why the working tool is unavailable without scripts. -->
 </body> <!-- End the immediately usable explorer. -->
