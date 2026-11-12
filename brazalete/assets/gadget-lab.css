@@ -405,6 +405,13 @@ body.lightning .prompt-es { min-height: 18px; color: #e08090; font-size: 13px; }
 .hub-cap { font-size: 7.5px; font-weight: 800; letter-spacing: .16em; text-anchor: middle; fill: color-mix(in srgb, var(--hub, var(--accent)) 85%, #fff); pointer-events: none; }
 @keyframes hubPulse { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: .45; } }
 @media (hover: none), (pointer: coarse) { .hub-btn.live:hover .hub-plate { fill: color-mix(in srgb, var(--hub, var(--accent)) 26%, #120c24); } }
+/* The infinitive resting state (combos contract §2, 2026-11-12): no person is chosen, so the centre
+   is neutral, unlit bronze. It can still be confirmed, so it keeps its pointer, but it doesn't glow
+   or pulse the way a chosen person's form does. The lettering stays white. */
+.hub-btn.live.resting .hub-plate { fill: #1a1330; stroke: rgba(210, 170, 100, .85); stroke-width: 2.5; filter: none; animation: none; }
+.hub-btn.live.resting .hub-ring { stroke: rgba(210, 170, 100, .4); }
+.hub-btn.live.resting:hover .hub-plate { fill: #241a3e; }               /* a faint lift on hover, still unlit */
+.hub-btn.live.resting .hub-cap { fill: rgba(232, 214, 176, .85); }      /* the CONFIRM label in pale bronze */
 
 /* Inside the device during the tutorial: everything but the spotlit part
    drops back, so "which ring am I on" needs no reading. */

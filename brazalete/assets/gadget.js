@@ -75,8 +75,19 @@ const Gadget = (() => {
     flash: new Set(),     // persons lit RIGHT NOW because the device just heard them (a few seconds each)
     cue: null,            // the guided round's pointer: { person } or { adj:[g,n] } — what to press next
     guard: null,          // (dialIndex, stopIndex) => bool — may this exact stop be chosen? (the guided round)
+    // Which person the device itself moved to because it HEARD it (the calibration's light), or null.
+    // Kept apart from a person the player chose, so the device can let go of it when the light fades
+    // and Madison's own tap is what picks the person (NZ, 2026-11-12).
+    remote: null,
   };
   const NEUTRAL = '#8fd3c8'; // the device's resting accent before any word is loaded
+  // THE INFINITIVE RESTING STATE (NZ, combos contract §2, 2026-11-11). The person dial can point at
+  // nobody: this value. A newly loaded verb starts here, so the centre reads the infinitive (comer)
+  // until a sector is tapped, and tapping the chosen sector again comes back here.
+  const NO_PERSON = -1;
+  // The centre's colour while it shows the infinitive: plain, unlit bronze, because the infinitive
+  // belongs to no person and so wears no person's colour.
+  const BRONZE = '#d2aa64';
   let host = null;          // the DOM element the gadget renders into
   let onChange = null;      // lab.js subscribes so it can redraw the hand/readout
 
@@ -106,6 +117,21 @@ const Gadget = (() => {
   function settleTense() {
     if (!state.word || state.word.kind !== 'verb') return;
     if (tenseLocked(TENSES[state.dials.verb[2]])) state.dials.verb[2] = TENSE_HOME;
+  }
+  // Turning to the gerund or participle CLEARS the person (contract §2): those forms belong to nobody,
+  // so no person stays picked behind the dark sectors. Coming back to a normal tense therefore starts
+  // on the infinitive again, never on a person chosen before the detour.
+  function settlePerson() {
+    if (!state.word || state.word.kind !== 'verb') return;
+    const t = TENSES[state.dials.verb[2]];
+    if (t && t.nonFinite) { state.dials.verb[1] = NO_PERSON; state.remote = null; }
+  }
+  // Is the verb device resting on the infinitive right now? (A verb loaded, no person picked, and a
+  // normal tense — on a gerund or participle the centre shows that form instead.)
+  function resting(word, dials) {
+    if (!word || word.kind !== 'verb' || dials[1] !== NO_PERSON) return false;
+    const t = TENSES[dials[2]];
+    return !!t && !t.nonFinite;
   }
 
   function dialSpecs() {
@@ -144,6 +170,9 @@ const Gadget = (() => {
       // Participio and gerundio do not change by person or mood: one form, held
       // by the hub alone (the sextants go dark — see deviceSvg).
       if (tense.nonFinite) return v.nf ? v.nf[tense.id] : null;
+      // No person picked: the centre shows the infinitive itself (comer, llamarse). It exists in every
+      // mood and tense the device allows, and with NO it simply reads "no comer".
+      if (dials[1] === NO_PERSON) return word.lemma;
       if (neg && mood === 'imp' && tense.id === 'pres') return dials[1] === 0 ? null : v.sub.pres[dials[1]];
       const table = v[mood] && v[mood][tense.id];
       return table ? table[dials[1]] : null;
@@ -154,6 +183,9 @@ const Gadget = (() => {
 
   function formFor(word, dials, neg) { // Extend the same lookup only when the public explorer opts in.
     let form = baseFormFor(word, dials, neg); // Keep every existing Tú table as the maintained source.
+    // The infinitive is the same everywhere: no −se ending, no Vos form, and a reflexive verb already
+    // carries its own pronoun (llamarse), so none of the adjustments below may touch it.
+    if (resting(word, dials)) return form;
     // The −ra/−se lever (NZ, 2026-11-11; designed 2026-11-10): in the imperfect subjunctive, the −se family
     // replaces −ra in all six forms: comiera → comiese, comiéramos → comiésemos. Applies in the game too.
     if (form && state.ending === 'se' && word && word.kind === 'verb' && MOODS[dials[0]].id === 'sub' && TENSES[dials[2]].id === 'impf') form = toSe(form);
@@ -203,7 +235,10 @@ const Gadget = (() => {
   // ---- mutations ----------------------------------------------------------
   function load(word) {
     state.word = { kind: word.kind, lemma: word.lemma };
-    if (state.resetOnLoad) state.dials[word.kind] = word.kind === 'verb' ? [0, 0, TENSE_HOME] : [0, 0];
+    if (state.resetOnLoad) state.dials[word.kind] = word.kind === 'verb' ? [0, NO_PERSON, TENSE_HOME] : [0, 0];
+    // A newly loaded verb has NO person picked (contract §2): the centre reads the infinitive until a
+    // sector is tapped. Mood and tense are still remembered from the last word, like real knobs.
+    if (word.kind === 'verb') { state.dials.verb[1] = NO_PERSON; state.remote = null; }
     // Every verb arrives with the mood ring resting on INDICATIVO (NZ,
     // 2026-09-21: "the default mood should always be set to indicative"). It is
     // the mood of plain statements — most sentences a learner builds — so the
@@ -232,8 +267,10 @@ const Gadget = (() => {
     const pick = stops => { let i; do { i = Math.floor(Math.random() * stops.length); } while (stops[i].locked); return i; };
     const tenseStops = TENSES.map(t => ({ locked: tenseLocked(t) }));
     // Mood is NOT randomised: it always rests on indicativo (see load()).
-    // Person and tense still are, so the first answer is never pre-dialled.
-    state.dials.verb = [MOODS.findIndex(m => m.id === 'ind'), Math.floor(Math.random() * PERSONS.length), pick(tenseStops)];
+    // The person starts on nobody (the infinitive resting state), which already keeps the answer from
+    // being pre-dialled; the tense is still scrambled.
+    state.dials.verb = [MOODS.findIndex(m => m.id === 'ind'), NO_PERSON, pick(tenseStops)];
+    state.remote = null;                         // nothing the device heard earlier carries over
     state.dials.adj = [Math.floor(Math.random() * GENDERS.length), Math.floor(Math.random() * NUMBERS.length)];
   }
 
@@ -262,6 +299,7 @@ const Gadget = (() => {
     dim();
     state.flash.add(i);                         // lit now, whatever its calibration level
     state.dials.verb[1] = i;                    // the remote hand turns the dial to it
+    state.remote = i;                           // remembered as the DEVICE's choice, not hers
     const mine = ++lightCount;                  // this lighting's own ticket
     SFX.powerUp();
     render();
@@ -269,17 +307,31 @@ const Gadget = (() => {
       if (mine !== lightCount) return;          // a newer light (or a dim) already took over
       if (!state.flash.has(i)) return;
       state.flash.delete(i);
+      releaseRemote();                          // and the centre goes back to the infinitive
       SFX.powerDown();
       render();
     }, ms);
   }
   let lightCount = 0;                           // tickets for light(), so an old timer never acts late
 
+  // When a heard section powers down, the device lets go of that person and rests on the infinitive
+  // again (NZ, 2026-11-12), so Madison's own tap is what picks the person. If she has already tapped
+  // a person herself, `remote` is null and her choice stays exactly where she put it.
+  // Returns true when it actually moved the dial, so callers know whether a redraw is needed.
+  function releaseRemote() {
+    if (state.remote == null) return false;
+    const moved = !!(state.word && state.word.kind === 'verb' && state.dials.verb[1] === state.remote);
+    if (moved) state.dials.verb[1] = NO_PERSON;
+    state.remote = null;
+    return moved;
+  }
+
   // Power down every section the device is still lighting from what it heard, with one
   // power-down sound. Used when a new line lights another section, and between ladder rungs.
   function dim() {
     lightCount++;                               // any pending power-down timer is now stale
-    if (!state.flash.size) return;
+    const released = releaseRemote();           // a heard person never outlives its light
+    if (!state.flash.size) { if (released) render(); return; } // redraw only if a person was let go
     state.flash.clear();
     SFX.powerDown();
     render();
@@ -309,18 +361,24 @@ const Gadget = (() => {
     if (dialIndex < 0 || dialIndex >= specs.length) return;
     if (!allowed(dialIndex)) return;
     const spec = specs[dialIndex];
-    const n = spec.stops.length;
     const dials = currentDials();
-    // PERSONA steps around its visual loop rather than raw array order.
-    const order = spec.stepOrder || Array.from({ length: n }, (_, i) => i);
-    const pos = order.indexOf(dials[dialIndex]);
+    // PERSONA steps around its visual loop rather than raw array order. On a verb that loop also has
+    // a "no person" stop between tú and yo (NZ, 2026-11-12), so the arrow keys can reach the infinitive.
+    const isPerson = state.word.kind === 'verb' && dialIndex === 1;
+    const base = spec.stepOrder || Array.from({ length: spec.stops.length }, (_, i) => i);
+    const order = isPerson ? [NO_PERSON, ...base] : base;
+    const n = order.length;                              // how many stops the loop has, "no person" included
+    const lockedAt = k => k !== NO_PERSON && !!spec.stops[k].locked; // the "no person" stop is never locked
+    const pos = Math.max(0, order.indexOf(dials[dialIndex]));
     let p = (pos + delta + n) % n;
     let guard = 0;
-    while (spec.stops[order[p]].locked && guard++ < n) { SFX.locked(); p = (p + delta + n) % n; }
+    while (lockedAt(order[p]) && guard++ < n) { SFX.locked(); p = (p + delta + n) % n; }
     // The guided round may refuse this exact stop: the press doesn't take, with a dull click.
     if (!guarded(dialIndex, order[p])) return;
     dials[dialIndex] = order[p];
+    if (isPerson) state.remote = null;    // a person she turned to herself is hers, not the device's
     if (dialIndex === 0) settleTense();   // A new mood may not allow the current tense (see MOOD_TENSES).
+    if (dialIndex === 2) settlePerson();  // A gerund or participle clears the person (contract §2).
     state.active = dialIndex;
     SFX.click(dialIndex);
     render();
@@ -335,18 +393,51 @@ const Gadget = (() => {
     const specs = dialSpecs();
     if (!specs[dialIndex]) return;
     if (!allowed(dialIndex)) return;
-    if (specs[dialIndex].stops[stopIndex].locked) { SFX.locked(); state.active = dialIndex; render(); return; }
+    // The verb's person dial also accepts NO_PERSON (the infinitive), which has no stop of its own.
+    const isPerson = state.word.kind === 'verb' && dialIndex === 1;
+    const stop = specs[dialIndex].stops[stopIndex];
+    if (!stop && !(isPerson && stopIndex === NO_PERSON)) return;   // not a real stop: ignore it
+    if (stop && stop.locked) { SFX.locked(); state.active = dialIndex; render(); return; }
     // The guided round may refuse this exact stop (a wrong person): it doesn't take.
     if (!guarded(dialIndex, stopIndex)) return;
     const dials = currentDials();
     if (dials[dialIndex] !== stopIndex) SFX.click(dialIndex);
     dials[dialIndex] = stopIndex;
+    if (isPerson) state.remote = null;    // a person set on purpose is never let go by a fading light
     if (dialIndex === 0) settleTense();   // A new mood may not allow the current tense (see MOOD_TENSES).
+    if (dialIndex === 2) settlePerson();  // A gerund or participle clears the person (contract §2).
     const order = STEP_ORDER[state.word.kind];
     const at = order.indexOf(dialIndex);
     state.active = at >= 0 && at < order.length - 1 ? order[at + 1] : dialIndex;
     render();
     if (state.onSet) state.onSet(dialIndex, stopIndex);
+  }
+
+  // A tap or click on a person sector (contract §2). Different from set(): tapping the sector that is
+  // already chosen DESELECTS it, and the centre returns to the infinitive. set() stays a plain
+  // "turn to this stop", because walkthroughs and the guided rounds call it to place the dial.
+  function tapPerson(i) {
+    if (!state.word || state.word.kind !== 'verb') return set(1, i);  // adjectives: an ordinary set
+    const t = TENSES[state.dials.verb[2]];
+    // On a gerund or participle the sectors are dark: there is nobody to pick, so the tap doesn't take.
+    if (t && t.nonFinite) { SFX.locked(); return; }
+    // Already this person, and chosen by her (not lit there by the device): the tap lets go of it.
+    if (state.dials.verb[1] === i && state.remote !== i) return clearPerson();
+    set(1, i);                                                         // otherwise pick this person
+  }
+
+  // Back to the infinitive: no person chosen. Used by a second tap on the chosen sector and by Esc.
+  function clearPerson() {
+    if (!state.word || state.word.kind !== 'verb') return;
+    if (state.dials.verb[1] === NO_PERSON) return;                     // already resting: nothing to do
+    if (!allowed(1)) return;                                           // a tutorial may hold the ring still
+    if (!guarded(1, NO_PERSON)) return;                                // a guided round may refuse it
+    state.dials.verb[1] = NO_PERSON;
+    state.remote = null;
+    state.active = 1;                                                  // the keyboard stays on the person ring
+    SFX.click(1);
+    render();
+    if (state.onSet) state.onSet(1, NO_PERSON);                        // walkthroughs hear the change too
   }
 
   function setActive(i) {
@@ -394,7 +485,10 @@ const Gadget = (() => {
     const text = formFor(state.word, dials, neg);
     if (!text) { SFX.reject(); render(); return null; }
     SFX.eject();
-    return { kind: state.word.kind, lemma: state.word.lemma, text, dials, neg, colour: colourFor(state.word, dials) };
+    // A confirmed infinitive carries the device's plain bronze, not a mood colour: it is not
+    // indicative, subjunctive or a command, just the verb's name.
+    const colour = resting(state.word, dials) ? BRONZE : colourFor(state.word, dials);
+    return { kind: state.word.kind, lemma: state.word.lemma, text, dials, neg, colour };
   }
 
   // ---- geometry helpers ---------------------------------------------------
@@ -553,11 +647,15 @@ const Gadget = (() => {
     // and the button you press next visibly match.
     // Exception (NZ, 2026-11-11): a gerund or participle wears the INDICATIVE yellow instead, because the form
     // stands alone, tied to no person, so no person's colour should appear to shape it.
+    // The infinitive resting state (contract §2): no person chosen, so the centre is neutral, unlit
+    // bronze with white lettering. It can still be confirmed; it just doesn't glow like a chosen form.
+    const atRest = !off && resting(word, dials);
     const hubHue = nonFinite ? MOODS.find(m => m.id === 'ind').colour
+      : atRest ? BRONZE
       : personSel >= 0 && personSpec.stops[personSel] ? personSpec.stops[personSel].colour : null;
     // The guided round points at the hub once the right person is chosen: the next press is CONFIRM.
     const hubCued = !off && hubForm && state.cue && state.cue.person != null && dials[1] === state.cue.person;
-    s += `<g data-part="hub" class="hub hub-btn${hubForm ? ' live' : ''}${nonFinite ? ' takeover' : ''}${hubCued ? ' cue' : ''}${focusCls('hub')}" `
+    s += `<g data-part="hub" class="hub hub-btn${hubForm ? ' live' : ''}${nonFinite ? ' takeover' : ''}${atRest ? ' resting' : ''}${hubCued ? ' cue' : ''}${focusCls('hub')}" `
       + `${hubHue ? `style="--hub:${hubHue}" ` : ''}`
       + `${hubForm ? 'role="button" aria-label="confirm ' + (state.neg ? 'no ' : '') + hubForm + '"' : ''}>`;
     s += `<circle cx="${CX}" cy="${CY}" r="${R_HUB}" class="hub-plate"/>`;
@@ -745,8 +843,10 @@ const Gadget = (() => {
       html += `<div class="device-readout">`;
       STEP_ORDER[word.kind].forEach((i, n) => {
         const sp = specs[i];
+        // No person chosen has no stop to name, so the chip says what the centre is showing instead.
+        const val = sp.stops[dials[i]] ? sp.stops[dials[i]].full : 'ninguna · infinitivo';
         html += `<button class="ro${state.active === i ? ' active' : ''}" data-dial="${i}" type="button">`
-          + `<span class="ro-name">${n + 1} · ${sp.name}</span><span class="ro-val">${sp.stops[dials[i]].full}</span></button>`;
+          + `<span class="ro-name">${n + 1} · ${sp.name}</span><span class="ro-val">${val}</span></button>`;
       });
       html += `</div>`;
     }
@@ -792,6 +892,8 @@ const Gadget = (() => {
       // Anything carrying data-dial + data-stop selects that stop — one rule
       // for every clickable region on both devices.
       const hit = t.closest && t.closest('[data-dial][data-stop]');
+      // A verb's person sector goes through tapPerson, so a second tap on it deselects (contract §2).
+      if (hit && state.word && state.word.kind === 'verb' && +hit.dataset.dial === 1) { tapPerson(+hit.dataset.stop); return; }
       if (hit) { set(+hit.dataset.dial, +hit.dataset.stop); return; }
       // The readout chips pick which ring the arrow keys drive.
       const ro = t.closest && t.closest('.ro');
@@ -811,8 +913,12 @@ const Gadget = (() => {
     set ending(v) { state.ending = v === 'se' ? 'se' : 'ra'; render(); }, // Restore a remembered ending family.
     get ending() { return state.ending; }, // Let the explorer remember the chosen family for later visits.
     captureState() { return JSON.parse(JSON.stringify({ word: state.word, dials: state.dials, active: state.active, neg: state.neg, variety: state.variety, ending: state.ending, lens: state.lens, liveReadout: state.liveReadout })); }, // Preserve both word modes (and the ending family) before a temporary walkthrough.
-    restoreState(saved) { Object.assign(state, JSON.parse(JSON.stringify(saved))); render(); }, // Restore exploration exactly without submitting an answer or firing input hooks.
+    restoreState(saved) { Object.assign(state, JSON.parse(JSON.stringify(saved))); state.remote = null; render(); }, // A restored person is always the visitor's own, never one the device "heard". // Restore exploration exactly without submitting an answer or firing input hooks.
     mount, load, clear, randomise, step, set, setActive, cycleActive, eject, formFor, colourFor, render,
+    // The infinitive resting state: the "no person" value, the tap that toggles a sector, and the
+    // clear used by Esc. `atRest` says whether the centre is showing the infinitive right now.
+    NO_PERSON, tapPerson, clearPerson,
+    get atRest() { return resting(state.word, currentDials()); },
     setNeg, toggleNeg: () => setNeg(!state.neg),
     get negative() { return state.neg; },
     get word() { return state.word; },

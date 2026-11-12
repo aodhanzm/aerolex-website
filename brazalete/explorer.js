@@ -47,6 +47,7 @@
     $('device').querySelector('.gadget-eject').disabled = !form; // Do not offer confirmation when no form exists.
     if (word.kind === 'adj') $('form-help').textContent = 'Set gender and number to match the noun this adjective describes.'; // Explain agreement without inventing a sentence.
     else if (TENSES[dials[2]].nonFinite) $('form-help').textContent = `${TENSES[dials[2]].full}: this form has no person. Mood and person do not change it. ${VERBS[word.lemma].reflexive && TENSES[dials[2]].id === 'ppart' ? 'This is the bare participle; it needs a construction to make a sentence.' : ''}`; // Do not imply a gerund or participle is a person-inflected tense.
+    else if (Gadget.atRest) $('form-help').textContent = `No person is chosen, so the centre shows the infinitive, ${word.lemma}. Tap a person to conjugate it (tap it again to go back), or confirm the infinitive itself.`; // Explain the resting state (draft text for NZ's review).
     else if (!form) $('form-help').textContent = 'There is no form for this combination. Choose an available tense or person.'; // Explain an unavailable result without claiming a missing verb.
     else $('form-help').textContent = MOODS[dials[0]].id === 'imp' && Gadget.negative ? 'A negative command uses a present-subjunctive verb form. Gray choices are unavailable with this mood.' : 'Turn the controls, then press CONFIRM. Gray choices are unavailable with this mood.'; // Keep the grammatical-form distinction visible during exploration.
     $('variety-status').textContent = `${Gadget.variety === 'vos' ? 'Vos · Argentina / Uruguay' : 'Tú · informal singular'}. The left-rim switch offers ${Gadget.variety === 'vos' ? 'Tú' : 'Vos'}. Vosotros stays plural, for Spain.`; // Keep the current variety visible when the shared switch changes.
@@ -101,7 +102,8 @@
   Gadget.ending = prefs.ending === 'se' ? 'se' : 'ra'; // First visit shows −ra; later visits keep the family chosen with the lever.
   load(library.some(w => w.lemma === saved.word?.lemma) ? saved.word.lemma : 'ser'); // Open directly with a supported working word.
   const remembered = saved[Gadget.word.kind === 'verb' ? 'verb' : 'adj']; // Restore only the relevant kind of device controls.
-  if (Array.isArray(remembered)) { const order = Gadget.word.kind === 'verb' ? [0, 2, 1] : [0, 1]; order.forEach(i => { if (Number.isInteger(remembered[i]) && optionsFor(i)[remembered[i]] && !optionsFor(i)[remembered[i]].disabled) Gadget.set(i, remembered[i]); }); } // Validate every saved index and its availability before restoring it.
+  if (Array.isArray(remembered)) { const order = Gadget.word.kind === 'verb' ? [0, 2] : [0, 1]; // A returning visitor's verb comes back on the infinitive: mood and tense are restored, the person is not (NZ, 2026-11-12).
+    order.forEach(i => { if (Number.isInteger(remembered[i]) && optionsFor(i)[remembered[i]] && !optionsFor(i)[remembered[i]].disabled) Gadget.set(i, remembered[i]); }); } // Validate every saved index and its availability before restoring it.
   Gadget.setNeg(saved.neg === true); // Restore polarity without changing the loaded word.
   Receiver.reset(['vic', 'rec', 'ref'].includes(saved.role) ? saved.role : 'vic', Number.isInteger(saved.person) && saved.person >= 0 && saved.person < 6 ? saved.person : 0, saved.gender === 1 ? 1 : 0); // Ignore malformed saved pronoun controls.
   refreshPronouns(); // Populate the accessible disc controls after restoration.
@@ -122,9 +124,14 @@
   $('confirm-pronoun').addEventListener('click', confirmPronoun); // Provide a full-size pronoun confirmation target.
   $('device').addEventListener('keydown', event => { // Restrict fast dial shortcuts to the focused hardware surface.
     if (event.target !== $('device')) return; // Let nested buttons retain their native Enter and Space behaviour.
+    if (event.key === 'Escape') { if (PublicTutorial.active) return; event.preventDefault(); Gadget.clearPerson(); return; } // Esc lets go of the chosen person (back to the infinitive); during a walkthrough Esc still leaves the walkthrough instead.
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', ' ', 'n', 'N', 't', 'T', 'e', 'E'].includes(event.key)) event.preventDefault(); else return; // Prevent the device shortcuts from scrolling the page.
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown') Gadget.cycleActive(event.key === 'ArrowUp' ? -1 : 1); // Follow mood, tense, person in the established working order.
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { const options = optionsFor(Gadget.active), delta = event.key === 'ArrowLeft' ? -1 : 1; let next = Gadget.dials[Gadget.active]; for (let i = 0; i < options.length; i++) { next = (next + delta + options.length) % options.length; if (!options[next].disabled) { Gadget.set(Gadget.active, next); break; } } } // Skip powered-down choices and never activate a disabled person.
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { const options = optionsFor(Gadget.active), delta = event.key === 'ArrowLeft' ? -1 : 1; // Skip powered-down choices and never activate a disabled person.
+      const stops = Gadget.word.kind === 'verb' && Gadget.active === 1 ? [Gadget.NO_PERSON, ...options.map((_, i) => i)] : options.map((_, i) => i); // On the person ring the loop also passes a "no person" stop, which shows the infinitive.
+      const usable = k => k === Gadget.NO_PERSON || !options[k].disabled; // The "no person" stop is always available; real stops follow the grammar rules.
+      let at = Math.max(0, stops.indexOf(Gadget.dials[Gadget.active])); // Where the ring is now within that loop.
+      for (let i = 0; i < stops.length; i++) { at = (at + delta + stops.length) % stops.length; if (usable(stops[at])) { if (stops[at] !== Gadget.dials[Gadget.active]) Gadget.set(Gadget.active, stops[at]); break; } } } // Move to the next usable stop, and only redraw if it actually moved.
     if (event.key === 'Enter' || event.key === ' ') confirm(); // Confirm explicitly with the focused device.
     if (event.key.toLowerCase() === 't' && Gadget.word.kind === 'verb') Gadget.toggleVariety(); // Operate the same physical regional switch from the focused verb device.
     if (event.key.toLowerCase() === 'n') Gadget.toggleNeg(); // Keep the existing negative-control shortcut.
