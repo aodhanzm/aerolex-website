@@ -34,22 +34,25 @@
       id: 'project-sanctum', name: 'The Sanctum', category: '02 / A SPACE FOR REFLECTION',
       description: 'A quiet observatory beyond the trees. A personal space for astrology, journaling, and following your curiosity.',
       contribution: 'Product design · Development',
+      // 2026-11-12: the second button opens the guest tour (sample profile, nothing saved) instead of the members' door.
       project: '/sanctum/about/', viewLabel: 'View project',
-      enter: '/sanctum/', enterLabel: 'Enter world',
-      availability: 'Private tool · Invitation required to join',
-      image: '/assets/forest/the-sanctum-clearing-v1.png', mobileFocus: '30%',
+      enter: '/sanctum/?guest=1', enterLabel: 'Look around as a guest',
+      availability: 'Guest tour · No sign-up, nothing saved',
+      // Compressed copy of the clearing picture (2026-11-12).
+      image: '/assets/forest/the-sanctum-clearing-v1.webp', mobileFocus: '30%',
       imageLabel: 'A Grecian island archipelago with a temple of Athena, a brass-domed observatory and illuminated marble terraces beneath the stars'
     },
     {
-      // Name is a placeholder until NZ's naming session picks the new one.
-      id: 'project-chinese', name: 'Hànyǔ Courtyard', category: '03 / CHINESE LEARNING',
+      // The name stays Hanyu Courtyard, written plainly (NZ, 2026-11-12).
+      id: 'project-chinese', name: 'Hanyu Courtyard', category: '03 / CHINESE LEARNING',
       description: 'An inherited estate in the mountains, a kettle that needs tea, and your first words of Mandarin. A Chinese-learning game I’m designing now.',
       contribution: 'Learning experience · Game design',
       // Visitors only see the design concept. The playable build is NZ-only (behind the password), so there is no "Enter world" here.
-      project: '#chinese-project', viewLabel: 'See the design',
-      enter: null,
+      // 2026-11-12: both buttons lead to pages now: the project page (design work only) and its design story.
+      project: '/hanyu-courtyard/', viewLabel: 'See the design',
+      enter: '/stories/hanyu-courtyard/', enterLabel: 'Design story',
       availability: 'In design · Concept art and mockups',
-      image: '/assets/forest/hanyu-courtyard-clearing-v1.png', mobileFocus: '48%',
+      image: '/assets/forest/hanyu-courtyard-clearing-v1.webp', mobileFocus: '48%', // compressed copy (2026-11-12)
       imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains'
     }
   ];
@@ -246,30 +249,22 @@
     });
     article.append(button);
   });
-  viewLink.addEventListener('click', event => {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    if (selected === 2) {
-      event.preventDefault();
-      const concept = document.querySelector('.project-dialog');
-      concept.showModal();
-      document.body.classList.add('modal-open');
-    }
-  });
+  // (2026-11-12) Hanyu's first button used to open a preview window; it is an ordinary link to its project page now.
   // Preserve direct links to the static portfolio sections for visitors arriving from outside.
   const legal = document.createElement('nav');
   legal.className = 'forest-legal';
   legal.setAttribute('aria-label', 'Privacy and cookie choices');
   legal.innerHTML = '<a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a>';
-  legal.querySelector('[data-action="cookie-settings"]').addEventListener('click', () => biography.close());
-  biography.append(legal);
+  // 2026-11-12: these links live in the Projects panel now (the About panel is no longer opened from the menu).
+  legal.querySelector('[data-action="cookie-settings"]').addEventListener('click', () => directory.close());
+  directory.append(legal);
   const initialHash = location.hash;
   // Links like aerolex.dev/#project-brazalete open the projects panel at that card (The Scene's card was replaced).
   if (['#projects', '#project-brazalete', '#project-sanctum', '#project-chinese'].includes(initialHash)) {
     openPanel('projects', initialHash.startsWith('#project-') ? initialHash.slice(1) : null);
   } else if (initialHash === '#chinese-project') {
-    document.querySelector('.project-dialog').showModal();
-    document.body.classList.add('modal-open');
+    location.replace('/hanyu-courtyard/'); // Old links to the Hanyu preview window go to its project page.
   } else if (['#about', '#experience', '#education', '#contact'].includes(initialHash)) {
-    openPanel('about', initialHash === '#about' ? null : initialHash.slice(1));
+    location.replace(initialHash === '#contact' ? '/about/#contact' : '/about/'); // Old links to the About panel go to the About page.
   }
 })();

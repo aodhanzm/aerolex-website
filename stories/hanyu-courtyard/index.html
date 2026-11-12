@@ -1,0 +1,176 @@
+<!doctype html>
+<!-- Design-process story for Hanyu Courtyard (portfolio launch, 2026-11-12). A 4-minute read: the problem, four decisions with pictures, before/after, what's next. Design work only; no link to the playable build. Draft wording for NZ's review. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1720">
+  <!-- The words search engines and link previews show for this page. -->
+  <title>How Hanyu Courtyard got its shape · Design story · Noah Zepter-Martínez</title>
+  <meta name="description" content="The design story of Hanyu Courtyard, a Mandarin-learning adventure: four decisions made across three playtests, a before and after, and the review loop that is designed but not yet built.">
+  <link rel="canonical" href="https://aerolex.dev/stories/hanyu-courtyard/">
+  <!-- Link-preview tags (the title, sentence and picture shown when this page is shared on LinkedIn, X or in a message). -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="AeroLex · Noah Zepter-Martínez">
+  <meta property="og:title" content="How Hanyu Courtyard got its shape">
+  <meta property="og:description" content="Four decisions made across three playtests of a Mandarin-learning adventure, and the part that is not built yet.">
+  <meta property="og:url" content="https://aerolex.dev/stories/hanyu-courtyard/">
+  <meta property="og:image" content="https://aerolex.dev/assets/og/story-hanyu-courtyard.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A painted Chinese courtyard at dusk with two figures standing before a red timber hall.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How Hanyu Courtyard got its shape">
+  <meta name="twitter:description" content="Four decisions made across three playtests of a Mandarin-learning adventure, and the part that is not built yet.">
+  <meta name="twitter:image" content="https://aerolex.dev/assets/og/story-hanyu-courtyard.jpg">
+  <!-- Browser-tab icons: a sharp vector one for modern browsers, a small picture for older ones, and one for phone home screens. -->
+  <link rel="icon" type="image/svg+xml" href="/assets/portfolio/mark.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32.png">
+  <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png">
+  <!-- The site's two fonts, loaded the same way as on the homepage. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;450;500;600;650&display=swap" rel="stylesheet">
+  <!-- Shared site styles first, then the reading-page styles added for the portfolio launch. -->
+  <link rel="stylesheet" href="/assets/portfolio.css?v=resume-learning-20261112">
+  <link rel="stylesheet" href="/assets/pages.css?v=launch-20261112">
+  <!-- Small shared script (the "Back to top" link) and the consent-gated visitor counter used across the site. -->
+  <script defer src="/assets/portfolio.js"></script>
+  <script async src="/assets/analytics.js"></script>
+</head>
+<body id="top" class="page">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <!-- Top bar shared by every reading page: logo, three links, résumé button. -->
+  <header class="site-header wrap page-header">
+    <a class="brand" href="/" aria-label="AeroLex home"><img src="/assets/portfolio/mark.svg" alt="" width="40" height="32"><span>AEROLEX</span></a>
+    <nav class="page-nav" aria-label="Main navigation"><a href="/#projects">Work</a><a href="/about/">About</a><a href="/about/#contact">Get in touch</a></nav>
+    <a class="button button-small" href="/resume/">Résumé <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main" class="page-main">
+    <!-- Where this page sits in the site. -->
+    <p class="crumbs"><a href="/#projects">Work</a> / <a href="/hanyu-courtyard/">Hanyu Courtyard</a> / Design story</p>
+
+    <!-- The story's opening: what it is about, how long it takes to read, and jump links to each part. -->
+    <header class="story-head">
+      <p class="eyebrow">Design story · Learning design and game design</p>
+      <h1>How Hanyu Courtyard got its shape</h1>
+      <p class="lead">Hanyu Courtyard is a Mandarin-learning adventure in private playtesting. These are the choices three playthroughs forced on it.</p>
+      <p class="story-meta">About a 4 minute read · Updated November 2026</p>
+      <ul class="story-toc" aria-label="In this story"><li><a href="#problem">The problem</a></li><li><a href="#decisions">Four decisions</a></li><li><a href="#before-after">Before and after</a></li><li><a href="#next">What’s next</a></li></ul>
+    </header>
+
+    <!-- Part 1: the problem. -->
+    <section class="page-section" id="problem" aria-labelledby="problem-title">
+      <p class="eyebrow">The problem</p>
+      <h2 id="problem-title">Characters taught as pictures to memorise</h2>
+      <div class="prose">
+        <p>I wanted to understand Chinese characters and put words together into sentences. The courses I tried split that into two jobs. A story happened over here, and the studying happened somewhere else, in a list.</p>
+        <p>A character taught as a small picture gives you nothing to reason from the next time you meet one of its parts. And a review list has no reason to exist beyond itself, so it’s the first thing I stop doing.</p>
+        <p>So the question for this game was whether the story could ask for each word before the lesson teaches it, and whether review could build something I cared about.</p>
+      </div>
+    </section>
+
+    <!-- Part 2: the decisions. -->
+    <section class="page-section" id="decisions" aria-labelledby="decisions-title">
+      <p class="eyebrow">Key decisions</p>
+      <h2 id="decisions-title">Four choices that shaped it</h2>
+      <div class="prose">
+        <div class="decision">
+          <span class="num" aria-hidden="true">01</span>
+          <div>
+            <h3>The story asks, the lesson answers</h3>
+            <p>The model I borrowed is an old one from children’s learning games: a stretch of story, then a learning activity that the story needs, then more story. You inherit a neglected estate and meet Zhou Ming, the groundskeeper, who greets you in Mandarin before you know a word of it.</p>
+            <p>That greeting is the lesson’s reason to exist. You learn <span lang="zh">你好</span> because someone just said it to you and is waiting for an answer.</p>
+          </div>
+        </div>
+        <div class="decision">
+          <span class="num" aria-hidden="true">02</span>
+          <div>
+            <h3>Throw out the map I had just built</h3>
+            <p>The first walkable version was a top-down map made of tiles, the kind you step across square by square. I built it, looked at it, and rejected it the same day. It read as a board game, and the estate needed to feel like somewhere you’d want to restore.</p>
+            <p>The replacement is closer to an old point-and-click mystery: wide painted scenes you slide across, with your character walking to wherever you click. Before committing, I made a small test page that showed the same courtyard from several camera heights and let me walk a figure across each. A low angle of about fifteen degrees won.</p>
+          </div>
+        </div>
+      </div>
+      <figure class="story-figure"><img src="/assets/hanyu/courtyard.webp" alt="The front courtyard as a wide painted scene, with the player’s character and the groundskeeper standing on the paving stones in front of a red timber hall" width="1440" height="900" loading="lazy" decoding="async"><figcaption>The courtyard after the change: one painting, a low camera, and a figure that walks where you click.</figcaption></figure>
+      <div class="prose">
+        <div class="decision">
+          <span class="num" aria-hidden="true">03</span>
+          <div>
+            <h3>Cut the first unit by more than half</h3>
+            <p>The first complete version of unit one taught 36 characters, each typed three ways and drawn from memory. On paper that came to 108 typing prompts and 72 drawings. I played it and it was far too long for a first sitting.</p>
+            <p>So I cut it to 15 characters in sentences of four characters or fewer, and changed how a new one arrives. Each now gets four short screens of its own: its parts and where they came from, its tone, its stroke order, and then your own attempt over a faint outline.</p>
+          </div>
+        </div>
+      </div>
+      <div class="before-after">
+        <figure class=""><img src="/assets/hanyu/character-parts.webp" alt="A lesson card showing the character for ‘you’ in two colours with each part explained" width="1152" height="772" loading="lazy" decoding="async"><figcaption>Screen one: the parts, and what each contributes.</figcaption></figure>
+        <figure class=""><img src="/assets/hanyu/tone.webp" alt="The character for ‘you’ above four tone cards drawn as coloured lines" width="1152" height="772" loading="lazy" decoding="async"><figcaption>Screen two: the tone, as a colour and a shape.</figcaption></figure>
+      </div>
+      <div class="prose">
+        <div class="decision">
+          <span class="num" aria-hidden="true">04</span>
+          <div>
+            <h3>Let the handwriting stay yours</h3>
+            <p>The game checks handwriting with an open-source tool called Hanzi Writer, which knows the correct order and direction of every stroke. In my first version, a correct stroke snapped into the textbook shape the moment you finished it.</p>
+            <p>After the second playtest I took that out, because it meant the character on the page was never really yours. Now your strokes stay exactly as you painted them, in the tone’s colour. A wrong one flashes and fades so you can try again, and a finished character blooms and moves on without a “Next” screen.</p>
+          </div>
+        </div>
+      </div>
+      <figure class="story-figure"><img src="/assets/hanyu/brush-desk.webp" alt="The brush desk: a sheet of rice paper with a faint outline of a character, beside an inkstone and a water dish" width="1152" height="772" loading="lazy" decoding="async"><figcaption>The brush desk. The outline is only there the first time.</figcaption></figure>
+    </section>
+
+    <!-- Part 3: before and after. -->
+    <section class="page-section" id="before-after" aria-labelledby="ba-title">
+      <p class="eyebrow">Before and after</p>
+      <h2 id="ba-title">From pages you read to a place you walk</h2>
+      <div class="before-after">
+        <figure class=""><img src="/assets/stories/hanyu/before.webp" alt="The earlier version of chapter one: a picture of the courtyard with a narrator’s paragraph underneath and a single button to continue" width="1440" height="815" loading="lazy" decoding="async"><figcaption><strong>Early November.</strong> The same opening as a page of narration with one button.</figcaption></figure>
+        <figure class=""><img src="/assets/hanyu/road.webp" alt="The current opening: a painted road beside the estate wall, with the scene itself as the thing you click" width="1440" height="900" loading="lazy" decoding="async"><figcaption><strong>Now.</strong> The scene is the interface. You walk to the gate because you want to see behind it.</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- Part 4: honest status and what's next. -->
+    <section class="page-section" id="next" aria-labelledby="next-title">
+      <p class="eyebrow">What’s next</p>
+      <h2 id="next-title">The part that isn’t built is the point of the game</h2>
+      <div class="prose">
+        <p>The idea the whole design leans on is that daily review restores the estate. Each visit you choose between reviewing at the desk or doing a household job, and either one earns the timber and stone that bring a room back. Missing a day costs nothing. Nothing you’ve earned is ever taken away.</p>
+        <p>That loop is designed and not yet playable, and I’d rather say so here than let the pictures imply otherwise.</p>
+      </div>
+      <div class="built-planned" style="margin-top:26px">
+        <div>
+          <span class="tag">Built</span>
+          <h3>Unit one, in a private build</h3>
+          <ul>
+            <li>Fifteen characters, start to finish, played through three times.</li>
+            <li>Painted scenes, tone colours, graded brush writing and typing by sound.</li>
+          </ul>
+        </div>
+        <div>
+          <span class="tag tag-planned">Planned</span>
+          <h3>Next in line</h3>
+          <ul>
+            <li>The review loop that rebuilds the estate.</li>
+            <li>Four more units, recorded audio, and a native speaker’s review of every line.</li>
+            <li>Playtests with learners other than me.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="prose">
+        <p style="margin-top:22px">My part: learning design, game design and story, built with AI as a build partner. The paintings are AI-generated from my prompts and style references. The Chinese lines are my drafts and haven’t been reviewed by a native speaker yet.</p>
+      </div>
+    </section>
+
+    <!-- Ways onward: back to the project itself, then the other two stories. -->
+    <a class="next-card" href="/hanyu-courtyard/"><span><span class="eyebrow">The project</span><strong>Hanyu Courtyard: see the design</strong></span><span class="arrow" aria-hidden="true">→</span></a>
+    <a class="next-card" href="/stories/brazalete/" style="margin-top:18px"><span><span class="eyebrow">Design story</span><strong>How a conjugation chart became something you wear</strong></span><span class="arrow" aria-hidden="true">→</span></a>
+    <a class="next-card" href="/stories/sanctum/" style="margin-top:18px"><span><span class="eyebrow">Design story</span><strong>The Sanctum: from a star chart to an estate you walk through</strong></span><span class="arrow" aria-hidden="true">→</span></a>
+    
+  </main>
+
+  <!-- Footer shared by every reading page. -->
+  <footer class="site-footer wrap"><a class="brand footer-brand" href="/">AEROLEX</a><p>© 2026 Noah Zepter-Martínez</p><nav aria-label="Footer navigation"><a href="/about/#contact">Get in touch</a><a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a><a href="#top" data-back-top>Back to top <span aria-hidden="true">↑</span></a></nav></footer>
+</body>
+</html>
