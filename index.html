@@ -21,7 +21,7 @@
   <!-- The "?v=" tags make returning visitors' browsers fetch the new file instead of an old saved copy. -->
   <link rel="stylesheet" href="/assets/portfolio.css?v=resume-text-20261111">
   <!-- New tags (2026-11-11) because the clearings changed: Brazalete / Sanctum / Hanyu, with pictures on the path buttons. -->
-  <link rel="stylesheet" href="/assets/forest.css?v=clearings-brazalete-20261111">
+  <link rel="stylesheet" href="/assets/forest.css?v=first-screen-20261112">
   <script defer src="/assets/portfolio.js"></script>
   <script defer src="/assets/forest.js?v=clearings-brazalete-20261111"></script>
   <script async src="/assets/analytics.js"></script>
@@ -45,11 +45,26 @@
       <div class="tree-curtain tree-right" aria-hidden="true"><img src="/assets/forest/foreground-trees-v1.png" alt="" width="1672" height="941" decoding="async"></div>
       <div class="forest-shade" aria-hidden="true"></div>
 
+      <!-- First screen rewritten 2026-11-12 (portfolio launch): a visitor now learns who Noah is and what he does before anything
+           else, and gets three shortcuts. The forest journey is still here, one line lower, for anyone who wants to wander. -->
       <div class="entrance-copy">
-        <p class="eyebrow forest-eyebrow">AEROLEX / A COLLECTION OF WORLDS</p>
-        <h1>A little curiosity.<br>A different path.</h1>
-        <p class="entrance-description">Follow the trail. There’s something<br class="forest-desktop-break"> being built beyond the trees.</p>
-        <a class="trail-start" href="#projects" data-start-trail><span>Follow the path</span><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 30V7m-7 7 7-7 7 7" stroke="currentColor" stroke-width="1.2"/><path d="M8 31h20" stroke="currentColor" stroke-width=".8"/></svg></a>
+        <!-- The name, so a hiring manager knows whose site this is within a second. -->
+        <p class="entrance-name">Noah Zepter-Martínez</p>
+        <!-- The role in four words (NZ's chosen direction: "a designer who builds"). -->
+        <h1>A designer<br>who builds.</h1>
+        <!-- The field NZ works in, as a small label under the headline. -->
+        <p class="eyebrow forest-eyebrow entrance-role">GAME-BASED LEARNING · INTERACTIVE WORLDS</p>
+        <!-- One sentence of value: what NZ does for a team, in NZ's own "trying to get it right" voice. -->
+        <p class="entrance-description">I design how a learning experience feels and works, then build a working version to find out whether it holds up.</p>
+        <!-- Three shortcuts. "See the work" skips the forest and opens the project list (or scrolls to it without JavaScript);
+             "Watch the dev log" goes to the Brazalete page's video library; "Get in touch" goes to the contact part of About. -->
+        <div class="entrance-actions">
+          <a class="button button-primary" href="#projects" data-forest-panel="projects">See the work <span aria-hidden="true">↓</span></a>
+          <a class="button" href="/brazalete/#dev-log">Watch the dev log <span aria-hidden="true">↗</span></a>
+          <a class="button" href="/about/#contact">Get in touch <span aria-hidden="true">↗</span></a>
+        </div>
+        <!-- The forest journey stays: this smaller link starts the walk through the three clearings, as before. -->
+        <a class="trail-start" href="#projects" data-start-trail><span>Or follow the path</span><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 30V7m-7 7 7-7 7 7" stroke="currentColor" stroke-width="1.2"/><path d="M8 31h20" stroke="currentColor" stroke-width=".8"/></svg></a>
         <p class="trail-hint">THREE CLEARINGS. THREE DIFFERENT WORLDS.</p>
       </div>
 
