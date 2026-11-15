@@ -18,6 +18,15 @@
   bar.id = 'edit-bar';
   bar.innerHTML = `<button type="button" data-act="toggle"></button><button type="button" data-act="undo">Undo last save</button><span class="edit-status" role="status"></span>`;
   document.body.append(bar);
+  // 2026-11-13: on the homepage the visitor-facing buttons are switched off while editing (clicking text selects it instead),
+  // so these toolbar buttons are the way to move between the entrance, the three clearing cards and the Projects panel.
+  const forest = () => window.aerolexForest;                      // Set by the homepage's forest script; missing on other pages.
+  if (forest()) {
+    const nav = document.createElement('span');
+    nav.className = 'edit-nav';
+    nav.innerHTML = `<b>Show:</b><button type="button" data-go="home">Entrance</button><button type="button" data-go="0">Brazalete card</button><button type="button" data-go="1">Sanctum card</button><button type="button" data-go="2">Hanyu card</button><button type="button" data-go="projects">Projects panel</button>`;
+    bar.append(nav);
+  }
   const status = bar.querySelector('.edit-status');
   const say = text => { status.textContent = text; };             // Short messages next to the buttons.
 
@@ -42,6 +51,18 @@
     <div class="edit-actions"><button type="button" data-act="reset">Reset look to original</button><button type="button" data-act="close">Cancel</button></div>`;
   document.body.append(panel);
   const field = name => panel.querySelector(`[data-f="${name}"]`);
+
+  // The Projects panel is a "modal" window that the browser draws above everything else, including this toolbar and panel.
+  // So whenever such a window is open, the toolbar and panel move inside it (and move back when it closes).
+  const reparent = () => {
+    const open = [...document.querySelectorAll('dialog[open]')].pop();
+    const home = open || document.body;
+    for (const el of [bar, panel]) if (el.parentNode !== home) home.append(el);
+  };
+  new MutationObserver(reparent).observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['open'] });
+
+  // Where the homepage is looking right now (which card or panel), so a save-and-reload can put the page back there.
+  const viewState = () => forest() ? { panel: !!document.querySelector('#forest-projects-dialog[open]'), clearing: forest().selected } : null;
 
   // Show the toolbar state; read-only pages (built by other projects) explain why nothing can be saved.
   function refreshBar() {
@@ -137,6 +158,7 @@
     const out = await r.json().catch(() => ({}));
     if (!r.ok || out.ok === false) { say(out.error || out.message || 'Couldn’t save.'); return; }
     sessionStorage.setItem(KEY + ':scroll', String(scrollY));
+    sessionStorage.setItem(KEY + ':view', JSON.stringify(viewState()));   // Return to the same card or panel after the reload.
     location.reload();
   }
   // The element's position in the file, as labelled by the server: "tagStart:textStart:textEnd".
@@ -200,10 +222,18 @@
       if (!on) cancel();
       refreshBar();
     }
+    const go = e.target.dataset.go;                                // "Show:" buttons on the homepage.
+    if (go !== undefined && forest()) {
+      cancel();                                                    // Drop any unsaved preview before changing what's on screen.
+      const f = forest();
+      const panelOpen = !!document.querySelector('#forest-projects-dialog[open]');
+      if (go === 'projects') { if (panelOpen) f.closePanels(); else { f.closePanels(); f.openPanel('projects'); } }
+      else { f.closePanels(); if (go === 'home') f.home(); else f.visit(Number(go)); }
+    }
     if (act === 'undo') {
       const r = await fetch('/__edit/undo', { method: 'POST', body: '{}' });
       const out = await r.json().catch(() => ({}));
-      if (out.ok) { sessionStorage.setItem(KEY + ':scroll', String(scrollY)); location.reload(); }
+      if (out.ok) { sessionStorage.setItem(KEY + ':scroll', String(scrollY)); sessionStorage.setItem(KEY + ':view', JSON.stringify(viewState())); location.reload(); }
       else say(out.message || 'Nothing to undo.');
     }
   });
@@ -211,5 +241,11 @@
   // After a save-and-reload, return to where the page was scrolled.
   const back = sessionStorage.getItem(KEY + ':scroll');
   if (back) { sessionStorage.removeItem(KEY + ':scroll'); addEventListener('load', () => scrollTo(0, +back)); }
+  // After a save-and-reload, show the same card or panel again (the page itself always restarts at the entrance).
+  try {
+    const view = JSON.parse(sessionStorage.getItem(KEY + ':view') || 'null');
+    sessionStorage.removeItem(KEY + ':view');
+    if (view && forest()) { if (view.panel) forest().openPanel('projects'); else if (view.clearing >= 0) forest().visit(view.clearing); }
+  } catch (_) { /* A missing or odd remembered view is simply ignored. */ }
   refreshBar();
 })();

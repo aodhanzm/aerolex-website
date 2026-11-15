@@ -33,10 +33,11 @@
   <link rel="stylesheet" href="/assets/portfolio.css?v=resume-text-20261111">
   <!-- New tags (2026-11-11) because the clearings changed: Brazalete / Sanctum / Hanyu, with pictures on the path buttons. -->
   <!-- "first-screen" tag (2026-11-12): the opening view changed, so returning visitors must fetch the new styles. -->
-  <link rel="stylesheet" href="/assets/forest.css?v=first-screen-20261112">
+  <link rel="stylesheet" href="/assets/forest.css?v=launch-20261113">
   <script defer src="/assets/portfolio.js"></script>
-  <script defer src="/assets/forest.js?v=launch-20261112"></script>
+  <script defer src="/assets/forest.js?v=launch-20261113"></script>
   <script async src="/assets/analytics.js"></script>
+<link rel="stylesheet" href="/assets/edit-overrides.css"> <!-- Look and placement changes saved from the local edit mode. -->
 </head>
 <body id="top" class="forest-home">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -65,30 +66,52 @@
         <!-- The role in four words (NZ's chosen direction: "a designer who builds"). -->
         <h1>A designer<br>who builds.</h1>
         <!-- The field NZ works in, as a small label under the headline. -->
-        <p class="eyebrow forest-eyebrow entrance-role">GAME-BASED LEARNING · INTERACTIVE WORLDS</p>
+        <p class="eyebrow forest-eyebrow entrance-role" data-edit="e-200b84">GAME-BASED LEARNING · INTERACTIVE WORLDS</p>
         <!-- One sentence of value: what NZ does for a team, in NZ's own "trying to get it right" voice. -->
         <p class="entrance-description">I design how a learning experience feels and works, then build a working version to find out whether it holds up.</p>
         <!-- Three shortcuts. "See the work" skips the forest and opens the project list (or scrolls to it without JavaScript);
              "Watch the dev log" goes to the Brazalete page's video library; "Get in touch" goes to the contact part of About. -->
         <div class="entrance-actions">
-          <a class="button button-primary" href="#projects" data-forest-panel="projects">See the work <span aria-hidden="true">↓</span></a>
-          <a class="button" href="/brazalete/#dev-log">Watch the dev log <span aria-hidden="true">↗</span></a>
-          <a class="button" href="/about/#contact">Get in touch <span aria-hidden="true">↗</span></a>
+          <!-- 2026-11-13: each button's words sit in their own small label so edit mode can retype them (an arrow beside the words used to block that). -->
+          <a class="button button-primary" href="#projects" data-forest-panel="projects"><span>See the work</span> <span aria-hidden="true">↓</span></a>
+          <a class="button" href="/brazalete/#dev-log"><span>Watch the dev log</span> <span aria-hidden="true">↗</span></a>
+          <a class="button" href="/about/#contact"><span>Get in touch</span> <span aria-hidden="true">↗</span></a>
         </div>
         <!-- The forest journey stays: this smaller link starts the walk through the three clearings, as before. -->
         <a class="trail-start" href="#projects" data-start-trail><span>Or follow the path</span><svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 30V7m-7 7 7-7 7 7" stroke="currentColor" stroke-width="1.2"/><path d="M8 31h20" stroke="currentColor" stroke-width=".8"/></svg></a>
         <p class="trail-hint">THREE CLEARINGS. THREE DIFFERENT WORLDS.</p>
       </div>
 
-      <article class="world-introduction" aria-labelledby="world-title" hidden>
-        <p class="eyebrow world-category" id="world-category">A CLEARING AHEAD</p>
-        <!-- Starting values for the first clearing (the Brazalete); the forest script swaps them for each clearing. -->
-        <h2 id="world-title" tabindex="-1">The Brazalete</h2>
-        <p class="world-description" id="world-description"></p>
-        <p class="world-role" id="world-role"></p>
-        <div class="world-actions"><a class="button button-primary" id="world-project-link" href="/brazalete/#dev-log">Watch the dev log <span aria-hidden="true">↗</span></a><a class="button" id="world-enter-link" href="/brazalete/">Try the Brazalete <span aria-hidden="true">↗</span></a></div>
-        <p class="world-availability" id="world-availability"></p>
-        <button class="continue-trail" type="button" data-next-clearing>Continue along the path <span aria-hidden="true">→</span></button>
+      <!-- 2026-11-13: the three clearing cards are written out here, one each, instead of being filled in by the forest script.
+           That way every word on them can be retyped in edit mode. The script only shows one card at a time (data-world = 0, 1, 2)
+           and takes each clearing's picture from its own list. Each button's words sit in their own small label for the same reason. -->
+      <article class="world-introduction" data-world="0" aria-labelledby="world-title-0" hidden>
+        <p class="eyebrow world-category">01 / SPANISH GRAMMAR TOOL</p>
+        <h2 id="world-title-0" tabindex="-1">The Brazalete</h2>
+        <p class="world-description">A brass wristband for building Spanish verbs. Turn the rings to choose mood, tense and person, and watch the word change shape as you go.</p>
+        <p class="world-role">My contribution: Interaction design · Learning design · Development</p>
+        <!-- Swapped 2026-11-13 at NZ's request: trying the tool comes first, the dev log second. -->
+        <div class="world-actions"><a class="button button-primary" href="/brazalete/"><span>Try the Brazalete</span> <span aria-hidden="true">↗</span></a><a class="button" href="/brazalete/#dev-log"><span>Watch the dev log</span> <span aria-hidden="true">↗</span></a></div>
+        <p class="world-availability">Free to try · No account needed</p>
+        <button class="continue-trail" type="button" data-next-clearing><span>Check out other projects</span> <span aria-hidden="true">→</span></button>
+      </article>
+      <article class="world-introduction" data-world="1" aria-labelledby="world-title-1" hidden>
+        <p class="eyebrow world-category">02 / A SPACE FOR REFLECTION</p>
+        <h2 id="world-title-1" tabindex="-1">The Sanctum</h2>
+        <p class="world-description">A quiet observatory beyond the trees. A personal space for astrology, journaling, and following your curiosity.</p>
+        <p class="world-role">My contribution: Product design · Development</p>
+        <div class="world-actions"><a class="button button-primary" href="/sanctum/about/"><span>View project</span> <span aria-hidden="true">↗</span></a><a class="button" href="/sanctum/?guest=1"><span>Look around as a guest</span> <span aria-hidden="true">↗</span></a></div>
+        <p class="world-availability">Guest tour · No sign-up, nothing saved</p>
+        <button class="continue-trail" type="button" data-next-clearing><span>Check out other projects</span> <span aria-hidden="true">→</span></button>
+      </article>
+      <article class="world-introduction" data-world="2" aria-labelledby="world-title-2" hidden>
+        <p class="eyebrow world-category">03 / CHINESE LEARNING</p>
+        <h2 id="world-title-2" tabindex="-1">Hanyu Courtyard</h2>
+        <p class="world-description">An inherited estate in the mountains, a kettle that needs tea, and your first words of Mandarin. A Chinese-learning game I’m designing now.</p>
+        <p class="world-role">My contribution: Learning experience · Game design</p>
+        <div class="world-actions"><a class="button button-primary" href="/hanyu-courtyard/"><span>See the design</span> <span aria-hidden="true">↗</span></a><a class="button" href="/stories/hanyu-courtyard/"><span>Design story</span> <span aria-hidden="true">↗</span></a></div>
+        <p class="world-availability">In design · Concept art and mockups</p>
+        <button class="continue-trail" type="button" data-next-clearing><span>Check out other projects</span> <span aria-hidden="true">→</span></button>
       </article>
 
       <p class="trail-announcement" id="trail-announcement" role="status" aria-live="polite"></p>
@@ -171,7 +194,7 @@
   <footer class="site-footer wrap"><a class="brand footer-brand" href="/">AEROLEX</a><p>© 2026 Noah Zepter-Martínez</p><nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a><a href="#top" data-back-top>Back to top <span aria-hidden="true">↑</span></a></nav></footer>
 
   <!-- 2026-11-12: the Hanyu preview window that used to pop up here was retired; its project page replaces it. -->
-  <dialog id="forest-projects-dialog" class="forest-dialog" aria-labelledby="projects-title"><div class="forest-dialog-toolbar"><p class="eyebrow">AEROLEX / THE CLEARINGS</p><button type="button" data-close-forest-panel aria-label="Close projects">Back to the forest <span aria-hidden="true">×</span></button></div></dialog>
+  <dialog id="forest-projects-dialog" class="forest-dialog" aria-labelledby="projects-title"><div class="forest-dialog-toolbar"><p class="eyebrow">AEROLEX / THE CLEARINGS</p><button type="button" data-close-forest-panel aria-label="Close projects" data-edit="e-b9ae53"><span>Back to the forest</span> <span aria-hidden="true">×</span></button></div></dialog>
   <dialog id="forest-about-dialog" class="forest-dialog" aria-labelledby="about-title"><div class="forest-dialog-toolbar"><p class="eyebrow">AEROLEX / ABOUT THE MAKER</p><button type="button" data-close-forest-panel aria-label="Close about">Back to the forest <span aria-hidden="true">×</span></button></div></dialog>
   <noscript><style>.forest-bottom,.trail-hint{display:none}.forest-stage{min-height:700px}</style><p class="no-script-note wrap">Explore the projects and résumé below. The animated forest journey is available with JavaScript enabled.</p></noscript>
 </body>

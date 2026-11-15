@@ -196,7 +196,7 @@
 .forest-dialog::backdrop { background: #030b08b8; backdrop-filter: blur(10px); }
 .forest-dialog-toolbar { position: sticky; top: 0; z-index: 3; display: flex; justify-content: space-between; align-items: center; gap: 20px; background: #101d17f5; backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); padding: 16px 28px; }
 .forest-dialog-toolbar button { border: 0; background: none; color: var(--ivory); cursor: pointer; display: flex; gap: 15px; align-items: center; font-size: 11px; }
-.forest-dialog-toolbar button span { font-size: 24px; }
+.forest-dialog-toolbar button span[aria-hidden] { font-size: 24px; }   /* 2026-11-13: only the × is large; the word label beside it is a plain span now */
 .forest-dialog > .section.wrap { width: auto; margin-inline: 28px; border-top: 0; }
 .forest-dialog .section-heading { margin-top: 0; }
 .forest-dialog .section-note { font-size: 18px; }
@@ -296,54 +296,38 @@
   .forest-stage *, .forest-stage *::before, .forest-stage *::after { transition: none !important; animation: none !important; }
 }
 
-/* Keep privacy choices reachable from the quick-access panel. */
-.forest-legal { display: flex; gap: 25px; border-top: 1px solid var(--line); padding: 18px 28px; font-size: 11px; color: var(--muted); }
-.forest-legal a:hover { color: var(--ivory); }
-.trail-stops button { min-height: 44px; }
-.forest-dialog-toolbar button { min-height: 38px; }
-
-/* ── First screen: who Noah is, what he does, three shortcuts (portfolio launch, 2026-11-12) ─────────────── */
-/* The name sits above the headline in the elegant serif, big enough to read at a glance. */
-.entrance-name { font-family: var(--serif); font-size: clamp(21px, 1.9vw, 28px); letter-spacing: .01em; color: #f3efe2; margin-bottom: 14px; }
-/* The headline is a little smaller than the old one (was up to 102px) so the name, sentence and buttons all fit on one screen. */
-.entrance-copy h1 { font-size: clamp(52px, 5.6vw, 92px); }
-/* The field label under the headline: small spaced capitals, centred (auto side margins; paragraphs here have a width limit, so without them it sat left). */
-.entrance-role { margin: 20px auto 0; max-width: none; }
-/* A soft dark haze behind the whole block, so the words stay readable where the forest picture is bright. It sits behind the text and ignores clicks. */
-.entrance-copy::before { content: ""; position: absolute; inset: -60px -90px; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at center, rgba(3, 14, 9, .5), rgba(3, 14, 9, .26) 48%, transparent 72%); }
-/* The one-sentence description: kept to a comfortable reading width so it wraps to two or three lines, not one long one. */
-.entrance-description { max-width: 600px; margin-top: 14px; }
-/* The three shortcut buttons sit in a centred row and wrap onto a second row on narrow screens. */
-.entrance-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 24px; }
-/* Over the forest picture the outlined buttons need a dark see-through backing so their words stay readable; no text glow on buttons. */
-.entrance-actions .button { background: rgba(6, 20, 14, .55); border-color: rgba(231, 235, 215, .6); text-shadow: none; gap: 14px; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
-/* The main button ("See the work") stays solid ivory so it reads as the first choice. */
-.entrance-actions .button-primary { background: var(--ivory); border-color: var(--ivory); }
-/* Hover: outlined buttons brighten slightly; the solid one warms, same as elsewhere on the site. */
-.entrance-actions .button:hover { background: rgba(195, 163, 114, .28); border-color: var(--gold-bright); }
-.entrance-actions .button-primary:hover { background: #e2cdab; }
-/* "Or follow the path" is now the second choice, so it is a size smaller than before (was 23px) and sits a little closer. */
-.entrance-copy .trail-start { font-size: 20px; margin-top: 20px; gap: 20px; }
-/* The whole block moves up a touch (was 47%) because it is taller than the old two-line greeting. */
-.entrance-copy { top: 46%; }
-@media (max-width: 760px) {
-  /* Phones: smaller headline and sentence, and tighter spacing, so everything clears the three path buttons at the bottom. */
-  .entrance-copy { top: 43%; }
-  .entrance-name { font-size: 20px; margin-bottom: 10px; }
-  .entrance-copy h1 { font-size: clamp(42px, 11.5vw, 60px); }
-  .entrance-role { margin-top: 14px; font-size: 8px; letter-spacing: .2em; }
-  .entrance-description { font-size: 19px; line-height: 1.32; margin-top: 10px; }
-  .entrance-actions { gap: 8px; margin-top: 16px; }
-  /* Phone buttons: shorter and narrower so two fit side by side and the third sits centred under them. */
-  .entrance-actions .button { min-height: 44px; padding: 9px 15px; font-size: 12px; gap: 10px; }
-  .entrance-copy .trail-start { font-size: 18px; margin-top: 12px; }
+/* ===== 2026-11-13 =====================================================================================================
+   1) Hover on the three round project buttons: the picture and the name grow to twice their size (NZ's request).
+      Only on devices that really hover; touch screens keep the normal size. It grows from the bottom edge so it never
+      covers the card above and never moves the other buttons (transforms don't push neighbours around).        */
+@media (hover: hover) {
+  .trail-stops button { transition: transform .25s ease; transform-origin: 50% 100%; position: relative; }
+  .trail-stops button:hover:not(:disabled) { transform: scale(2); z-index: 8; }
 }
-@media (max-height: 650px) and (min-width: 761px) {
-  /* Short laptop screens: shrink the headline and gaps so nothing collides with the header or the path buttons. */
-  .entrance-name { margin-bottom: 6px; font-size: 20px; }
-  .entrance-copy h1 { font-size: 54px; }
-  .entrance-role { margin-top: 10px; }
-  .entrance-description { margin-top: 8px; font-size: 19px; }
-  .entrance-actions { margin-top: 12px; }
-  .entrance-copy .trail-start { margin-top: 8px; font-size: 18px; }
+
+/* 2) The projects panel: no scrolling on laptops and tablets. Everything is sized from the screen height so the three
+      cards fit; on phones the cards become a swipe row instead (see the next block). */
+@media (min-width: 761px) and (min-height: 560px) {
+  .forest-dialog { overflow: hidden; }
+  .forest-dialog .section-heading { margin-bottom: clamp(8px, 2vh, 24px); }
+  .forest-dialog .project-visual { aspect-ratio: auto; height: clamp(70px, 21vh, 280px); }
+  /* Spacing between the parts of each card also scales with the screen height, so short laptop screens still fit. */
+  .forest-dialog-toolbar { padding-block: clamp(6px, 1.6vh, 16px); }
+  .forest-dialog #projects { padding-block: clamp(6px, 1.8vh, 34px) clamp(8px, 2vh, 49px); }
+  .forest-dialog #projects-title { font-size: clamp(26px, 5.2vh, 52px); }
+  .forest-dialog .project-card .project-title-row { margin-top: clamp(6px, 1.7vh, 19px); margin-bottom: clamp(3px, 1vh, 10px); }
+  .forest-dialog .project-card .project-role { margin-top: clamp(3px, 1vh, 12px); margin-bottom: clamp(5px, 1.5vh, 19px); }
+  .forest-dialog .project-card .forest-find-clearing { margin-top: clamp(5px, 1.3vh, 16px); }
+  .forest-dialog .project-title-row h3 { font-size: clamp(20px, 3.4vh, 31px); }
+  .forest-dialog .project-description { min-height: 0; font-size: clamp(15px, 2.1vh, 20px); }
+  .forest-dialog .section-note { font-size: clamp(14px, 2vh, 18px); }
+}
+@media (max-width: 760px) {
+  /* Phones: one project card at a time. Swipe sideways to move between them; the next card peeks in at the edge. */
+  .forest-dialog { overflow: hidden; }
+  .forest-dialog .project-grid { display: flex; gap: 14px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+  .forest-dialog .project-grid::-webkit-scrollbar { display: none; }
+  .forest-dialog .project-card { flex: 0 0 84%; scroll-snap-align: center; }
+  .forest-dialog .project-visual { aspect-ratio: auto; height: clamp(110px, 24vh, 220px); }
+  .forest-dialog .section-heading { margin-bottom: 12px; }
 }

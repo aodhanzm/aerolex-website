@@ -15,57 +15,22 @@
   biography.append(about, contact);
   document.body.classList.add('forest-ready');
 
+  // 2026-11-13: the words, buttons and links of each clearing are written in index.html (one card per clearing), so edit mode can
+  // retype them. This list now holds only what the page can't hold: each clearing's backdrop picture and where it is centred on phones.
   const worlds = [
-    // The three clearings, in path order (changed 2026-11-11: The Brazalete replaces The Scene, which is private for now).
-    // viewLabel / enterLabel are each clearing's own button wording; enter: null hides the second button.
-    {
-      id: 'project-brazalete', name: 'The Brazalete', category: '01 / SPANISH GRAMMAR TOOL',
-      description: 'A brass wristband for building Spanish verbs. Turn the rings to choose mood, tense and person, and watch the word change shape as you go.',
-      contribution: 'Interaction design · Learning design · Development',
-      // Both buttons lead to the Brazalete page: one to the dev-log videos further down it, one to the tool at the top.
-      project: '/brazalete/#dev-log', viewLabel: 'Watch the dev log',
-      enter: '/brazalete/', enterLabel: 'Try the Brazalete',
-      availability: 'Free to try · No account needed',
-      // Backdrop made from NZ's original brazalete concept art (device close-up, edges blended into a dark background).
-      image: '/assets/forest/brazalete-clearing-v1.webp', mobileFocus: '42%',
-      imageLabel: 'A brass and enamel wristband with a glowing wheel of coloured segments for choosing verb forms'
-    },
-    {
-      id: 'project-sanctum', name: 'The Sanctum', category: '02 / A SPACE FOR REFLECTION',
-      description: 'A quiet observatory beyond the trees. A personal space for astrology, journaling, and following your curiosity.',
-      contribution: 'Product design · Development',
-      // 2026-11-12: the second button opens the guest tour (sample profile, nothing saved) instead of the members' door.
-      project: '/sanctum/about/', viewLabel: 'View project',
-      enter: '/sanctum/?guest=1', enterLabel: 'Look around as a guest',
-      availability: 'Guest tour · No sign-up, nothing saved',
-      // Compressed copy of the clearing picture (2026-11-12).
-      image: '/assets/forest/the-sanctum-clearing-v1.webp', mobileFocus: '30%',
-      imageLabel: 'A Grecian island archipelago with a temple of Athena, a brass-domed observatory and illuminated marble terraces beneath the stars'
-    },
-    {
-      // The name stays Hanyu Courtyard, written plainly (NZ, 2026-11-12).
-      id: 'project-chinese', name: 'Hanyu Courtyard', category: '03 / CHINESE LEARNING',
-      description: 'An inherited estate in the mountains, a kettle that needs tea, and your first words of Mandarin. A Chinese-learning game I’m designing now.',
-      contribution: 'Learning experience · Game design',
-      // Visitors only see the design concept. The playable build is NZ-only (behind the password), so there is no "Enter world" here.
-      // 2026-11-12: both buttons lead to pages now: the project page (design work only) and its design story.
-      project: '/hanyu-courtyard/', viewLabel: 'See the design',
-      enter: '/stories/hanyu-courtyard/', enterLabel: 'Design story',
-      availability: 'In design · Concept art and mockups',
-      image: '/assets/forest/hanyu-courtyard-clearing-v1.webp', mobileFocus: '48%', // compressed copy (2026-11-12)
-      imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains'
-    }
+    // The Brazalete's backdrop: NZ's original brazalete concept art (device close-up, edges blended into a dark background).
+    { name: 'The Brazalete', image: '/assets/forest/brazalete-clearing-v1.webp', mobileFocus: '42%',
+      imageLabel: 'A brass and enamel wristband with a glowing wheel of coloured segments for choosing verb forms' },
+    // The Sanctum's backdrop: compressed copy of the clearing picture (2026-11-12).
+    { name: 'The Sanctum', image: '/assets/forest/the-sanctum-clearing-v1.webp', mobileFocus: '30%',
+      imageLabel: 'A Grecian island archipelago with a temple of Athena, a brass-domed observatory and illuminated marble terraces beneath the stars' },
+    // Hanyu Courtyard's backdrop (compressed copy, 2026-11-12). Visitors only see the design concept; the playable build is NZ-only.
+    { name: 'Hanyu Courtyard', image: '/assets/forest/hanyu-courtyard-clearing-v1.webp', mobileFocus: '48%',
+      imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains' }
   ];
-  const card = stage.querySelector('.world-introduction');
+  const cards = [...stage.querySelectorAll('.world-introduction')];   // The three clearing cards, in path order.
   const backdrop = stage.querySelector('.world-backdrop');
-  const title = document.querySelector('#world-title');
-  const category = document.querySelector('#world-category');
-  const description = document.querySelector('#world-description');
-  const role = document.querySelector('#world-role');
-  const availability = document.querySelector('#world-availability');
-  const viewLink = document.querySelector('#world-project-link');
-  const enterLink = document.querySelector('#world-enter-link');
-  const next = stage.querySelector('[data-next-clearing]');
+  const nextButtons = [...stage.querySelectorAll('[data-next-clearing]')];   // One "next" button per card.
   const start = stage.querySelector('[data-start-trail]');
   const announcement = document.querySelector('#trail-announcement');
   const motionButton = document.querySelector('#motion-control');
@@ -99,7 +64,7 @@
     busy = value;
     stage.setAttribute('aria-busy', String(value));
     stopButtons.forEach(button => { button.disabled = value; });
-    next.disabled = value;
+    nextButtons.forEach(button => { button.disabled = value; });
     start.setAttribute('aria-disabled', String(value));
   }
   function wait(ms) { return new Promise(resolve => setTimeout(resolve, motionReduced ? 0 : ms)); }
@@ -130,8 +95,8 @@
     stage.dataset.phase = 'walking';
     stage.classList.remove('is-revealed');
     stage.classList.add('is-away', 'is-walking');
-    card.setAttribute('aria-hidden', 'true');
-    card.inert = true;
+    // While walking, every card is closed to assistive tech and clicks (only one is ever shown at a time).
+    cards.forEach(card => { card.setAttribute('aria-hidden', 'true'); card.inert = true; });
     announcement.textContent = 'Following the path to ' + worlds[index].name + '…';
     try {
       const world = worlds[index];
@@ -142,26 +107,8 @@
       backdrop.style.setProperty('--world-focus', world.mobileFocus);
       backdrop.setAttribute('aria-label', world.imageLabel);
       backdrop.setAttribute('aria-hidden', 'false');
-      category.textContent = world.category;
-      title.textContent = world.name;
-      description.textContent = world.description;
-      role.textContent = 'My contribution: ' + world.contribution;
-      availability.textContent = world.availability;
-      viewLink.href = world.project;
-      // Each clearing names its own first button (e.g. "Watch the dev log", "See the design").
-      viewLink.innerHTML = world.viewLabel + ' <span aria-hidden="true">↗</span>';
-      // Hide the second button for clearings that have nothing to enter (Hanyu, for now).
-      enterLink.hidden = !world.enter;
-      if (world.enter) {
-        enterLink.href = world.enter;
-        // Only The Scene's old game opened in a new tab; every current destination is on this site, so open in place.
-        enterLink.removeAttribute('target');
-        enterLink.removeAttribute('rel');
-        // Button wording plus the arrow; the old "(opens in a new tab)" note is gone because it no longer does.
-        enterLink.innerHTML = world.enterLabel + ' <span aria-hidden="true">↗</span>';
-      }
-      next.innerHTML = (index === worlds.length - 1 ? 'Return to the forest' : 'Continue along the path') + ' <span aria-hidden="true">→</span>';
-      card.hidden = false;
+      // Show only this clearing's card; its words and buttons are already written in index.html.
+      cards.forEach((card, i) => { card.hidden = i !== index; });
       reflectStops();
       // Allow the closed frame to paint before beginning the tree-parting transition.
       await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
@@ -172,11 +119,11 @@
       await wait(1800);
       if (token !== transition) return;
       stage.dataset.phase = 'world';
-      card.removeAttribute('aria-hidden');
-      card.inert = false;
+      cards[index].removeAttribute('aria-hidden');
+      cards[index].inert = false;
       announcement.textContent = '';
       setBusy(false);
-      title.focus({ preventScroll: true });
+      cards[index].querySelector('h2').focus({ preventScroll: true });
     } catch (_) {
       if (token !== transition) return;
       returnHome(false);
@@ -190,9 +137,7 @@
     stage.classList.remove('is-away', 'is-revealed', 'is-walking');
     stage.dataset.phase = 'entrance';
     backdrop.setAttribute('aria-hidden', 'true');
-    card.hidden = true;
-    card.setAttribute('aria-hidden', 'true');
-    card.inert = true;
+    cards.forEach(card => { card.hidden = true; card.setAttribute('aria-hidden', 'true'); card.inert = true; });
     announcement.textContent = '';
     setBusy(false);
     reflectStops();
@@ -204,7 +149,11 @@
     visit(0);
   });
   stopButtons.forEach((button, index) => button.addEventListener('click', () => visit(index)));
-  next.addEventListener('click', () => selected === worlds.length - 1 ? returnHome() : visit(selected + 1));
+  // "Check out other projects": the first two cards walk on to the next clearing; the last one opens the projects panel
+  // (NZ's choice, 2026-11-13) instead of going back to the forest entrance.
+  nextButtons.forEach(button => button.addEventListener('click', () => {
+    if (selected === worlds.length - 1) { returnHome(false); openPanel('projects'); } else visit(selected + 1);
+  }));
   homeButtons.forEach(button => button.addEventListener('click', event => {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
@@ -249,15 +198,11 @@
     });
     article.append(button);
   });
-  // (2026-11-12) Hanyu's first button used to open a preview window; it is an ordinary link to its project page now.
-  // Preserve direct links to the static portfolio sections for visitors arriving from outside.
-  const legal = document.createElement('nav');
-  legal.className = 'forest-legal';
-  legal.setAttribute('aria-label', 'Privacy and cookie choices');
-  legal.innerHTML = '<a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a>';
-  // 2026-11-12: these links live in the Projects panel now (the About panel is no longer opened from the menu).
-  legal.querySelector('[data-action="cookie-settings"]').addEventListener('click', () => directory.close());
-  directory.append(legal);
+  // 2026-11-13: the Privacy and Cookie settings links that used to sit at the bottom of this panel are gone (NZ's request);
+  // they remain in the page footer and the About page.
+  // The local edit tool (_tools/edit-mode) uses these to show a clearing or the projects panel while editing.
+  // Visitors never need them; they only read what is on the page.
+  window.aerolexForest = { visit, home: () => returnHome(false), openPanel, closePanels, get selected() { return selected; }, get busy() { return busy; } };
   const initialHash = location.hash;
   // Links like aerolex.dev/#project-brazalete open the projects panel at that card (The Scene's card was replaced).
   if (['#projects', '#project-brazalete', '#project-sanctum', '#project-chinese'].includes(initialHash)) {
