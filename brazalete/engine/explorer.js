@@ -2,7 +2,7 @@
   'use strict'; // Catch accidental global assignments during exploration.
   const $ = id => document.getElementById(id); // Refer to the page's own labelled controls.
   const escape = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); // Render supported labels safely.
-  const key = 'aerolex.brazalete.explorer.v1'; // Isolate these preferences from every other product.
+  const key = 'aerolex.brazalete.explorer.v2'; // Isolate these preferences from every other product.
   let prefs = {}, filter = 'all'; // Start with the complete library and first-visit defaults.
   try { prefs = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch { $('save-notice').textContent = 'This browser cannot restore saved settings. You can still use the tool.'; } // Continue when local saving is unavailable.
   const saved = { ...prefs }; // Snapshot restoration settings before the first device redraw saves defaults.
@@ -102,7 +102,7 @@
   Gadget.ending = prefs.ending === 'se' ? 'se' : 'ra'; // First visit shows −ra; later visits keep the family chosen with the lever.
   load(library.some(w => w.lemma === saved.word?.lemma) ? saved.word.lemma : 'ser'); // Open directly with a supported working word.
   const remembered = saved[Gadget.word.kind === 'verb' ? 'verb' : 'adj']; // Restore only the relevant kind of device controls.
-  if (Array.isArray(remembered)) { const order = Gadget.word.kind === 'verb' ? [0, 2] : [0, 1]; // A returning visitor's verb comes back on the infinitive: mood and tense are restored, the person is not (NZ, 2026-11-12).
+  if (Array.isArray(remembered)) { const order = Gadget.word.kind === 'verb' ? [0, 2, 1] : [0, 1]; // A returning visitor's verb comes back on the infinitive: mood and tense are restored, the person is not (NZ, 2026-11-12).
     order.forEach(i => { if (Number.isInteger(remembered[i]) && optionsFor(i)[remembered[i]] && !optionsFor(i)[remembered[i]].disabled) Gadget.set(i, remembered[i]); }); } // Validate every saved index and its availability before restoring it.
   Gadget.setNeg(saved.neg === true); // Restore polarity without changing the loaded word.
   Receiver.reset(['vic', 'rec', 'ref'].includes(saved.role) ? saved.role : 'vic', Number.isInteger(saved.person) && saved.person >= 0 && saved.person < 6 ? saved.person : 0, saved.gender === 1 ? 1 : 0); // Ignore malformed saved pronoun controls.
@@ -147,4 +147,5 @@
     restore(snapshot) { Gadget.restoreState(snapshot.gadget); Receiver.reset(snapshot.receiver.mode, snapshot.receiver.person, snapshot.receiver.gender); Receiver.configurePublic(snapshot.gadget.variety); prefs = snapshot.prefs; refresh(); refreshPronouns(); renderLibrary(); $('confirmed').textContent = snapshot.confirmed; $('pronoun-output').textContent = snapshot.pronounOutput; }, // Return without losing the visitor's work or confirming anything automatically.
     persist: save, // Save only after tutorial cleanup has restored genuine exploration state.
   }); // Quiz-specific pause and restore belongs to the later quiz checkpoint.
+if (!saved.word) { Gadget.clear(); $('loaded-word').textContent = 'Choose a verb'; $('picker').open = !phone.matches; renderLibrary(); $('form-help').textContent = 'Choose a word to bring the device to life.'; save(); } // Start a first visit with an accessible empty device, without saving the temporary default word.
 })(); // Finish the local explorer with optional, independently replayable walkthroughs.
