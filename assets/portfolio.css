@@ -1599,3 +1599,17 @@ p {
     display: none;
   }
 }
+
+/* ===== 2026-11-18: a custom cursor (NZ's request) ==========================================================
+   The pointer is a small leaf with a vein, cream-coloured with a dark outline and a pale halo so it reads on both the
+   dark forest photo and the light pages. Over links and buttons the leaf turns forest green (the same green the buttons
+   use on hover). The tip of the leaf is the click point. Text boxes keep the normal text cursor, disabled buttons keep
+   the "wait" cursor, and phones are unaffected because they have no pointer. If an image cursor can't load, the
+   browser falls back to the normal arrow or hand.                                                                  */
+html, body {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M4 3C17 3 28 12 28 27 14 26 5 17 4 3Z' fill='%23eef2e2' stroke='white' stroke-width='4' stroke-linejoin='round' paint-order='stroke'/><path d='M4 3C17 3 28 12 28 27 14 26 5 17 4 3Z' fill='%23eef2e2' stroke='%230f1f16' stroke-width='1.6' stroke-linejoin='round'/><path d='M5 4 22 21' stroke='%230f1f16' stroke-width='1.3' stroke-linecap='round'/></svg>") 4 3, auto;
+}
+a, button:not(:disabled), [role="button"], summary, label[for], .button, .tab, input[type="submit"], input[type="button"] {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><path d='M4 3C17 3 28 12 28 27 14 26 5 17 4 3Z' fill='%237fd08e' stroke='white' stroke-width='4' stroke-linejoin='round' paint-order='stroke'/><path d='M4 3C17 3 28 12 28 27 14 26 5 17 4 3Z' fill='%237fd08e' stroke='%230f1f16' stroke-width='1.6' stroke-linejoin='round'/><path d='M5 4 22 21' stroke='%230f1f16' stroke-width='1.3' stroke-linecap='round'/></svg>") 4 3, pointer !important;
+}
+input[type="text"], input[type="email"], input[type="search"], textarea { cursor: text; }
