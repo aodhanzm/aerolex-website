@@ -94,7 +94,7 @@
 
   var COPY = {
     en: {
-      message: 'AeroLex uses cookies for analytics. It helps me see what is working. Either choice is fine.',
+      message: 'AeroLex uses cookies for analytics, to see which pages people read.',
       accept: 'Accept',
       decline: 'Decline',
       privacy: 'Privacy',

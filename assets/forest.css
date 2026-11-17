@@ -331,3 +331,59 @@
   .forest-dialog .project-visual { aspect-ratio: auto; height: clamp(110px, 24vh, 220px); }
   .forest-dialog .section-heading { margin-bottom: 12px; }
 }
+
+/* ===== 2026-11-17: homepage fixes from NZ's spoken review ===========================================================
+   1) Everything on the first screen is centred on the page's middle line, and the new headline is the biggest thing.
+   2) The three buttons are all clearly readable: the first is solid white, the other two have bright white text and a
+      white outline. Hovering any of them turns it forest green (it used to turn orange).
+   3) The three round project buttons at the bottom now start at the size they used to grow to on hover (twice as big),
+      sit further apart, and only grow a little (6%) on hover. Their names get bigger with the screen but stay fully visible.
+   4) The projects panel lists each project's links one under another, and scrolls if the screen is short so no words
+      are ever cut off.                                                                                              */
+.entrance-copy { width: min(940px, calc(100% - 44px)); text-align: center; }
+/* The name had no centring of its own (its paragraph box sat at the left edge), which is why it looked off-centre. */
+.entrance-name { text-align: center; margin: 0 auto 14px; max-width: none; font-size: 15px; letter-spacing: .12em; color: #e9efdf; }
+.entrance-description { max-width: 720px; margin-inline: auto; text-wrap: balance; }
+/* The headline is two lines ("Interactive Game-Based" / "Learning Designer"); sized from both width and height so it never crowds the buttons. */
+.entrance-copy h1 { font-size: clamp(38px, min(4.9vw, 9.2vh), 78px); line-height: 1.04; text-align: center; margin-inline: auto; }
+.entrance-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+.entrance-actions .button, .world-actions .button:not(.button-primary) { color: #fff; border-color: rgba(255, 255, 255, .9); background: rgba(5, 16, 11, .45); font-weight: 600; text-shadow: none; }
+.entrance-actions .button-primary, .world-actions .button-primary { color: #13241a; background: #f4f7ec; border-color: #f4f7ec; }
+.entrance-actions .button:hover, .entrance-actions .button-primary:hover, .world-actions .button:hover, .world-actions .button-primary:hover { background: #2f6f47; border-color: #2f6f47; color: #fff; }
+
+/* The bottom row: the three project buttons sit exactly in the middle; the small options float at the right edge. */
+.forest-bottom { display: flex; justify-content: center; align-items: flex-end; }
+.forest-bottom > .forest-options { position: absolute; right: 0; bottom: 0; min-width: 0; }
+.trail-stops { justify-content: center; gap: clamp(12px, 2vw, 34px); }
+.stop-thumb { width: clamp(64px, 7vw, 104px); height: clamp(64px, 7vw, 104px); }
+.stop-thumb .stop-number { width: 34px; height: 34px; font-size: 13px; right: -6px; bottom: -6px; }
+.trail-stops button { font-size: clamp(13px, 1.35vw, 19px); gap: 12px; }
+.trail-rule { width: clamp(12px, 1.6vw, 30px); }
+@media (min-width: 901px) and (max-width: 1100px) { .stop-name { display: inline; } }
+@media (hover: hover) {
+  .trail-stops button:hover:not(:disabled) { transform: scale(1.06); }
+}
+
+/* Panel: links in a list, one per line. */
+.directory-list { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.directory-list a { color: #d3e2c4; font-size: 16px; text-decoration: underline; text-underline-offset: 4px; }
+.directory-list a:hover { color: #fff; }
+.forest-dialog .project-card .forest-find-clearing { margin-top: 14px; display: block; }
+@media (min-width: 761px) and (min-height: 560px) {
+  .forest-dialog { overflow-y: auto; }
+  .forest-dialog .project-visual { height: clamp(90px, 17vh, 230px); }
+}
+@media (max-width: 760px) {
+  .entrance-copy h1 { font-size: clamp(34px, 9.4vw, 56px); }
+  .stop-thumb { width: 52px; height: 52px; }
+  .stop-thumb .stop-number { width: 20px; height: 20px; font-size: 9px; }
+  /* Phones: each round picture sits above its name so all three fit across the screen with every word showing. */
+  .forest-bottom { flex-direction: column; align-items: center; gap: 4px; }
+  .forest-bottom > .forest-options { position: static; align-items: center; }
+  .trail-stops { gap: 14px; }
+  .trail-stops button { flex-direction: column; gap: 6px; font-size: 11px; padding: 0; }
+  .trail-rule { display: none; }
+  .stop-name { display: inline; font-size: 11px; }
+}
+/* The sentence under the headline now wraps to two lines, so the buttons get more room below it. */
+.entrance-actions { margin-top: 30px; }

@@ -191,7 +191,7 @@
     const button = document.createElement('button');
     button.className = 'forest-find-clearing';
     button.type = 'button';
-    button.textContent = 'Find this clearing →';
+    button.textContent = 'Show in this forest';
     button.addEventListener('click', () => {
       closePanels();
       visit(index);
