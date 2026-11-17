@@ -1,0 +1,216 @@
+<!doctype html>
+<!-- ROUGH MOCKUP v3, 17 Nov 2026: you are standing ON the stage floor of a school-play set. Giant plywood cut-out trees
+     divide three scenes (Sanctum left, Brazalete centre, Hanyu right). Move the mouse to the left or right edge to pan.
+     A "Welcome to aerolex.dev" curtain opens first. Click a prop: the flats "fly" up out of the way, stop-motion style.
+     Everything is drawn in code as a stand-in for painted plywood. This is a design sketch, not the real site. -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AeroLex stage-set mockup v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IM+Fell+English:ital@0;1&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;background:#0f0808;overflow:hidden}
+  body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'><path d='M5 3 L5 27 L11 21 L16 31 L21 29 L16 19 L25 19 Z' fill='%23d9a93a' stroke='white' stroke-width='3' stroke-linejoin='round' paint-order='stroke'/><path d='M5 3 L5 27 L11 21 L16 31 L21 29 L16 19 L25 19 Z' fill='%23d9a93a' stroke='%232b1d14' stroke-width='1.2' stroke-linejoin='round'/></svg>") 5 3,auto}
+  .prop,a,button,.tab{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 38 38'><path d='M13 4c2 0 3 1 3 3v8l2-1c2-1 4 0 4 2l2-1c2-1 4 0 4 2l1 8c0 5-3 9-9 9h-4c-4 0-6-2-8-6l-4-8c-1-2 1-4 3-3l3 2V7c0-2 1-3 3-3Z' fill='%23fff7e0' stroke='white' stroke-width='3' paint-order='stroke' stroke-linejoin='round'/><path d='M13 4c2 0 3 1 3 3v8l2-1c2-1 4 0 4 2l2-1c2-1 4 0 4 2l1 8c0 5-3 9-9 9h-4c-4 0-6-2-8-6l-4-8c-1-2 1-4 3-3l3 2V7c0-2 1-3 3-3Z' fill='%23fff7e0' stroke='%232b1d14' stroke-width='1.3' stroke-linejoin='round'/></svg>") 14 4,pointer}
+  /* The stage is always laid out as 1280x720 and scaled to fit the window. */
+  #stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;overflow:hidden;background:#1c120c}
+  .pan,.fly{position:absolute;left:0;top:0;height:720px}
+  .pan{will-change:transform}
+  .fly{width:100%}
+  svg{display:block}
+  svg.fixed{position:absolute;left:0;top:0;pointer-events:none}
+  .sign{position:absolute;width:520px;transform:translateX(-50%) rotate(-.6deg);background:#c9975a;color:#2b1d14;text-align:center;padding:16px 26px 18px;border:6px solid #6b4423;outline:3px solid #2b1d14;box-shadow:8px 10px 0 #0005;font-family:'IM Fell English',serif}
+  .sign:before,.sign:after{content:"";position:absolute;top:-70px;width:4px;height:70px;background:#4a3320;left:60px}
+  .sign:after{left:auto;right:60px}
+  .sign:after{}
+  .pres{font:italic 400 12px/1 'IM Fell English';letter-spacing:.16em;text-transform:uppercase;margin:0 0 8px;color:#5a1d12}
+  h1{font:400 33px/1.05 'Abril Fatface',serif;margin:0;color:#241912}
+  .sub{font:400 14px/1.35 'IM Fell English';margin:9px auto 0;max-width:420px}
+  .btns{display:flex;gap:9px;justify-content:center;margin-top:12px}
+  .btn{font:700 11px 'DM Sans';padding:9px 15px;border:2px solid #241912;background:transparent;color:#241912;text-decoration:none;transition:background .15s,color .15s}
+  .btn.p{background:#241912;color:#f1dfae}.btn:hover{background:#2f6f47;border-color:#2f6f47;color:#fff}
+  /* Edge tabs that also pan (for people who don't want to use the mouse position). */
+  .tab{position:absolute;top:340px;z-index:8;background:#efe2c0;color:#241912;font:700 11px 'DM Sans';letter-spacing:.1em;padding:10px 14px;border:3px double #5a3a1c;box-shadow:4px 6px 0 #0005;border-radius:2px;transition:opacity .3s}
+  #tabL{left:116px}#tabR{right:116px}
+  .dots{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:8;display:flex;gap:10px}
+  .dot{width:13px;height:13px;border-radius:50%;background:#efe2c0;border:2px solid #241912;opacity:.55;padding:0}.dot.on{opacity:1;background:#d9a93a}
+  .reveal{position:absolute;left:50%;top:330px;width:560px;transform:translate(-50%,-50%) rotate(-1deg);background:#efe2c0;color:#241912;padding:30px 36px;z-index:9;border:4px double #5a3a1c;outline:6px solid #efe2c0;box-shadow:10px 14px 0 4px #0006;display:none;text-align:center;font-family:'IM Fell English',serif}
+  .reveal h2{font:400 36px 'Abril Fatface';margin:0 0 8px}.reveal p{font-size:16px;line-height:1.4;margin:8px 0}
+  .go .reveal.on{display:block;animation:pop .6s steps(4) both}
+  @keyframes pop{from{transform:translate(-50%,-10%) rotate(-7deg) scale(.7)}to{transform:translate(-50%,-50%) rotate(-1deg) scale(1)}}
+  /* "Flying" flats: the near and middle layers lift out of sight at different speeds, in stop-motion steps. */
+  .go #flyNear{animation:fly 1.2s steps(6) forwards}.go #flyMid{animation:fly 1.2s steps(4) .25s forwards}.go #sign{opacity:0}
+  @keyframes fly{to{transform:translateY(-105%)}}
+  .back{position:absolute;right:130px;bottom:90px;z-index:10;display:none;font:700 12px 'DM Sans'}.go .back{display:inline-block}
+  .go .tab,.go .dots{opacity:0;pointer-events:none}
+  /* Welcome curtain, shown first. */
+  #intro{position:absolute;inset:0;z-index:30;display:flex}
+  #intro .half{flex:1;background:linear-gradient(90deg,#5e0f1f,#b3283d 45%,#6e1222 55%,#b3283d 80%,#5e0f1f);box-shadow:inset 0 0 0 4px #2c0a12;position:relative}
+  #intro .half:after{content:"";position:absolute;top:0;bottom:0;width:14px;background:repeating-linear-gradient(0deg,#d9a93a 0 6px,#7a5412 6px 10px)}
+  #intro .L:after{right:0}#intro .R:after{left:0}
+  #plaque{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:31;background:#efe2c0;color:#241912;border:6px double #7a5412;outline:6px solid #efe2c0;padding:26px 44px;text-align:center;box-shadow:10px 14px 0 4px #0007;font-family:'IM Fell English',serif}
+  #plaque small{display:block;font:italic 14px 'IM Fell English';letter-spacing:.18em;text-transform:uppercase;color:#7a2d1d}
+  #plaque b{display:block;font:400 44px/1.1 'Abril Fatface';margin-top:6px}
+  #intro.open .L{animation:oL 1.4s steps(8) forwards}#intro.open .R{animation:oR 1.4s steps(8) forwards}#intro.open+#plaque{animation:fade .5s steps(3) forwards}
+  @keyframes oL{to{transform:translateX(-100%)}}@keyframes oR{to{transform:translateX(100%)}}@keyframes fade{to{opacity:0;transform:translate(-50%,-80%)}}
+  .note{position:absolute;left:112px;bottom:8px;z-index:12;color:#efe2c0;font:400 11px 'DM Sans';opacity:.85;max-width:420px}
+</style></head><body>
+<div id="stage">
+  <svg id="back" class="pan fixed" style="position:absolute" width="1584" height="720" viewBox="0 0 1584 720"></svg>
+  <div id="flyFar" class="fly" style="left:0"><svg id="far" class="pan fixed" width="2040" height="720" viewBox="0 0 2040 720"></svg></div>
+  <div id="flyMid" class="fly" style="left:0"><svg id="mid" class="pan fixed" width="2420" height="720" viewBox="0 0 2420 720"></svg></div>
+  <div id="props" class="pan" style="width:2800px">
+    <svg id="floorprops" width="2800" height="720" viewBox="0 0 2800 720" style="position:absolute;left:0;top:0"></svg>
+    <div class="sign" id="sign" style="left:1400px;top:150px"><p class="pres">Noah Zepter-Martínez presents</p>
+      <h1>Designer of Interactive Game-Based Educational Tools</h1>
+      <p class="sub">I design how a learning experience feels and works, then build a working version to test it.</p>
+      <div class="btns"><a class="btn p" href="#">See the work</a><a class="btn" href="#">Watch the dev log</a><a class="btn" href="#">Get in touch</a></div></div>
+  </div>
+  <div id="flyNear" class="fly"><svg id="near" class="pan fixed" width="3104" height="720" viewBox="0 0 3104 720"></svg></div>
+  <svg id="frame" class="fixed" width="1280" height="720" viewBox="0 0 1280 720"></svg>
+  <button class="tab" id="tabL">◀ THE SANCTUM</button><button class="tab" id="tabR">HANYU COURTYARD ▶</button>
+  <div class="dots"><button class="dot" data-p="0" title="The Sanctum"></button><button class="dot on" data-p=".5" title="The Brazalete"></button><button class="dot" data-p="1" title="Hanyu Courtyard"></button></div>
+  <div class="reveal" id="rev"><h2 id="rt"></h2><p id="rd"></p><p><b>Tour</b> &nbsp;·&nbsp; <b>About</b> &nbsp;·&nbsp; <b>Design story</b></p></div>
+  <a class="btn p back" href="#" id="back2">← Back to the stage</a>
+  <div class="note">ROUGH MOCKUP v3. Move the mouse to the left or right to pan. Click a prop. Wooden cut-outs are drawn shapes.</div>
+  <div id="intro"><div class="half L"></div><div class="half R"></div></div>
+  <div id="plaque"><small>Now arriving at</small><b>Welcome to aerolex.dev</b></div>
+</div>
+<script>
+const NS='http://www.w3.org/2000/svg',INK='#241912';
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=rng(5);
+function E(tag,a,p){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e}
+function defs(svg){svg.insertAdjacentHTML('afterbegin',`<defs>
+ <filter id="lift${svg.id}" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="5" dy="7" stdDeviation="0" flood-color="#000" flood-opacity=".32"/></filter>
+ <pattern id="brush${svg.id}" width="14" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)"><path d="M0 4 q7 -4 14 0" stroke="#000" stroke-width="1.4" fill="none" opacity=".16"/></pattern>
+ <pattern id="grain${svg.id}" width="40" height="26" patternUnits="userSpaceOnUse"><path d="M0 6 q20 -6 40 0 M0 17 q20 6 40 0" stroke="#3a2412" stroke-width="1.2" fill="none" opacity=".4"/></pattern>
+ <linearGradient id="wood${svg.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98a52"/><stop offset="1" stop-color="#8a6034"/></linearGradient></defs>`)}
+['back','far','mid','near','floorprops','frame'].forEach(id=>defs(document.getElementById(id)));
+const S=id=>document.getElementById(id);
+
+/* ---------- painted flat helpers: plywood edge shows on the lower right, brush strokes over the paint ---------- */
+function flat(svg,id,d,fill,opts){opts=opts||{};const g=E('g',{filter:`url(#lift${id})`},svg);
+  E('path',{d,fill:'#d6a869',stroke:INK,'stroke-width':3,transform:'translate(6 8)'},g);   // the cut edge of the plywood
+  E('path',{d,fill,stroke:INK,'stroke-width':3.2,'stroke-linejoin':'round'},g);
+  E('path',{d,fill:`url(#brush${id})`},g);return g}
+function brace(svg,id,x,base,w,h){const g=E('g',{},svg);E('polygon',{points:`${x-w},${base} ${x-w+16},${base} ${x+4},${base-h} ${x-12},${base-h}`,fill:'#a07846',stroke:INK,'stroke-width':2},g);
+  E('rect',{x:x-w-14,y:base-8,width:w*2+28,height:12,fill:`url(#wood${id})`,stroke:INK,'stroke-width':2},g)}
+function pine(svg,id,x,base,h,cols,opts){opts=opts||{};const w=h*.42,g=E('g',{},svg);
+  brace(g,id,x-h*.07,base,h*.16,h*.4);brace(g,id,x+h*.12,base,h*.1,h*.3);
+  E('rect',{x:x-h*.035,y:base-h*.2,width:h*.07,height:h*.2,fill:'#9a6c3a',stroke:INK,'stroke-width':3},g);
+  const tiers=opts.tiers||4;
+  for(let i=0;i<tiers;i++){const ty=base-h*.16-i*(h*.74/tiers),tw=w*(1-i*.62/tiers),th=h*.74/tiers*1.55;let d=`M${x-tw/2} ${ty}`;
+    const n=5;for(let k=1;k<=n;k++){d+=` L${x-tw/2+tw*k/n-tw/n*.5} ${ty-th*.12} L${x-tw/2+tw*k/n} ${ty}`}
+    d+=` L${x+tw*.2} ${ty-th*.55} L${x+tw*.12} ${ty-th*.55} L${x} ${ty-th} L${x-tw*.12} ${ty-th*.55} L${x-tw*.2} ${ty-th*.55} Z`;
+    flat(g,id,d,cols[i%cols.length])}
+  E('path',{d:`M${x} ${base-h*.9} q${h*.05} ${h*.1} 0 ${h*.2}`,stroke:'#ffffff',strokeWidth:3,opacity:.25,fill:'none'},g);return g}
+function roundTree(svg,id,x,base,h,col,hi){const g=E('g',{},svg);brace(g,id,x-h*.08,base,h*.15,h*.4);brace(g,id,x+h*.1,base,h*.1,h*.3);
+  E('rect',{x:x-h*.04,y:base-h*.5,width:h*.08,height:h*.5,fill:'#9a6c3a',stroke:INK,'stroke-width':3},g);E('rect',{x:x-h*.04,y:base-h*.5,width:h*.08,height:h*.5,fill:`url(#grain${id})`},g);
+  const cs=[[0,-.72,.24],[-.18,-.6,.2],[.18,-.6,.2],[-.08,-.86,.17],[.1,-.84,.18],[-.28,-.7,.14],[.28,-.72,.14]];
+  const gg=E('g',{filter:`url(#lift${id})`},g);
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h,cy:base+b*h,r:r*h,fill:'#d6a869',stroke:INK,'stroke-width':8,transform:'translate(6 8)'},gg));
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h,cy:base+b*h,r:r*h,fill:col,stroke:INK,'stroke-width':8},gg));
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h,cy:base+b*h,r:r*h-4,fill:col},gg));
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h-r*h*.25,cy:base+b*h-r*h*.25,r:r*h*.55,fill:hi,opacity:.55},gg));
+  E('circle',{cx:x,cy:base-.7*h,r:.5*h,fill:`url(#brush${id})`},gg);return g}
+const G1=['#3f7a4a','#2f6a56','#4f8a3e'],G2=['#2d5d4a','#3a6f3a'],G3=['#c58a2a','#a85a2a'],G4=['#6a7fb0','#4f6498'];
+
+/* ---------- 1. backcloth: painted sky that changes mood from left (twilight) to right (lantern dusk) ---------- */
+{const s=S('back'),W=1584;s.insertAdjacentHTML('beforeend',`<defs><linearGradient id="sk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e2a5e"/><stop offset=".3" stop-color="#52639f"/><stop offset=".5" stop-color="#9fd0d6"/><stop offset=".7" stop-color="#f0c995"/><stop offset="1" stop-color="#d9684a"/></linearGradient><linearGradient id="fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#f3e6b4" stop-opacity=".55"/></linearGradient></defs>`);
+  E('rect',{width:W,height:720,fill:'url(#sk)'},s);E('rect',{width:W,height:720,fill:'url(#fade)'},s);
+  for(let i=0;i<30;i++){const x=R()*W*.38,y=60+R()*220;E('path',{d:`M${x} ${y} l3 7 7 1 -5 5 2 8 -7 -4 -7 4 2 -8 -5 -5 7 -1Z`,fill:'#ffe9a0',stroke:INK,'stroke-width':.8},s)}
+  E('circle',{cx:270,cy:170,r:52,fill:'#f4e6b0',stroke:INK,'stroke-width':3},s);E('circle',{cx:290,cy:158,r:44,fill:'#2a3a78'},s);
+  [[760,140],[960,210],[640,260]].forEach(([x,y])=>{const g=E('g',{},s);[0,40,80,120].forEach((dx,k)=>E('circle',{cx:x+dx,cy:y-(k%2?18:0),r:26+k%2*8,fill:'#fff',stroke:INK,'stroke-width':3},g));E('rect',{x:x-26,y:y-2,width:178,height:26,fill:'#fff',stroke:'none'},g)});
+  E('circle',{cx:1290,cy:190,r:60,fill:'#f7d27a',stroke:INK,'stroke-width':3},s);
+  for(let k=0;k<4;k++){const x=1050+k*140,h=180+k%2*60;E('path',{d:`M${x-120} 560 L${x} ${560-h} L${x+120} 560Z`,fill:k%2?'#a8484a':'#b9574a',stroke:INK,'stroke-width':3},s)}}
+
+/* ---------- 2. far flats (small, pale) ---------- */
+{const s=S('far'),W=2040;[.05,.13,.22,.3,.42,.5,.6,.69,.78,.87,.95].forEach((f,i)=>{const x=W*f;(i%3===1?roundTree:pine)===pine?pine(s,'far',x,610,230+R()*60,['#8bab9a','#7e9d92'],{tiers:4}):roundTree(s,'far',x,610,240,'#9bb98a','#c3d6a8')})}
+
+/* ---------- 3. mid flats: tall dividers between the three scenes, plus smaller ones in each scene ---------- */
+{const s=S('mid'),W=2420;pine(s,'mid',W*.34,640,560,G1,{tiers:5});pine(s,'mid',W*.66,640,560,G2,{tiers:5});
+  roundTree(s,'mid',W*.1,640,420,'#d49a35','#f0cf74');roundTree(s,'mid',W*.9,640,420,'#c4553a','#eea17c');
+  pine(s,'mid',W*.2,640,300,G2,{tiers:4});pine(s,'mid',W*.5-250,640,240,G1,{tiers:4});pine(s,'mid',W*.5+250,640,240,G1,{tiers:4});pine(s,'mid',W*.8,640,300,G3,{tiers:4})}
+
+/* ---------- 4. floor and the three big props (stage floor, spike tape, wooden stands) ---------- */
+{const s=S('floorprops'),W=2800;
+  E('rect',{x:0,y:612,width:W,height:108,fill:'#a97a46'},s);
+  for(let y=612;y<720;y+=18){E('line',{x1:0,y1:y,x2:W,y2:y,stroke:INK,'stroke-width':1.6,opacity:.55},s)}
+  for(let x=0;x<W;x+=130){E('line',{x1:x,y1:612,x2:x+(R()*10),y2:720,stroke:INK,'stroke-width':1,opacity:.28},s)}
+  E('rect',{x:0,y:612,width:W,height:108,fill:`url(#grain${'floorprops'})`},s);
+  E('rect',{x:0,y:606,width:W,height:8,fill:'#6b4423',stroke:INK,'stroke-width':2},s);
+  /* coloured spike tape: where each prop is "placed" */
+  [[504,'#ec5f8f'],[1400,'#3fb6e0'],[2296,'#58c25a']].forEach(([x,c])=>{for(let k=-1;k<=1;k+=2){E('line',{x1:x-40,y1:668-24*k,x2:x+40,y2:668+24*k,stroke:c,'stroke-width':9,opacity:.9,'stroke-linecap':'round'},s)}});
+  /* floor name boards on stakes */
+  [[504,'THE SANCTUM'],[1400,'THE BRAZALETE'],[2296,'HANYU COURTYARD']].forEach(([x,t])=>{const g=E('g',{filter:'url(#liftfloorprops)'},s);E('rect',{x:x-8,y:640,width:16,height:60,fill:'#8a6034',stroke:INK,'stroke-width':2},g);E('rect',{x:x-110,y:628,width:220,height:40,fill:'#efe2c0',stroke:INK,'stroke-width':3},g);const tx=E('text',{x,y:655,'text-anchor':'middle','font-family':'Abril Fatface','font-size':20,fill:INK},g);tx.textContent=t});
+  const props=[];
+  function prop(x,title,desc,draw){const g=E('g',{class:'prop','data-t':title,'data-d':desc},s);const f=E('g',{filter:'url(#liftfloorprops)'},g);draw(f);props.push(g);
+    const hit=E('rect',{x:x-190,y:260,width:380,height:360,fill:'transparent'},g)}
+  /* Brazalete: a giant wooden wristband with strap and six coloured sections */
+  prop(1400,'The Brazalete','A wristband for complex Spanish grammar. Turn its rings to pick the mood, tense and person.',f=>{
+    brace(f,'floorprops',1330,606,70,200);brace(f,'floorprops',1480,606,60,170);
+    flat(f,'floorprops','M1170 470 L1250 450 L1250 560 L1170 540Z','#2f6fb0');flat(f,'floorprops','M1630 470 L1550 450 L1550 560 L1630 540Z','#2f6fb0');
+    E('circle',{cx:1400,cy:505,r:112,fill:'#d6a869',stroke:INK,'stroke-width':3,transform:'translate(6 8)'},f);E('circle',{cx:1400,cy:505,r:112,fill:'#e0b23a',stroke:INK,'stroke-width':4},f);
+    ['#e25c8a','#8b4fd9','#f09a22','#25c7d8','#7fcb2f','#e2473f'].forEach((c,i)=>{const a0=i*Math.PI/3-Math.PI/2,a1=(i+1)*Math.PI/3-Math.PI/2;E('path',{d:`M1400 505 L${1400+92*Math.cos(a0)} ${505+92*Math.sin(a0)} A92 92 0 0 1 ${1400+92*Math.cos(a1)} ${505+92*Math.sin(a1)}Z`,fill:c,stroke:INK,'stroke-width':3},f)});
+    E('circle',{cx:1400,cy:505,r:26,fill:'#ffd84a',stroke:INK,'stroke-width':3},f);E('circle',{cx:1400,cy:505,r:112,fill:'url(#brushfloorprops)'},f)});
+  /* Sanctum: a wooden observatory tower with a dome, a slit and stars */
+  prop(504,'The Sanctum','An interactive world for astrology, witchcraft and journaling. Walk an estate with an observatory, a grimoire and a temple.',f=>{
+    brace(f,'floorprops',440,606,70,260);brace(f,'floorprops',580,606,60,220);
+    flat(f,'floorprops','M400 606 L410 340 L600 340 L610 606Z','#cfc6b2');
+    flat(f,'floorprops','M392 346 A112 112 0 0 1 618 346Z','#32478f');E('path',{d:'M486 250 L486 340 L522 340 L522 250Z',fill:'#0f1a44',stroke:INK,'stroke-width':3},f);
+    E('path',{d:'M504 176 l7 18 19 2 -14 12 5 19 -17 -10 -17 10 5 -19 -14 -12 19 -2Z',fill:'#ffd877',stroke:INK,'stroke-width':3},f);
+    E('rect',{x:470,y:500,width:68,height:106,rx:34,fill:'#7a4a2a',stroke:INK,'stroke-width':3},f);[[430,420],[580,420],[440,500],[570,500]].forEach(([x,y])=>E('rect',{x:x-16,y,width:32,height:50,rx:16,fill:'#243a7a',stroke:INK,'stroke-width':3},f))});
+  /* Hanyu: a two-storey pagoda house with red walls, curved roofs and lanterns */
+  prop(2296,'Hanyu Courtyard','An inherited estate needs your help. Learn Mandarin while you lend a hand. A game I’m designing, set in a mythical ancient China.',f=>{
+    brace(f,'floorprops',2230,606,70,250);brace(f,'floorprops',2380,606,60,220);
+    flat(f,'floorprops','M2170 606 L2170 470 L2420 470 L2420 606Z','#b8321f');
+    flat(f,'floorprops','M2130 480 Q2296 440 2460 480 L2420 440 L2170 440Z','#2a1a14');
+    flat(f,'floorprops','M2190 440 L2190 360 L2400 360 L2400 440Z','#b8321f');
+    flat(f,'floorprops','M2160 372 Q2296 326 2430 372 L2390 330 L2200 330Z','#2a1a14');
+    E('rect',{x:2262,y:520,width:70,height:86,fill:'#ffd877',stroke:INK,'stroke-width':3},f);E('line',{x1:2297,y1:520,x2:2297,y2:606,stroke:INK,'stroke-width':3},f);
+    [[2130,540],[2462,540]].forEach(([x,y])=>{E('line',{x1:x,y1:y-40,x2:x,y2:y-14,stroke:INK,'stroke-width':3},f);E('ellipse',{cx:x,cy:y,rx:20,ry:28,fill:'#e2473f',stroke:INK,'stroke-width':3},f)})});
+  window.__props=props}
+
+/* ---------- 5. near flats: huge trees at the very edges and between the scenes, bigger than a person ---------- */
+{const s=S('near'),W=3104;[[.0,G1],[.34,G2],[.66,G1],[1,G2]].forEach(([f,c],i)=>pine(s,'near',W*f+(f===0?40:(f===1?-40:0)),720,760,c,{tiers:5}));
+  /* (no big round trees here: they would hide the props as you pan) */}
+
+/* ---------- 6. the proscenium we are standing inside: red drapes, gilt valance, decorated side strips ---------- */
+{const s=S('frame'),f=s;
+  function strip(x){const g=E('g',{},f);E('rect',{x,y:0,width:100,height:720,fill:'#efe2c0',stroke:INK,'stroke-width':3},g);
+    [[0,70,'#2b8aa0'],[70,120,'#c8402e'],[190,60,'#d9a93a'],[250,200,'#2b8aa0'],[450,60,'#d9a93a'],[510,210,'#c8402e']].forEach(([y,h,c])=>{E('rect',{x:x+10,y,width:80,height:h,fill:c,stroke:INK,'stroke-width':2},g)});
+    for(let y=110;y<700;y+=70){E('path',{d:`M${x+50} ${y} l14 20 -14 20 -14 -20Z`,fill:'#f1d27a',stroke:INK,'stroke-width':1.6},g)}}
+  strip(0);strip(1180);
+  [['M100 0 H250 Q205 150 190 300 Q175 460 140 580 L100 580Z'],['M1180 0 H1030 Q1075 150 1090 300 Q1105 460 1140 580 L1180 580Z']].forEach(([d])=>{E('path',{d,fill:'#9a1f33',stroke:INK,'stroke-width':3},f);for(let i=0;i<5;i++){}});
+  let v='M0 0H1280V86';for(let x=1280;x>0;x-=128){v+=`Q${x-64} 150 ${x-128} 86`}v+='Z';E('path',{d:v,fill:'#a3283b',stroke:INK,'stroke-width':3},f);
+  for(let x=64;x<1280;x+=128){for(let i=0;i<7;i++)E('line',{x1:x-16+i*5,y1:124,x2:x-16+i*5,y2:140,stroke:'#f1d27a','stroke-width':2.4},f);E('circle',{cx:x,cy:120,r:7,fill:'#d9a93a',stroke:INK},f)}
+  E('rect',{x:0,y:0,width:1280,height:24,fill:'#d9a93a',stroke:INK,'stroke-width':2},f);
+  E('path',{d:'M480 24 q30 -34 100 -34 h120 q70 0 100 34 q-20 42 -160 42 q-140 0 -160 -42Z',fill:'#d9a93a',stroke:INK,'stroke-width':3},f);E('ellipse',{cx:640,cy:32,rx:96,ry:22,fill:'#a83a2c',stroke:INK,'stroke-width':2},f);
+  const t=E('text',{x:640,y:40,'text-anchor':'middle','font-family':'Abril Fatface','font-size':24,'letter-spacing':'.18em',fill:'#f6e7b6',stroke:INK,'stroke-width':.6},f);t.textContent='AEROLEX'}
+</script>
+<script>
+const stage=document.getElementById('stage');
+function fit(){const k=Math.min(innerWidth/1280,innerHeight/720);stage.style.transform=`scale(${k})`;stage.style.left=(innerWidth-1280*k)/2+'px';stage.style.top=(innerHeight-720*k)/2+'px'}
+addEventListener('resize',fit);fit();
+/* Panning: p runs 0 (Sanctum) to .5 (Brazalete) to 1 (Hanyu). The mouse position sets a target; each layer moves a different amount (parallax). */
+const layers=[['back',.2],['far',.5],['mid',.75],['props',1],['near',1.15]];
+let p=.5,target=.5,locked=false;
+const lerp=()=>{p+=(target-p)*.07;layers.forEach(([id,f])=>{document.getElementById(id).style.transform=`translateX(${-p*1520*f}px)`});
+  document.getElementById('tabL').style.opacity=p<.12?0:1;document.getElementById('tabR').style.opacity=p>.88?0:1;
+  document.querySelectorAll('.dot').forEach(d=>d.classList.toggle('on',Math.abs(+d.dataset.p-p)<.2));if(Math.abs(target-p)>.0004)requestAnimationFrame(lerp);else running=false};
+/* The loop only runs while the scene is actually moving, so a still page costs nothing. */
+let running=false;function kick(){if(!running){running=true;requestAnimationFrame(lerp)}}
+kick();
+addEventListener('mousemove',e=>{if(locked)return;const r=stage.getBoundingClientRect(),t=((e.clientX-r.left)/r.width-.5)*2,a=Math.max(0,Math.abs(t)-.3)/.7;target=.5+Math.sign(t)*Math.min(a,1)*.5;target=Math.max(0,Math.min(1,target));kick()});
+/* the dead zone in the middle keeps the Brazalete steady; the edges pan. */
+document.getElementById('tabL').onclick=()=>{target=0;kick()};document.getElementById('tabR').onclick=()=>{target=1;kick()};
+document.querySelectorAll('.dot').forEach(d=>d.onclick=()=>{target=+d.dataset.p;kick()});
+addEventListener('keydown',e=>{if(e.key==='ArrowLeft')target=Math.max(0,target-.5);if(e.key==='ArrowRight')target=Math.min(1,target+.5)});
+document.querySelectorAll('.prop').forEach(b=>b.addEventListener('click',()=>{
+  document.getElementById('rt').textContent=b.dataset.t;document.getElementById('rd').textContent=b.dataset.d;
+  document.getElementById('rev').classList.add('on');stage.classList.add('go');locked=true;
+  target=b.dataset.t==='The Sanctum'?0:b.dataset.t==='Hanyu Courtyard'?1:.5;kick();}));
+document.getElementById('back2').addEventListener('click',e=>{e.preventDefault();stage.classList.remove('go');document.getElementById('rev').classList.remove('on');locked=false});
+/* Welcome curtain: opens by itself after a moment (or on click). */
+const intro=document.getElementById('intro');function open(){intro.classList.add('open');setTimeout(()=>{intro.remove();document.getElementById('plaque').remove()},1900)}
+setTimeout(open,2400);intro.addEventListener('click',open);
+</script></body></html>
