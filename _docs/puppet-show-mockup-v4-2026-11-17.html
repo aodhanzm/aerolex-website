@@ -1,0 +1,287 @@
+<!doctype html>
+<!-- ROUGH MOCKUP v4, 17 Nov 2026. The proscenium (valance, drapes, side strips, light rig) NEVER moves. Everything behind it is a
+     set that gets CHANGED, like a musical: the lights dim, the props wheel off on wagons, the flats lift away, the painted
+     backdrop tarp lifts out, then a new backdrop drops in, new flats and props wheel on, and new colour gels come up.
+     The home scene is the forest; it has three gateways (Sanctum left, Brazalete centre, Hanyu right) reached by moving the
+     mouse to an edge. Each gateway changes the whole stage into that project's scene, with its own lights and set pieces.
+     Everything is drawn in code as a stand-in for painted plywood and printed tarps. A design sketch, not the real site. -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AeroLex stage mockup v4: scene changes</title>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=IM+Fell+English:ital@0;1&family=DM+Sans:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%;background:#0f0808;overflow:hidden}
+  body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'><path d='M5 3 L5 27 L11 21 L16 31 L21 29 L16 19 L25 19 Z' fill='%23d9a93a' stroke='white' stroke-width='3' stroke-linejoin='round' paint-order='stroke'/><path d='M5 3 L5 27 L11 21 L16 31 L21 29 L16 19 L25 19 Z' fill='%23d9a93a' stroke='%232b1d14' stroke-width='1.2' stroke-linejoin='round'/></svg>") 5 3,auto}
+  .gate,a,button,.tab{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 38 38'><path d='M13 4c2 0 3 1 3 3v8l2-1c2-1 4 0 4 2l2-1c2-1 4 0 4 2l1 8c0 5-3 9-9 9h-4c-4 0-6-2-8-6l-4-8c-1-2 1-4 3-3l3 2V7c0-2 1-3 3-3Z' fill='%23fff7e0' stroke='white' stroke-width='3' paint-order='stroke' stroke-linejoin='round'/><path d='M13 4c2 0 3 1 3 3v8l2-1c2-1 4 0 4 2l2-1c2-1 4 0 4 2l1 8c0 5-3 9-9 9h-4c-4 0-6-2-8-6l-4-8c-1-2 1-4 3-3l3 2V7c0-2 1-3 3-3Z' fill='%23fff7e0' stroke='%232b1d14' stroke-width='1.3' stroke-linejoin='round'/></svg>") 14 4,pointer}
+  #stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0;overflow:hidden;background:#140c08}
+  .wrap{position:absolute;left:0;top:0;width:1280px;height:720px;overflow:visible}
+  .wrap>svg,.wrap>.inner{position:absolute;left:0;top:0;display:block}
+  svg{display:block}
+  svg.fixed{position:absolute;left:0;top:0;pointer-events:none}
+  .gate{pointer-events:auto}
+  #setroot{position:absolute;inset:0;overflow:hidden;clip-path:inset(0 100px 0 100px)}
+  /* the gel wash from the light rig, and the black "dim" used between scenes */
+  #wash{position:absolute;inset:0;z-index:6;pointer-events:none;mix-blend-mode:soft-light;opacity:.8;background:radial-gradient(ellipse at 50% -10%,var(--gel,#ffe6a8) 0%,transparent 75%);transition:background .4s steps(4)}
+  #glow{position:absolute;inset:0;z-index:6;pointer-events:none;mix-blend-mode:screen;opacity:.22;background:radial-gradient(ellipse at 50% 0%,var(--gel,#ffe6a8) 0%,transparent 60%)}
+  #dim{position:absolute;inset:0;z-index:7;pointer-events:none;background:#06030a;opacity:0;transition:opacity .5s steps(5)}
+  #stage.busy #dim{opacity:.88}
+  #stage.busy *{pointer-events:none!important}
+  svg#frame{z-index:8}
+  .sign{position:absolute;transform:translateX(-50%) rotate(-.6deg);background:#c9975a;color:#2b1d14;text-align:center;padding:14px 24px 16px;border:6px solid #6b4423;outline:3px solid #2b1d14;box-shadow:8px 10px 0 #0005;font-family:'IM Fell English',serif;z-index:5}
+  .sign:before,.sign:after{content:"";position:absolute;top:-80px;width:4px;height:80px;background:#4a3320;left:54px}.sign:after{left:auto;right:54px}
+  .pres{font:italic 400 12px/1 'IM Fell English';letter-spacing:.16em;text-transform:uppercase;margin:0 0 7px;color:#5a1d12}
+  h1{font:400 32px/1.05 'Abril Fatface',serif;margin:0;color:#241912}
+  .sub{font:400 14px/1.3 'IM Fell English';margin:8px auto 0;max-width:430px}
+  .btns{display:flex;gap:9px;justify-content:center;margin-top:11px;flex-wrap:wrap}
+  .btn{font:700 11px 'DM Sans';padding:9px 14px;border:2px solid #241912;background:transparent;color:#241912;text-decoration:none;transition:background .15s,color .15s;display:inline-block}
+  .btn.p{background:#241912;color:#f1dfae}.btn:hover{background:#2f6f47;border-color:#2f6f47;color:#fff}
+  /* Marquee boards in a project scene: the three links. */
+  .marq{position:absolute;bottom:62px;z-index:5;transform:translateX(-50%) rotate(-1deg);background:#efe2c0;border:4px double #5a3a1c;outline:4px solid #efe2c0;padding:10px 18px;font:400 18px 'Abril Fatface';color:#241912;text-decoration:none;box-shadow:6px 8px 0 #0006;white-space:nowrap}
+  .marq:hover{background:#2f6f47;color:#fff;outline-color:#2f6f47}
+  .exit{position:absolute;right:112px;top:204px;z-index:9;background:#143d22;color:#bff5c9;border:3px solid #bff5c9;font:700 13px 'DM Sans';letter-spacing:.2em;padding:8px 14px;box-shadow:0 0 18px #3fe07a88;text-decoration:none;display:none}
+  .exit:hover{background:#1d5a33}
+  .tab{position:absolute;top:340px;z-index:9;background:#efe2c0;color:#241912;font:700 11px 'DM Sans';letter-spacing:.1em;padding:10px 14px;border:3px double #5a3a1c;box-shadow:4px 6px 0 #0005;transition:opacity .3s}
+  #tabL{left:116px}#tabR{right:116px}
+  .dots{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:9;display:flex;gap:10px}
+  .dot{width:13px;height:13px;border-radius:50%;background:#efe2c0;border:2px solid #241912;opacity:.55;padding:0}.dot.on{opacity:1;background:#d9a93a}
+  .hubonly{transition:opacity .3s}.inproj .hubonly{opacity:0!important;pointer-events:none}.inproj .exit{display:block}
+  /* Set-change animations: every move is in jumpy steps, like stagehands pushing wagons and hauling ropes. */
+  .rollL{animation:rL .8s steps(8) forwards}.rollR{animation:rR .8s steps(8) forwards}
+  .inL{animation:iL .9s steps(8) both}.inR{animation:iR .9s steps(8) both}
+  .lift{animation:lf .9s steps(9) forwards}.drop{animation:dr 1s steps(10) both}
+  @keyframes rL{to{transform:translateX(-115%)}}@keyframes rR{to{transform:translateX(115%)}}
+  @keyframes iL{from{transform:translateX(-115%)}}@keyframes iR{from{transform:translateX(115%)}}
+  @keyframes lf{to{transform:translateY(-110%)}}@keyframes dr{from{transform:translateY(-110%)}}
+  .d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}
+  .fade{animation:fd .5s steps(4) both}@keyframes fd{from{opacity:0}}
+  #intro{position:absolute;inset:0;z-index:30;display:flex}
+  #intro .half{flex:1;background:linear-gradient(90deg,#5e0f1f,#b3283d 45%,#6e1222 55%,#b3283d 80%,#5e0f1f);box-shadow:inset 0 0 0 4px #2c0a12;position:relative}
+  #intro .half:after{content:"";position:absolute;top:0;bottom:0;width:14px;background:repeating-linear-gradient(0deg,#d9a93a 0 6px,#7a5412 6px 10px)}
+  #intro .L:after{right:0}#intro .R:after{left:0}
+  #plaque{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:31;background:#efe2c0;color:#241912;border:6px double #7a5412;outline:6px solid #efe2c0;padding:26px 44px;text-align:center;box-shadow:10px 14px 0 4px #0007;font-family:'IM Fell English',serif}
+  #plaque small{display:block;font:italic 14px 'IM Fell English';letter-spacing:.18em;text-transform:uppercase;color:#7a2d1d}
+  #plaque b{display:block;font:400 44px/1.1 'Abril Fatface';margin-top:6px}
+  #intro.open .L{animation:oL 1.4s steps(8) forwards}#intro.open .R{animation:oR 1.4s steps(8) forwards}#intro.open+#plaque{animation:pf .5s steps(3) forwards}
+  @keyframes oL{to{transform:translateX(-100%)}}@keyframes oR{to{transform:translateX(100%)}}@keyframes pf{to{opacity:0;transform:translate(-50%,-80%)}}
+  .note{position:absolute;left:112px;bottom:8px;z-index:12;color:#efe2c0;font:400 11px 'DM Sans';opacity:.85;max-width:430px}
+</style></head><body>
+<div id="stage">
+  <div id="setroot"></div>
+  <div id="wash"></div><div id="glow"></div>
+  <svg id="frame" class="fixed" width="1280" height="720" viewBox="0 0 1280 720"></svg>
+  <div id="dim"></div>
+  <a class="exit" id="exit" href="#">◀ EXIT TO THE FOREST</a>
+  <button class="tab hubonly" id="tabL">◀ THE SANCTUM</button><button class="tab hubonly" id="tabR">HANYU COURTYARD ▶</button>
+  <div class="dots hubonly"><button class="dot" data-p="0" title="The Sanctum"></button><button class="dot on" data-p=".5" title="The Brazalete"></button><button class="dot" data-p="1" title="Hanyu Courtyard"></button></div>
+  <div class="note" id="note">ROUGH MOCKUP v4. Move the mouse to an edge to pan, then click a gateway to change the whole set.</div>
+  <div id="intro"><div class="half L"></div><div class="half R"></div></div>
+  <div id="plaque"><small>Now arriving at</small><b>Welcome to aerolex.dev</b></div>
+</div>
+<script>
+const NS='http://www.w3.org/2000/svg',INK='#241912';
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+let R=rng(5);
+function E(tag,a,p){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e}
+let uid=0;
+/* A new SVG layer, with its own shadow filter, brush and wood-grain textures (ids are unique per layer). */
+function mkSvg(w){const id='s'+(uid++);const s=document.createElementNS(NS,'svg');s.setAttribute('width',w);s.setAttribute('height',720);s.setAttribute('viewBox',`0 0 ${w} 720`);s.id=id;
+  s.insertAdjacentHTML('afterbegin',`<defs>
+ <filter id="lift${id}" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="5" dy="7" stdDeviation="0" flood-color="#000" flood-opacity=".32"/></filter>
+ <pattern id="brush${id}" width="14" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)"><path d="M0 4 q7 -4 14 0" stroke="#000" stroke-width="1.4" fill="none" opacity=".16"/></pattern>
+ <pattern id="grain${id}" width="40" height="26" patternUnits="userSpaceOnUse"><path d="M0 6 q20 -6 40 0 M0 17 q20 6 40 0" stroke="#3a2412" stroke-width="1.2" fill="none" opacity=".4"/></pattern>
+ <pattern id="dots${id}" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="4.5" cy="4.5" r="1.6" fill="#000" opacity=".14"/></pattern>
+ <linearGradient id="wood${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98a52"/><stop offset="1" stop-color="#8a6034"/></linearGradient></defs>`);return s}
+/* A layer wrapper: the wrapper is what the set-change animations move; the inner svg/div is what mouse-panning moves. */
+function layer(w,kind){const wr=document.createElement('div');wr.className='wrap';const s=mkSvg(w);wr.appendChild(s);wr._svg=s;wr._id=s.id;return wr}
+
+/* ---------- painted plywood pieces ---------- */
+function flat(svg,id,d,fill){const g=E('g',{filter:`url(#lift${id})`},svg);E('path',{d,fill:'#d6a869',stroke:INK,'stroke-width':3,transform:'translate(6 8)'},g);E('path',{d,fill,stroke:INK,'stroke-width':3.2,'stroke-linejoin':'round'},g);E('path',{d,fill:`url(#brush${id})`},g);return g}
+function brace(svg,id,x,base,w,h){const g=E('g',{},svg);E('polygon',{points:`${x-w},${base} ${x-w+16},${base} ${x+4},${base-h} ${x-12},${base-h}`,fill:'#a07846',stroke:INK,'stroke-width':2},g);E('rect',{x:x-w-14,y:base-8,width:w*2+28,height:12,fill:`url(#wood${id})`,stroke:INK,'stroke-width':2},g)}
+function pine(svg,id,x,base,h,cols,opts){opts=opts||{};const w=h*.42,g=E('g',{},svg);brace(g,id,x-h*.07,base,h*.16,h*.4);brace(g,id,x+h*.12,base,h*.1,h*.3);
+  E('rect',{x:x-h*.035,y:base-h*.2,width:h*.07,height:h*.2,fill:'#9a6c3a',stroke:INK,'stroke-width':3},g);const tiers=opts.tiers||4;
+  for(let i=0;i<tiers;i++){const ty=base-h*.16-i*(h*.74/tiers),tw=w*(1-i*.62/tiers),th=h*.74/tiers*1.55;let d=`M${x-tw/2} ${ty}`;const n=5;for(let k=1;k<=n;k++){d+=` L${x-tw/2+tw*k/n-tw/n*.5} ${ty-th*.12} L${x-tw/2+tw*k/n} ${ty}`}
+    d+=` L${x+tw*.2} ${ty-th*.55} L${x+tw*.12} ${ty-th*.55} L${x} ${ty-th} L${x-tw*.12} ${ty-th*.55} L${x-tw*.2} ${ty-th*.55} Z`;flat(g,id,d,cols[i%cols.length])}return g}
+function roundTree(svg,id,x,base,h,col,hi){const g=E('g',{},svg);brace(g,id,x-h*.08,base,h*.15,h*.4);brace(g,id,x+h*.1,base,h*.1,h*.3);
+  E('rect',{x:x-h*.04,y:base-h*.5,width:h*.08,height:h*.5,fill:'#9a6c3a',stroke:INK,'stroke-width':3},g);E('rect',{x:x-h*.04,y:base-h*.5,width:h*.08,height:h*.5,fill:`url(#grain${id})`},g);
+  const cs=[[0,-.72,.24],[-.18,-.6,.2],[.18,-.6,.2],[-.08,-.86,.17],[.1,-.84,.18],[-.28,-.7,.14],[.28,-.72,.14]],gg=E('g',{filter:`url(#lift${id})`},g);
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h,cy:base+b*h,r:r*h,fill:'#d6a869',stroke:INK,'stroke-width':8,transform:'translate(6 8)'},gg));
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h,cy:base+b*h,r:r*h,fill:col,stroke:INK,'stroke-width':8},gg));cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h,cy:base+b*h,r:r*h-4,fill:col},gg));
+  cs.forEach(([a,b,r])=>E('circle',{cx:x+a*h-r*h*.25,cy:base+b*h-r*h*.25,r:r*h*.55,fill:hi,opacity:.55},gg));return g}
+function floor(svg,id,W,tint,tape){E('rect',{x:0,y:612,width:W,height:108,fill:tint},svg);for(let y=612;y<720;y+=18)E('line',{x1:0,y1:y,x2:W,y2:y,stroke:INK,'stroke-width':1.6,opacity:.55},svg);
+  for(let x=0;x<W;x+=130)E('line',{x1:x,y1:612,x2:x+(R()*10),y2:720,stroke:INK,'stroke-width':1,opacity:.28},svg);E('rect',{x:0,y:612,width:W,height:108,fill:`url(#grain${id})`},svg);E('rect',{x:0,y:606,width:W,height:8,fill:'#6b4423',stroke:INK,'stroke-width':2},svg);
+  (tape||[]).forEach(([x,c])=>{for(let k=-1;k<=1;k+=2)E('line',{x1:x-40,y1:668-24*k,x2:x+40,y2:668+24*k,stroke:c,'stroke-width':9,opacity:.9,'stroke-linecap':'round'},svg)})}
+function board(svg,id,x,t,y){const g=E('g',{filter:`url(#lift${id})`},svg);E('rect',{x:x-8,y:(y||640)+12,width:16,height:60,fill:'#8a6034',stroke:INK,'stroke-width':2},g);E('rect',{x:x-110,y:y||628,width:220,height:40,fill:'#efe2c0',stroke:INK,'stroke-width':3},g);const tx=E('text',{x,y:(y||628)+27,'text-anchor':'middle','font-family':'Abril Fatface','font-size':20,fill:INK},g);tx.textContent=t}
+const G1=['#3f7a4a','#2f6a56','#4f8a3e'],G2=['#2d5d4a','#3a6f3a'],G3=['#c58a2a','#a85a2a'];
+function star(svg,x,y,s,c){E('path',{d:`M${x} ${y-s} l${s*.3} ${s*.7} ${s*.8} ${s*.1} -${s*.6} ${s*.5} ${s*.2} ${s*.8} -${s*.7} -${s*.4} -${s*.7} ${s*.4} ${s*.2} -${s*.8} -${s*.6} -${s*.5} ${s*.8} -${s*.1}Z`,fill:c||'#ffe9a0',stroke:INK,'stroke-width':1.4},svg)}
+function cloud(svg,x,y,s,fill){const g=E('g',{},svg);[0,40,80,120].forEach((dx,k)=>E('circle',{cx:x+dx*s,cy:y-(k%2?18:0)*s,r:(26+k%2*8)*s,fill:fill||'#fff',stroke:INK,'stroke-width':3},g));E('rect',{x:x-26*s,y:y-2*s,width:178*s,height:28*s,fill:fill||'#fff'},g)}
+
+/* =====================================================================================================================
+   SCENES. Each builder returns { layers:[{el,kind}], gel, lamp, pan }.  kind decides how that layer rolls on and off.
+   ===================================================================================================================== */
+const SCENES={};
+
+/* ---------- HOME: the forest, three gateways ---------- */
+SCENES.hub=function(){const out={pan:true,gel:'#ffe6a8',layers:[]};const f={back:.2,far:.5,mid:.75,props:1,near:1.15},Wd={};for(const k in f)Wd[k]=Math.round(1280+f[k]*1520);
+  const back=layer(Wd.back);{const s=back._svg,W=Wd.back;s.insertAdjacentHTML('beforeend',`<defs><linearGradient id="sk${s.id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e2a5e"/><stop offset=".3" stop-color="#52639f"/><stop offset=".5" stop-color="#9fd0d6"/><stop offset=".7" stop-color="#f0c995"/><stop offset="1" stop-color="#d9684a"/></linearGradient><linearGradient id="fd${s.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#f3e6b4" stop-opacity=".55"/></linearGradient></defs>`);
+    E('rect',{width:W,height:720,fill:`url(#sk${s.id})`},s);E('rect',{width:W,height:720,fill:`url(#fd${s.id})`},s);
+    for(let i=0;i<30;i++)star(s,R()*W*.36,60+R()*220,5+R()*4);E('circle',{cx:270,cy:170,r:52,fill:'#f4e6b0',stroke:INK,'stroke-width':3},s);E('circle',{cx:290,cy:158,r:44,fill:'#2a3a78'},s);
+    [[760,140],[960,210],[640,260]].forEach(([x,y])=>cloud(s,x,y,1));E('circle',{cx:1290,cy:190,r:60,fill:'#f7d27a',stroke:INK,'stroke-width':3},s);for(let k=0;k<4;k++){const x=1050+k*140,h=180+k%2*60;E('path',{d:`M${x-120} 560 L${x} ${560-h} L${x+120} 560Z`,fill:k%2?'#a8484a':'#b9574a',stroke:INK,'stroke-width':3},s)}}
+  const far=layer(Wd.far);{const s=far._svg,W=Wd.far;[.05,.13,.22,.3,.42,.5,.6,.69,.78,.87,.95].forEach((q,i)=>i%3===1?roundTree(s,s.id,W*q,610,240,'#9bb98a','#c3d6a8'):pine(s,s.id,W*q,610,230+R()*60,['#8bab9a','#7e9d92']))}
+  const mid=layer(Wd.mid);{const s=mid._svg,W=Wd.mid;pine(s,s.id,W*.34,640,560,G1,{tiers:5});pine(s,s.id,W*.66,640,560,G2,{tiers:5});roundTree(s,s.id,W*.1,640,420,'#d49a35','#f0cf74');roundTree(s,s.id,W*.9,640,420,'#c4553a','#eea17c');pine(s,s.id,W*.2,640,300,G2);pine(s,s.id,W*.5-250,640,240,G1);pine(s,s.id,W*.5+250,640,240,G1);pine(s,s.id,W*.8,640,300,G3)}
+  const props=layer(Wd.props);{const s=props._svg,W=Wd.props;floor(s,s.id,W,'#a97a46',[[504,'#ec5f8f'],[1400,'#3fb6e0'],[2296,'#58c25a']]);
+    /* three gateways: an arched opening in the treeline, with a painted glimpse of the path and the place beyond */
+    [[504,'THE SANCTUM','sanctum','night'],[1400,'THE BRAZALETE','brazalete','day'],[2296,'HANYU COURTYARD','hanyu','dusk']].forEach(([x,t,go,mood])=>{
+      const g=E('g',{class:'gate','data-go':go},s),ff=E('g',{filter:`url(#lift${s.id})`},g);const top=396,R2=110,base=606;
+      const arch=`M${x-R2} ${base} V${top+R2} A${R2} ${R2} 0 0 1 ${x+R2} ${top+R2} V${base}Z`;
+      brace(ff,s.id,x-70,base,60,170);brace(ff,s.id,x+80,base,60,150);
+      E('path',{d:arch,fill:'#d6a869',stroke:INK,'stroke-width':3,transform:'translate(8 9) scale(1.12)',style:`transform-origin:${x}px ${base}px`},ff);
+      E('path',{d:arch,fill:'#8a5a2c',stroke:INK,'stroke-width':4,transform:`translate(0 0)`,style:`transform-origin:${x}px ${base}px;transform:scale(1.12)`},ff);
+      const cid='c'+go+s.id;const cp=E('clipPath',{id:cid},s);E('path',{d:arch},cp);const v=E('g',{'clip-path':`url(#${cid})`},g);
+      const sky={night:['#1e2a5e','#52639f'],day:['#7fd2e6','#e8f6ee'],dusk:['#d9684a','#f6c58b']}[mood];
+      s.insertAdjacentHTML('beforeend',`<defs><linearGradient id="v${go}${s.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky[0]}"/><stop offset="1" stop-color="${sky[1]}"/></linearGradient></defs>`);
+      E('rect',{x:x-R2,y:top,width:R2*2,height:base-top,fill:`url(#v${go}${s.id})`},v);
+      if(mood==='night'){for(let i=0;i<9;i++)star(v,x-90+R()*180,top+20+R()*90,4+R()*3);E('circle',{cx:x+50,cy:top+50,r:16,fill:'#f4e6b0',stroke:INK,'stroke-width':2},v);E('path',{d:`M${x-40} 520 a40 40 0 0 1 80 0Z`,fill:'#32478f',stroke:INK,'stroke-width':3},v);E('rect',{x:x-34,y:518,width:68,height:60,fill:'#cfc6b2',stroke:INK,'stroke-width':3},v)}
+      if(mood==='day'){cloud(v,x-80,top+50,.55);E('circle',{cx:x,cy:500,r:46,fill:'#e0b23a',stroke:INK,'stroke-width':3},v);['#e25c8a','#8b4fd9','#f09a22','#25c7d8','#7fcb2f','#e2473f'].forEach((c,i)=>{const a0=i*Math.PI/3-Math.PI/2,a1=(i+1)*Math.PI/3-Math.PI/2;E('path',{d:`M${x} 500 L${x+38*Math.cos(a0)} ${500+38*Math.sin(a0)} A38 38 0 0 1 ${x+38*Math.cos(a1)} ${500+38*Math.sin(a1)}Z`,fill:c,stroke:INK,'stroke-width':2},v)})}
+      if(mood==='dusk'){E('path',{d:`M${x-110} 560 L${x-30} 470 L${x+30} 540 L${x+110} 450 L${x+110} 606 L${x-110} 606Z`,fill:'#8a3a3a',stroke:INK,'stroke-width':3},v);E('rect',{x:x-30,y:520,width:60,height:50,fill:'#b8321f',stroke:INK,'stroke-width':3},v);E('path',{d:`M${x-44} 524 Q${x} 490 ${x+44} 524Z`,fill:'#2a1a14',stroke:INK,'stroke-width':3},v)}
+      /* the path itself, narrowing into the distance */
+      E('path',{d:`M${x-60} ${base} L${x-8} ${top+120} L${x+8} ${top+120} L${x+60} ${base}Z`,fill:'#e5cf9c',stroke:INK,'stroke-width':2.5},v);
+      E('rect',{x:x-R2,y:top,width:R2*2,height:base-top,fill:`url(#dots${s.id})`},v);
+      board(s,s.id,x,t)});
+    const sg=document.createElement('div');sg.className='inner sign';sg.style.cssText='left:1400px;top:196px;width:500px';
+    sg.innerHTML=`<p class="pres">Noah Zepter-Martínez presents</p><h1>Designer of Interactive Game-Based Educational Tools</h1><p class="sub">I design how a learning experience feels and works, then build a working version to test it.</p><div class="btns"><a class="btn p" href="#">See the work</a><a class="btn" href="#">Watch the dev log</a><a class="btn" href="#">Get in touch</a></div>`;sg.style.position='absolute';props.appendChild(sg);props._sign=sg}
+  const near=layer(Wd.near);{const s=near._svg,W=Wd.near;[[0,G1],[.34,G2],[.66,G1],[1,G2]].forEach(([q,c])=>pine(s,s.id,W*q+(q===0?40:(q===1?-40:0)),720,760,c,{tiers:5}))}
+  out.layers=[[back,'back','L',f.back],[far,'far','R',f.far],[mid,'mid','L',f.mid],[props,'props','R',f.props],[near,'near','L',f.near]];return out};
+
+/* ---------- THE SANCTUM: observatory at night, violet and blue lights ---------- */
+SCENES.sanctum=function(){const out={gel:'#9aa6ff',layers:[]};
+  const back=layer(1280);{const s=back._svg;s.insertAdjacentHTML('beforeend',`<defs><linearGradient id="n${s.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1240"/><stop offset=".7" stop-color="#3a3f8c"/><stop offset="1" stop-color="#7a5aa0"/></linearGradient></defs>`);
+    E('rect',{width:1280,height:720,fill:`url(#n${s.id})`},s);for(let i=0;i<70;i++)star(s,R()*1280,30+R()*400,3+R()*5,i%5?'#ffe9a0':'#fff');E('circle',{cx:1010,cy:200,r:100,fill:'#f4e6b0',stroke:INK,'stroke-width':4},s);E('circle',{cx:1010,cy:200,r:100,fill:`url(#dots${s.id})`},s);E('circle',{cx:1050,cy:176,r:86,fill:'#3a3f8c',opacity:.9},s);
+    for(let k=0;k<5;k++){const x=k*300-40;E('path',{d:`M${x} 600 L${x+160} ${340+k%2*50} L${x+340} 600Z`,fill:k%2?'#2a2f6e':'#232866',stroke:INK,'stroke-width':3},s)}}
+  const far=layer(1280);{const s=far._svg;[90,230,1050,1190].forEach((x,i)=>pine(s,s.id,x,612,240+R()*60,['#2c3a78','#243066']))}
+  const mid=layer(1280);{const s=mid._svg;
+    /* a hanging orrery: rings and planets on wires from the fly loft */
+    [[330,190,110],[950,170,95]].forEach(([x,y,r])=>{E('line',{x1:x,y1:0,x2:x,y2:y-r,stroke:INK,'stroke-width':3},s);const g=E('g',{filter:`url(#lift${s.id})`},s);[r,r*.7,r*.4].forEach((rr,i)=>E('circle',{cx:x,cy:y,r:rr,fill:'none',stroke:i%2?'#d9a93a':'#f1d27a','stroke-width':8},g));E('circle',{cx:x,cy:y,r:r*.18,fill:'#ffd877',stroke:INK,'stroke-width':3},g);E('circle',{cx:x+r,cy:y,r:14,fill:'#5aa0e0',stroke:INK,'stroke-width':3},g);E('circle',{cx:x-r*.7,cy:y,r:10,fill:'#e0603a',stroke:INK,'stroke-width':3},g)})}
+  const props=layer(1280);{const s=props._svg;floor(s,s.id,1280,'#6b5a7a',[[640,'#9a7cff']]);
+    brace(s,s.id,560,606,70,260);brace(s,s.id,720,606,60,230);
+    flat(s,s.id,'M470 606 L482 330 L798 330 L810 606Z','#cfc6b2');flat(s,s.id,'M456 340 A184 184 0 0 1 824 340Z','#32478f');
+    E('path',{d:'M620 156 L620 340 L660 340 L660 156Z',fill:'#0f1a44',stroke:INK,'stroke-width':3},s);
+    star(s,640,116,26,'#ffd877');E('rect',{x:600,y:480,width:80,height:126,rx:40,fill:'#7a4a2a',stroke:INK,'stroke-width':3},s);
+    [[500,420],[780,420],[516,520],[764,520]].forEach(([x,y])=>E('rect',{x:x-18,y,width:36,height:56,rx:18,fill:'#243a7a',stroke:INK,'stroke-width':3},s));
+    /* a giant telescope */
+    flat(s,s.id,'M700 250 L930 110 L950 146 L726 290Z','#a07846');E('circle',{cx:938,cy:128,r:24,fill:'#d9a93a',stroke:INK,'stroke-width':3},s);
+    /* a lectern with a giant open grimoire, and a tall candelabra */
+    flat(s,s.id,'M170 606 L200 470 L330 470 L360 606Z','#7a4a2a');flat(s,s.id,'M140 470 L250 440 L360 470 L250 500Z','#efe2c0');E('path',{d:'M250 440 L250 500',stroke:INK,'stroke-width':3},s);star(s,200,468,12,'#a83a2c');
+    flat(s,s.id,'M1000 606 L1000 330 L1022 330 L1022 606Z','#8a6034');[0,1,2].forEach(i=>{E('rect',{x:960+i*60,y:300,width:14,height:40,fill:'#efe2c0',stroke:INK,'stroke-width':2.5},s);E('path',{d:`M${967+i*60} 296 q-10 -22 0 -34 q10 12 0 34Z`,fill:'#ffb23a',stroke:INK,'stroke-width':2},s)});
+    board(s,s.id,640,'THE SANCTUM');
+    props._sign=makeSign(props,'The Sanctum','An interactive world for astrology, witchcraft and journaling. Walk an estate with an observatory, a grimoire and a temple.',[['Tour the Sanctum',380],['About the Sanctum',640],['Design story',900]])}
+  const near=layer(1280);{const s=near._svg;pine(s,s.id,0,720,700,['#1d2652','#262f66'],{tiers:5});pine(s,s.id,1280,720,700,['#1d2652','#262f66'],{tiers:5});
+    for(let x=140;x<1200;x+=210){E('line',{x1:x,y1:0,x2:x,y2:60+R()*60,stroke:INK,'stroke-width':2},s);star(s,x,100+R()*40,12,'#ffd877')}}
+  out.layers=[[back,'back','L'],[far,'far','R'],[mid,'mid','L'],[props,'props','R'],[near,'near','L']];return out};
+
+/* ---------- THE BRAZALETE: bright glossy aqua, a giant wristband on a turntable ---------- */
+SCENES.brazalete=function(){const out={gel:'#bff3ff',layers:[]};
+  const back=layer(1280);{const s=back._svg;s.insertAdjacentHTML('beforeend',`<defs><linearGradient id="a${s.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2aa6e0"/><stop offset=".7" stop-color="#9fe3f2"/><stop offset="1" stop-color="#e9fbf4"/></linearGradient></defs>`);
+    E('rect',{width:1280,height:720,fill:`url(#a${s.id})`},s);for(let i=0;i<22;i++){const x=R()*1280,y=60+R()*420,r=10+R()*34;E('circle',{cx:x,cy:y,r,fill:'#ffffff55',stroke:'#fff','stroke-width':3},s);E('circle',{cx:x-r*.3,cy:y-r*.3,r:r*.25,fill:'#fff'},s)}
+    E('path',{d:'M0 420 Q300 330 640 420 T1280 400 V720 H0Z',fill:'#6fd0ea',stroke:INK,'stroke-width':3,opacity:.8},s);cloud(s,120,150,1,'#fff');cloud(s,900,110,1.2,'#fff');E('circle',{cx:1120,cy:90,r:50,fill:'#fff6a8',stroke:INK,'stroke-width':3},s)}
+  const far=layer(1280);{const s=far._svg;[[180,'#8bd0f0'],[420,'#a6e0f4'],[860,'#8bd0f0'],[1100,'#a6e0f4']].forEach(([x,c],i)=>{const g=E('g',{filter:`url(#lift${s.id})`},s);E('ellipse',{cx:x,cy:430+i%2*40,rx:90,ry:34,fill:c,stroke:INK,'stroke-width':3},g)})}
+  const mid=layer(1280);{const s=mid._svg;['#e25c8a','#8b4fd9','#f09a22'].forEach((c,i)=>{const x=170+i*30,y=210+i*130;brace(s,s.id,x,606,50,120);const g=E('g',{filter:`url(#lift${s.id})`},s);E('circle',{cx:x,cy:y,r:70,fill:c,stroke:INK,'stroke-width':4},g);E('circle',{cx:x-18,cy:y-20,r:22,fill:'#ffffff66'},g)});
+    ['#25c7d8','#7fcb2f','#e2473f'].forEach((c,i)=>{const x=1110-i*30,y=210+i*130;brace(s,s.id,x,606,50,120);const g=E('g',{filter:`url(#lift${s.id})`},s);E('circle',{cx:x,cy:y,r:70,fill:c,stroke:INK,'stroke-width':4},g);E('circle',{cx:x-18,cy:y-20,r:22,fill:'#ffffff66'},g)})}
+  const props=layer(1280);{const s=props._svg;floor(s,s.id,1280,'#c9a46a',[[640,'#3fb6e0']]);
+    /* a turntable with the giant wristband */
+    flat(s,s.id,'M430 606 L450 560 L830 560 L850 606Z','#d9d9e6');brace(s,s.id,560,560,60,190);brace(s,s.id,720,560,60,160);
+    flat(s,s.id,'M350 400 L470 380 L470 500 L350 480Z','#2f6fb0');flat(s,s.id,'M930 400 L810 380 L810 500 L930 480Z','#2f6fb0');
+    E('circle',{cx:640,cy:430,r:150,fill:'#d6a869',stroke:INK,'stroke-width':3,transform:'translate(7 9)'},s);E('circle',{cx:640,cy:430,r:150,fill:'#f4f1e8',stroke:INK,'stroke-width':4},s);
+    ['#e25c8a','#8b4fd9','#f09a22','#25c7d8','#7fcb2f','#e2473f'].forEach((c,i)=>{const a0=i*Math.PI/3-Math.PI/2,a1=(i+1)*Math.PI/3-Math.PI/2;E('path',{d:`M640 430 L${640+124*Math.cos(a0)} ${430+124*Math.sin(a0)} A124 124 0 0 1 ${640+124*Math.cos(a1)} ${430+124*Math.sin(a1)}Z`,fill:c,stroke:INK,'stroke-width':3},s)});
+    E('circle',{cx:640,cy:430,r:34,fill:'#ffd84a',stroke:INK,'stroke-width':4},s);E('circle',{cx:640,cy:430,r:150,fill:`url(#dots${s.id})`},s);
+    ['MOOD','TENSE','PERSON'].forEach((t,i)=>{const x=190+i*0;});board(s,s.id,640,'THE BRAZALETE');
+    props._sign=makeSign(props,'The Brazalete','A wristband for complex Spanish grammar. Turn its rings to pick the mood, tense and person.',[['Try the Brazalete',380],['About the Brazalete',640],['Design story',900]])}
+  const near=layer(1280);{const s=near._svg;[[40,'#2aa6e0'],[1240,'#25c7d8']].forEach(([x,c])=>{const g=E('g',{filter:`url(#lift${s.id})`},s);for(let k=0;k<5;k++){E('path',{d:`M${x} 720 Q${x+(x<640?1:-1)*(120+k*14)} ${420-k*70} ${x+(x<640?1:-1)*(20+k*8)} ${180-k*10} Q${x+(x<640?1:-1)*(10)} ${420-k*60} ${x} 720Z`,fill:k%2?c:'#7fcb2f',stroke:INK,'stroke-width':3},g)}});
+    [[210,560,46],[1060,540,60]].forEach(([x,y,r])=>{E('circle',{cx:x,cy:y,r,fill:'#ffffff55',stroke:'#fff','stroke-width':4},s);E('circle',{cx:x-r*.3,cy:y-r*.3,r:r*.22,fill:'#fff'},s)})}
+  out.layers=[[back,'back','L'],[far,'far','R'],[mid,'mid','L'],[props,'props','R'],[near,'near','L']];return out};
+
+/* ---------- HANYU COURTYARD: amber lantern dusk, a gate, a kettle and a tea table ---------- */
+SCENES.hanyu=function(){const out={gel:'#ffb866',layers:[]};
+  const back=layer(1280);{const s=back._svg;s.insertAdjacentHTML('beforeend',`<defs><linearGradient id="h${s.id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c84a3a"/><stop offset=".6" stop-color="#f09a5a"/><stop offset="1" stop-color="#f6d28b"/></linearGradient></defs>`);
+    E('rect',{width:1280,height:720,fill:`url(#h${s.id})`},s);E('circle',{cx:900,cy:260,r:120,fill:'#ffe9b0',stroke:INK,'stroke-width':4},s);
+    [['#7a4a5a',360],['#5a3a4a',440],['#3f2a3a',520]].forEach(([c,y],i)=>{let d=`M0 ${y+60}`;for(let x=0;x<=1280;x+=110)d+=` L${x+55} ${y-30-R()*70+i*10} L${x+110} ${y+60}`;E('path',{d:d+' V720 H0Z',fill:c,stroke:INK,'stroke-width':3},s)})}
+  const far=layer(1280);{const s=far._svg;[[200,'#6a3a3a'],[420,'#5a2f33'],[860,'#6a3a3a'],[1090,'#5a2f33']].forEach(([x,c])=>{const g=E('g',{filter:`url(#lift${s.id})`},s);E('rect',{x:x-40,y:480,width:80,height:130,fill:c,stroke:INK,'stroke-width':3},g);E('path',{d:`M${x-62} 486 Q${x} 450 ${x+62} 486 L${x+40} 456 L${x-40} 456Z`,fill:'#2a1a14',stroke:INK,'stroke-width':3},g)})}
+  const mid=layer(1280);{const s=mid._svg;/* strings of lanterns across the stage */
+    [0,1].forEach(r=>{let d=`M60 ${90+r*50}`;E('path',{d:`M60 ${80+r*50} Q640 ${200+r*50} 1220 ${80+r*50}`,fill:'none',stroke:INK,'stroke-width':3},s);for(let i=0;i<9;i++){const t=(i+.5)/9,x=60+1160*t,y=(80+r*50)*(1-t)*(1-t)+2*(1-t)*t*(200+r*50)+(80+r*50)*t*t;const g=E('g',{filter:`url(#lift${s.id})`},s);E('line',{x1:x,y1:y,x2:x,y2:y+12,stroke:INK,'stroke-width':2},g);E('ellipse',{cx:x,cy:y+36,rx:20,ry:26,fill:i%2?'#e2473f':'#f09a22',stroke:INK,'stroke-width':3},g);E('ellipse',{cx:x,cy:y+36,rx:20,ry:26,fill:`url(#dots${s.id})`},g)}});
+    roundTree(s,s.id,190,640,380,'#e07a8a','#f6b6c0');roundTree(s,s.id,1090,640,380,'#d4623a','#f0a070')}
+  const props=layer(1280);{const s=props._svg;floor(s,s.id,1280,'#a26a3a',[[640,'#ff8a3a']]);
+    /* the estate gate and pagoda */
+    brace(s,s.id,500,606,70,250);brace(s,s.id,780,606,60,230);
+    flat(s,s.id,'M440 606 L440 440 L840 440 L840 606Z','#b8321f');flat(s,s.id,'M400 450 Q640 390 880 450 L830 396 L450 396Z','#2a1a14');
+    flat(s,s.id,'M480 396 L480 300 L800 300 L800 396Z','#b8321f');flat(s,s.id,'M450 312 Q640 250 830 312 L780 256 L500 256Z','#2a1a14');
+    E('rect',{x:590,y:500,width:100,height:106,fill:'#ffd877',stroke:INK,'stroke-width':3.5},s);E('line',{x1:640,y1:500,x2:640,y2:606,stroke:INK,'stroke-width':3.5},s);E('circle',{cx:640,cy:226,r:14,fill:'#ffd877',stroke:INK,'stroke-width':3},s);
+    /* the kettle that needs tea, steaming on a low table */
+    flat(s,s.id,'M150 606 L160 520 L340 520 L350 606Z','#7a4a2a');const k=E('g',{filter:`url(#lift${s.id})`},s);E('path',{d:'M200 520 Q190 470 240 462 Q290 470 280 520Z',fill:'#3a3a4a',stroke:INK,'stroke-width':3.5},k);E('path',{d:'M280 490 q30 -10 20 -34',fill:'none',stroke:INK,'stroke-width':6},k);E('path',{d:'M206 480 q-40 10 -30 -30',fill:'none',stroke:INK,'stroke-width':4},k);
+    [0,1,2].forEach(i=>E('path',{d:`M${232+i*8} ${450-i*10} q-14 -22 0 -40 q14 -22 0 -40`,fill:'none',stroke:'#fff','stroke-width':6,opacity:.8,'stroke-linecap':'round'},s));
+    /* a stone lion on a plinth */
+    flat(s,s.id,'M980 606 L990 530 L1130 530 L1140 606Z','#9a8f86');flat(s,s.id,'M1000 530 Q1010 460 1060 450 Q1110 460 1120 530Z','#b6aca2');E('circle',{cx:1060,cy:480,r:30,fill:'#c8beb4',stroke:INK,'stroke-width':3.5},s);E('circle',{cx:1050,cy:476,r:5,fill:INK},s);E('circle',{cx:1072,cy:476,r:5,fill:INK},s);
+    board(s,s.id,640,'HANYU COURTYARD');
+    props._sign=makeSign(props,'Hanyu Courtyard','An inherited estate needs your help. Learn Mandarin while you lend a hand. A game I’m designing, set in a mythical ancient China.',[['See the concept',470],['Design story',810]])}
+  const near=layer(1280);{const s=near._svg;[[30,'#5a7a3a'],[1250,'#6a8a3a']].forEach(([x,c])=>{const g=E('g',{filter:`url(#lift${s.id})`},s);for(let k=0;k<4;k++){const xx=x+(x<640?1:-1)*k*46;E('rect',{x:xx-14,y:0,width:28,height:720,fill:k%2?c:'#7a9a4a',stroke:INK,'stroke-width':3},g);for(let y=120;y<720;y+=150)E('line',{x1:xx-14,y1:y,x2:xx+14,y2:y,stroke:INK,'stroke-width':3},g)}})}
+  out.layers=[[back,'back','L'],[far,'far','R'],[mid,'mid','L'],[props,'props','R'],[near,'near','L']];return out};
+
+/* A title sign hung over a project scene, with its three marquee links on the floor. */
+function makeSign(host,title,desc,links){const wr=document.createElement('div');wr.className='inner';wr.style.cssText='position:absolute;left:0;top:0;width:1280px;height:720px;pointer-events:none';
+  wr.innerHTML=`<div class="sign" style="left:432px;top:204px;width:350px;pointer-events:auto"><p class="pres">Now playing</p><h1 style="font-size:34px">${title}</h1><p class="sub" style="font-size:14px;max-width:300px">${desc}</p></div>`+links.map(([t,x])=>`<a class="marq" href="#" style="left:${x}px;pointer-events:auto">${t}</a>`).join('');host.appendChild(wr);return wr}
+
+/* =====================================================================================================================
+   THE FIXED FRAME: valance, drapes, side strips and the light rig. It never moves.
+   ===================================================================================================================== */
+{const fr=document.getElementById('frame');fr.insertAdjacentHTML('afterbegin',`<defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1d27a"/><stop offset="1" stop-color="#a97b22"/></linearGradient></defs>`);const f=fr;
+  function strip(x){const g=E('g',{},f);E('rect',{x,y:0,width:100,height:720,fill:'#efe2c0',stroke:INK,'stroke-width':3},g);[[0,70,'#2b8aa0'],[70,120,'#c8402e'],[190,60,'#d9a93a'],[250,200,'#2b8aa0'],[450,60,'#d9a93a'],[510,210,'#c8402e']].forEach(([y,h,c])=>E('rect',{x:x+10,y,width:80,height:h,fill:c,stroke:INK,'stroke-width':2},g));for(let y=110;y<700;y+=70)E('path',{d:`M${x+50} ${y} l14 20 -14 20 -14 -20Z`,fill:'#f1d27a',stroke:INK,'stroke-width':1.6},g)}
+  strip(0);strip(1180);
+  E('path',{d:'M100 0 H250 Q205 150 190 300 Q175 460 140 580 L100 580Z',fill:'#9a1f33',stroke:INK,'stroke-width':3},f);E('path',{d:'M1180 0 H1030 Q1075 150 1090 300 Q1105 460 1140 580 L1180 580Z',fill:'#9a1f33',stroke:INK,'stroke-width':3},f);
+  let v='M0 0H1280V86';for(let x=1280;x>0;x-=128)v+=`Q${x-64} 150 ${x-128} 86`;v+='Z';E('path',{d:v,fill:'#a3283b',stroke:INK,'stroke-width':3},f);
+  for(let x=64;x<1280;x+=128){for(let i=0;i<7;i++)E('line',{x1:x-16+i*5,y1:124,x2:x-16+i*5,y2:140,stroke:'#f1d27a','stroke-width':2.4},f);E('circle',{cx:x,cy:120,r:7,fill:'#d9a93a',stroke:INK},f)}
+  E('rect',{x:0,y:0,width:1280,height:24,fill:'#d9a93a',stroke:INK,'stroke-width':2},f);E('path',{d:'M480 24 q30 -34 100 -34 h120 q70 0 100 34 q-20 42 -160 42 q-140 0 -160 -42Z',fill:'#d9a93a',stroke:INK,'stroke-width':3},f);E('ellipse',{cx:640,cy:32,rx:96,ry:22,fill:'#a83a2c',stroke:INK,'stroke-width':2},f);
+  const t=E('text',{x:640,y:40,'text-anchor':'middle','font-family':'Abril Fatface','font-size':24,'letter-spacing':'.18em',fill:'#f6e7b6',stroke:INK,'stroke-width':.6},f);t.textContent='AEROLEX';
+  /* the light rig: a pipe with seven lamps under the valance; the lens colour changes with each scene */
+  E('rect',{x:112,y:150,width:1056,height:8,fill:'#3a2c24',stroke:INK,'stroke-width':2},f);
+  window.__lamps=[];for(let i=0;i<7;i++){const x=200+i*146;const g=E('g',{},f);E('rect',{x:x-6,y:158,width:12,height:12,fill:'#3a2c24',stroke:INK},g);E('path',{d:`M${x-22} 190 L${x-14} 170 L${x+14} 170 L${x+22} 190Z`,fill:'#2b2018',stroke:INK,'stroke-width':2},g);window.__lamps.push(E('ellipse',{cx:x,cy:191,rx:20,ry:5,fill:'#ffe6a8',stroke:INK,'stroke-width':1.5},g))}}
+function setGel(c){document.getElementById('stage').style.setProperty('--gel',c);window.__lamps.forEach(l=>l.setAttribute('fill',c))}
+
+/* =====================================================================================================================
+   THE STAGE MANAGER: builds a scene, wheels things on and off, pans the home scene.
+   ===================================================================================================================== */
+const stage=document.getElementById('stage'),root=document.getElementById('setroot');
+function fit(){const k=Math.min(innerWidth/1280,innerHeight/720);stage.style.transform=`scale(${k})`;stage.style.left=(innerWidth-1280*k)/2+'px';stage.style.top=(innerHeight-720*k)/2+'px'}
+addEventListener('resize',fit);fit();
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+let current=null,name=null,p=.5,target=.5,running=false;
+/* -- panning for the home scene (the mouse position sets a target; each layer moves a different amount) -- */
+function apply(){if(!current||!current.pan)return;current.layers.forEach(([wr,kind,side,f])=>{const el=wr.querySelector(':scope>svg'),pr=wr.querySelector(':scope>.inner.sign');const x=-p*1520*f;wr.querySelectorAll(':scope>svg').forEach(e=>e.style.transform=`translateX(${x}px)`);if(wr._sign)wr._sign.style.transform=`translateX(calc(-50% + ${x}px)) rotate(-.6deg)`})}
+function loop(){p+=(target-p)*.07;apply();document.getElementById('tabL').style.opacity=p<.12?0:1;document.getElementById('tabR').style.opacity=p>.88?0:1;document.querySelectorAll('.dot').forEach(d=>d.classList.toggle('on',Math.abs(+d.dataset.p-p)<.2));if(Math.abs(target-p)>.0004)requestAnimationFrame(loop);else running=false}
+function kick(){if(!running){running=true;requestAnimationFrame(loop)}}
+addEventListener('mousemove',e=>{if(name!=='hub'||stage.classList.contains('busy'))return;const r=stage.getBoundingClientRect(),t=((e.clientX-r.left)/r.width-.5)*2,a=Math.max(0,Math.abs(t)-.3)/.7;target=Math.max(0,Math.min(1,.5+Math.sign(t)*Math.min(a,1)*.5));kick()});
+document.getElementById('tabL').onclick=()=>{target=0;kick()};document.getElementById('tabR').onclick=()=>{target=1;kick()};document.querySelectorAll('.dot').forEach(d=>d.onclick=()=>{target=+d.dataset.p;kick()});
+addEventListener('keydown',e=>{if(name!=='hub')return;if(e.key==='ArrowLeft'){target=Math.max(0,target-.5);kick()}if(e.key==='ArrowRight'){target=Math.min(1,target+.5);kick()}});
+
+/* -- the scene change: dim, wheel the props out, lift the flats and the tarp, then bring the new set in under new lights -- */
+async function change(to){if(stage.classList.contains('busy'))return;stage.classList.add('busy');R=rng(to.length*17+3);
+  const old=current;
+  if(old){const L=old.layers,by=k=>L.find(l=>l[1]===k)[0];
+    document.getElementById('note').textContent='Scene change: props wheel off, flats lift, backdrop tarp lifts out...';
+    by('props').classList.add(by('props')===null?'':'rollL');await wait(0);
+    by('near').classList.add('lift');by('mid').classList.add('lift','d1');by('far').classList.add('lift','d2');by('back').classList.add('lift','d3');
+    await wait(1800);root.innerHTML=''}
+  const sc=SCENES[to]();current=sc;name=to;setGel(sc.gel);
+  /* new set arrives: backdrop drops first, then flats, then the props roll in on wagons from the wings */
+  const order=['back','far','mid','props','near'],kind=Object.fromEntries(sc.layers.map(l=>[l[1],l[0]]));
+  order.forEach(k=>root.appendChild(kind[k]));
+  kind.back.classList.add('drop');kind.far.classList.add('drop','d1');kind.mid.classList.add('drop','d2');kind.near.classList.add('drop','d3');kind.props.classList.add(to==='hub'?'inR':'inL','d2');
+  if(sc.pan){p=.5;target=.5;apply()}
+  stage.classList.toggle('inproj',to!=='hub');
+  document.getElementById('note').textContent=to==='hub'?'ROUGH MOCKUP v4. Move the mouse to an edge to pan, then click a gateway to change the whole set.':'Scene: '+to+'. Note the different lights, backdrop, flats and props. Use EXIT to go back to the forest.';
+  await wait(1700);
+  /* the arrival animations are finished: clear them so the next scene change can move these pieces again */
+  sc.layers.forEach(l=>l[0].classList.remove('drop','inL','inR','d1','d2','d3'));stage.classList.remove('busy');
+  root.querySelectorAll('.gate').forEach(g=>g.addEventListener('click',()=>change(g.dataset.go)))}
+document.getElementById('exit').addEventListener('click',e=>{e.preventDefault();change('hub')});
+
+/* -- the very first thing a visitor sees: the Welcome curtain, then the forest -- */
+const intro=document.getElementById('intro');function open(){intro.classList.add('open');setTimeout(()=>{intro.remove();document.getElementById('plaque').remove()},1900)}
+change('hub').then(()=>{});setTimeout(open,2400);intro.addEventListener('click',open);
+</script></body></html>
