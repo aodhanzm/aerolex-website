@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#101c17">
   <title>Noah Zepter-Martínez · Designer of Interactive Game-Based Educational Tools · AeroLex</title>
   <!-- Search-result summary rewritten 2026-11-12 for the "designer who builds" direction (and without the old middle name). -->
-  <meta name="description" content="Noah Zepter-Martínez designs game-based learning and interactive worlds, then builds working prototypes. Try the Brazalete, look around The Sanctum as a guest, and see the design of Hanyu Courtyard.">
+  <meta name="description" content="Noah Zepter-Martínez designs game-based learning and interactive worlds, then builds working prototypes. Try the Brazalete, look around The Sanctum as a guest, see the design of Hanyu Courtyard, and read about The Scene.">
   <link rel="canonical" href="https://aerolex.dev/">
   <!-- Link-preview tags (2026-11-12): the title, sentence and 1200 by 630 picture shown when the site is shared on LinkedIn, X or in a message. -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AeroLex · Noah Zepter-Martínez">
   <meta property="og:title" content="Noah Zepter-Martínez · Designer of Interactive Game-Based Educational Tools">
-  <meta property="og:description" content="Game-based learning and interactive worlds, designed and built. A Spanish grammar tool you wear, an observatory for reflection, and a Mandarin adventure in an old estate.">
+  <meta property="og:description" content="Game-based learning and interactive worlds, designed and built. A Spanish grammar tool you wear, an observatory for reflection, a Mandarin adventure in an old estate, and a Spanish-learning game set on an island city.">
   <meta property="og:url" content="https://aerolex.dev/">
   <meta property="og:image" content="https://aerolex.dev/assets/og/home.jpg">
   <meta property="og:image:width" content="1200">
@@ -77,7 +77,7 @@
         </div>
         <!-- The forest journey stays: this smaller link starts the walk through the three clearings, as before. -->
         <a class="trail-start" href="#projects" data-start-trail><span>Or follow the path</span></a><!-- 2026-11-19: the small drawn up-arrow beside this link was removed at NZ's request. -->
-        <p class="trail-hint">THREE DIFFERENT WORLDS.</p>
+        <p class="trail-hint">FOUR DIFFERENT WORLDS.</p>
       </div>
 
       <!-- 2026-11-13: the three clearing cards are written out here, one each, instead of being filled in by the forest script.
@@ -109,6 +109,15 @@
         <p class="world-availability">In design: concept art and mockups</p>
         <button class="continue-trail" type="button" data-next-clearing><span>Check out other projects</span></button>
       </article>
+      <!-- 2026-11-19: The Scene added as the fourth clearing at NZ's request. Its backdrop is the existing the-scene-clearing art. -->
+      <article class="world-introduction" data-world="3" aria-labelledby="world-title-3" hidden>
+        <p class="eyebrow world-category">04 / SPANISH LEARNING GAME</p>
+        <h2 id="world-title-3" tabindex="-1">The Scene</h2>
+        <p class="world-description">A Spanish-learning game set on Solmara, a Y2K island city, where you arrive without a word of Spanish and talk your way through the night.</p>
+        <div class="world-actions"><a class="button button-primary" href="/the-scene/"><span>Explore the world</span></a><a class="button" href="/stories/the-scene/"><span>Design story</span></a></div>
+        <p class="world-availability">Private friends beta</p>
+        <button class="continue-trail" type="button" data-next-clearing><span>Check out other projects</span></button>
+      </article>
 
       <p class="trail-announcement" id="trail-announcement" role="status" aria-live="polite"></p>
       <div class="forest-bottom">
@@ -121,13 +130,15 @@
           <button type="button" data-clearing="1" aria-label="Visit The Sanctum clearing"><span class="stop-thumb"><img src="/assets/forest/stops/sanctum.webp" alt="" width="192" height="192" decoding="async"><span class="stop-number">02</span></span><span class="stop-name">The Sanctum</span></button>
           <span class="trail-rule" aria-hidden="true"></span>
           <button type="button" data-clearing="2" aria-label="Visit Hanyu Courtyard clearing"><span class="stop-thumb"><img src="/assets/forest/stops/hanyu.webp" alt="" width="192" height="192" decoding="async"><span class="stop-number">03</span></span><span class="stop-name">Hanyu Courtyard</span></button>
+          <span class="trail-rule" aria-hidden="true"></span>
+          <button type="button" data-clearing="3" aria-label="Visit The Scene clearing"><span class="stop-thumb"><img src="/assets/forest/stops/the-scene.webp" alt="" width="192" height="192" decoding="async"><span class="stop-number">04</span></span><span class="stop-name">The Scene</span></button>
         </nav>
         <div class="forest-options"><button type="button" id="motion-control" aria-pressed="false">Reduce motion</button><button type="button" data-trail-home class="back-to-trailhead" hidden>Forest entrance <span aria-hidden="true">↶</span></button></div>
       </div>
     </section>
 
     <section id="projects" class="projects section wrap" aria-labelledby="projects-title">
-      <div class="section-heading"><div><p class="eyebrow section-kicker">01 / SELECTED WORK</p><h2 id="projects-title" tabindex="-1">Three different worlds.</h2></div><p class="section-note">The projects I’m working on, in and out of the education world.</p></div>
+      <div class="section-heading"><div><p class="eyebrow section-kicker">01 / SELECTED WORK</p><h2 id="projects-title" tabindex="-1">Four different worlds.</h2></div><p class="section-note">The projects I’m working on, in and out of the education world.</p></div>
       <div class="project-grid">
         <!-- First card is now the Brazalete (replaced The Scene's card on 2026-11-11; The Scene is private for now). -->
         <article class="project-card" id="project-brazalete">
@@ -165,6 +176,18 @@
           <p class="project-description">An inherited estate needs your help. Learn Mandarin while you lend a hand.</p>
           <p class="project-role">Learning experience, game design</p>
           <ul class="directory-list"><li><a href="/hanyu-courtyard/">See the concept</a></li><li><a href="/stories/hanyu-courtyard/">Design story</a></li></ul>
+        </article>
+
+        <!-- 2026-11-19: the fourth project card, The Scene (NZ's request). -->
+        <article class="project-card" id="project-scene">
+          <a class="project-visual scene-visual" href="/the-scene/" aria-label="Read about The Scene, a Spanish-learning game set on the island city of Solmara">
+            <img src="/assets/art/plaza-del-sol.webp" alt="Concept art of the Plaza del Sol in Solmara, the island city of The Scene" width="1536" height="1024" decoding="async" loading="lazy">
+            <span class="visual-index" aria-hidden="true">04</span><span class="visual-caption">GAME ART</span>
+          </a>
+          <div class="project-title-row"><h3><a href="/the-scene/">The Scene</a></h3><span class="status status-planned">PRIVATE BETA</span></div>
+          <p class="project-description">A Spanish-learning game set on an island city, where you arrive without a word of Spanish.</p>
+          <p class="project-role">Project lead, learning design</p>
+          <ul class="directory-list"><li><a href="/the-scene/">The world of The Scene</a></li><li><a href="/stories/the-scene/">Design story</a></li></ul>
         </article>
       </div>
     </section>

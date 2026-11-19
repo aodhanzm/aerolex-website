@@ -26,9 +26,12 @@
       imageLabel: 'A Grecian island archipelago with a temple of Athena, a brass-domed observatory and illuminated marble terraces beneath the stars' },
     // Hanyu Courtyard's backdrop (compressed copy, 2026-11-12). Visitors only see the design concept; the playable build is NZ-only.
     { name: 'Hanyu Courtyard', image: '/assets/forest/hanyu-courtyard-clearing-v1.webp', mobileFocus: '48%',
-      imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains' }
+      imageLabel: 'A Chinese scholar’s writing desk and carved wooden study opening onto a lantern-lit garden courtyard and distant mountains' },
+    // The Scene's backdrop (added 2026-11-19): the island city of Solmara at sunset, from a stone terrace.
+    { name: 'The Scene', image: '/assets/forest/the-scene-clearing-v1.webp', mobileFocus: '35%',
+      imageLabel: 'The island city of Solmara at sunset: a giant carved face in a cliff beside a waterfall, pastel domed buildings, a tram and cable cars, and the sea beyond a stone terrace' }
   ];
-  const cards = [...stage.querySelectorAll('.world-introduction')];   // The three clearing cards, in path order.
+  const cards = [...stage.querySelectorAll('.world-introduction')];   // The four clearing cards, in path order.
   const backdrop = stage.querySelector('.world-backdrop');
   const nextButtons = [...stage.querySelectorAll('[data-next-clearing]')];   // One "next" button per card.
   const start = stage.querySelector('[data-start-trail]');
