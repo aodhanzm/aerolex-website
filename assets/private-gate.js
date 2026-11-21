@@ -100,7 +100,7 @@
       '<input id="pg-password" type="password" autocomplete="current-password" required>' +
       '<button type="submit">Unlock</button>' +
       '<p class="pg-error" role="alert" aria-live="polite"></p>' +
-      '<a href="/">← Back to aerolex.dev</a>' +
+      '<a href="/">Back to aerolex.dev</a>' +
       '</form>';
     document.body.appendChild(box);
 

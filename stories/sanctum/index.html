@@ -1,27 +1,27 @@
 <!doctype html>
-<!-- Design-process story for The Sanctum (portfolio launch, 2026-11-12). A 4-minute read: the problem, four decisions with pictures, before/after, what's next. All pictures use sample data. Draft wording for NZ's review. -->
+<!-- Design-process story for The Sanctum, rewritten 2026-11-19 from NZ's own account. Organised room by room: what the client asked for, then what NZ built. The client is unnamed. Only the Celestial Realm and the Grimoire are designed so far, and even those are unfinished. Draft wording for NZ's review, not published. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1720">
   <!-- The words search engines and link previews show for this page. -->
-  <title>From a star chart to an estate you walk through · The Sanctum design story · Noah Zepter-Martínez</title>
-  <meta name="description" content="The design story of The Sanctum: how an astrology tool that felt like a spreadsheet became an estate of seven rooms, in small releases shaped by an early audit.">
+  <title>Designing The Sanctum one room at a time: the design story</title>
+  <meta name="description" content="The design story of The Sanctum: a client's request for a personal tool for their spiritual practice, built room by room, with what is designed and what is not yet.">
   <link rel="canonical" href="https://aerolex.dev/stories/sanctum/">
   <!-- Link-preview tags (the title, sentence and picture shown when this page is shared on LinkedIn, X or in a message). -->
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="AeroLex · Noah Zepter-Martínez">
-  <meta property="og:title" content="The Sanctum: from a star chart to an estate you walk through">
-  <meta property="og:description" content="How an astrology tool that felt like a spreadsheet became an estate of seven rooms.">
+  <meta property="og:site_name" content="AeroLex - Noah Zepter-Martínez">
+  <meta property="og:title" content="Designing The Sanctum one room at a time">
+  <meta property="og:description" content="A client asked for a personal tool for their spiritual practice. Here is what they asked for in each room and what I built.">
   <meta property="og:url" content="https://aerolex.dev/stories/sanctum/">
   <meta property="og:image" content="https://aerolex.dev/assets/og/story-sanctum.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="The Sanctum’s observatory: a bronze model of the solar system beside a chart wheel.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The Sanctum: from a star chart to an estate you walk through">
-  <meta name="twitter:description" content="How an astrology tool that felt like a spreadsheet became an estate of seven rooms.">
+  <meta name="twitter:title" content="Designing The Sanctum one room at a time">
+  <meta name="twitter:description" content="A client asked for a personal tool for their spiritual practice. Here is what they asked for in each room and what I built.">
   <meta name="twitter:image" content="https://aerolex.dev/assets/og/story-sanctum.jpg">
   <!-- Browser-tab icons: a sharp vector one for modern browsers, a small picture for older ones, and one for phone home screens. -->
   <link rel="icon" type="image/svg+xml" href="/assets/portfolio/mark.svg">
@@ -40,11 +40,11 @@
 </head>
 <body id="top" class="page">
   <a class="skip-link" href="#main">Skip to content</a>
-  <!-- Top bar shared by every reading page: logo, three links, résumé button. -->
+  <!-- Top bar shared by every reading page: logo, three links, resume button. Arrows were removed at NZ's request (2026-11-19). -->
   <header class="site-header wrap page-header">
     <a class="brand" href="/" aria-label="AeroLex home"><img src="/assets/portfolio/mark.svg" alt="" width="40" height="32"><span>AEROLEX</span></a>
     <nav class="page-nav" aria-label="Main navigation"><a href="/#projects">Work</a><a href="/about/">About</a><a href="/about/#contact">Get in touch</a></nav>
-    <a class="button button-small" href="/resume/">Résumé <span aria-hidden="true">↗</span></a>
+    <a class="button button-small" href="/resume/">Resume and CV</a>
   </header>
 
   <main id="main" class="page-main">
@@ -53,121 +53,131 @@
 
     <!-- The story's opening: what it is about, how long it takes to read, and jump links to each part. -->
     <header class="story-head">
-      <p class="eyebrow">Design story · Product design</p>
-      <h1>From a star chart to an estate you walk through</h1>
-      <p class="lead">The Sanctum is an observatory and a journal for a small circle of friends. This is how it stopped being a tool and became a place.</p>
-      <p class="story-meta">About a 4 minute read · Updated November 2026</p>
-      <ul class="story-toc" aria-label="In this story"><li><a href="#problem">The problem</a></li><li><a href="#decisions">Four decisions</a></li><li><a href="#before-after">Before and after</a></li><li><a href="#next">What’s next</a></li></ul>
+      <p class="eyebrow">Design story: product design</p>
+      <h1>Designing The Sanctum one room at a time</h1>
+      <p class="lead">A client first asked me for a visualization of astrology, and the requests grew from there into a personal tool for their spiritual practice. This is what they asked for in each room and what I built.</p>
+      <p class="story-meta">A 7-minute read. Updated November 2026.</p>
+      <ul class="story-toc" aria-label="In this story"><li><a href="#start">Where it started</a></li><li><a href="#brief">The brief</a></li><li><a href="#celestial">The Celestial Realm</a></li><li><a href="#grimoire">The Grimoire</a></li><li><a href="#other-rooms">The other rooms</a></li><li><a href="#audit">The audit and the versions</a></li><li><a href="#status">Where it stands</a></li></ul>
     </header>
 
-    <!-- Part 1: the problem. -->
-    <section class="page-section" id="problem" aria-labelledby="problem-title">
-      <p class="eyebrow">The problem</p>
-      <h2 id="problem-title">It worked, and it felt like a spreadsheet with stars</h2>
+    <!-- Part 1 (restored 2026-11-19 at NZ's request): the Astro-Map start, with the before and after pictures. -->
+    <section class="page-section" id="start" aria-labelledby="start-title">
+      <h2 id="start-title">Where it started</h2>
       <div class="prose">
-        <p>I started this on 26 October 2026 under the name Astro-Map. My first message about it asked for an interactive model of the solar system linked to my birth chart, with a way to move through the dates of my own life.</p>
-        <p>Within two days it could do a great deal: transits, a timeline, a journal, tarot readings, spell timing, three traditions for friends with different practices. Every feature worked. And using it felt like filling in forms.</p>
-        <p>A practice like this is personal and a little ceremonial. I wanted the software to feel like the place where you do it, and what I had was a tool with a theme bolted on.</p>
+        <p>I started this on 26 October 2026 under the name Astro-Map. The client’s first request was small: a visualization of astrology. They wanted an interactive model of the solar system linked to a birth chart, with a way to move through dates.</p>
+        <p>It grew fast. Within two days it could do a great deal: transits, a timeline, a journal, tarot readings, spell timing and three traditions for different practices. Every feature worked, and using it felt like filling in forms.</p>
+        <p>A practice like this is personal and a little ceremonial. I wanted the software to feel like the place where you do it, and what I had was a tool with a theme bolted on. So I stopped adding pages and built an estate, with a front hall and a room for each part of the practice. My references were places where study and ritual are the same activity: a school of magic, a scholars’ tower, bronze instruments that still work after centuries. They gave me a test for every later choice. If a corner of the app feels out of step with the room it sits in, I redesign or move it.</p>
       </div>
-      <figure class="story-figure"><img src="/assets/stories/sanctum/astro-map.webp" alt="The first version, called Astro-Map: a plain dark page with a list of planets, a simple solar-system view, a chart wheel and a timeline, all shown with sample data" width="1440" height="810" loading="lazy" decoding="async"><figcaption>Astro-Map on 27 October, the day before it became The Sanctum. Sample data.</figcaption></figure>
+      <div class="before-after">
+        <figure class=""><img src="/assets/stories/sanctum/astro-map.webp" alt="Astro-Map: a planet list, a plain solar-system view and a chart wheel on a flat dark page" width="1440" height="810" loading="lazy" decoding="async"><figcaption><strong>27 October.</strong> Everything is there, and nothing tells you where you are. Sample data.</figcaption></figure>
+        <figure class=""><img src="/assets/stories/sanctum/observatory.webp" alt="The Sanctum’s observatory: the same planet list, solar-system model and chart wheel, now set in a bronze instrument inside a room" width="1320" height="620" loading="lazy" decoding="async"><figcaption><strong>Today.</strong> The same three views, now an instrument in a room you walked into. Sample data.</figcaption></figure>
+      </div>
     </section>
 
-    <!-- Part 2: the decisions. -->
-    <section class="page-section" id="decisions" aria-labelledby="decisions-title">
-      <p class="eyebrow">Key decisions</p>
-      <h2 id="decisions-title">Four choices that shaped it</h2>
+    <!-- Part 2: the client's brief and the feeling NZ wanted. -->
+    <section class="page-section" id="brief" aria-labelledby="brief-title">
+      <h2 id="brief-title">The brief</h2>
       <div class="prose">
-        <div class="decision">
-          <span class="num" aria-hidden="true">01</span>
-          <div>
-            <h3>Make it a place</h3>
-            <p>The first real design decision was to stop adding pages and build an estate. Seven rooms: an observatory, a study, a seasonal courtyard, a temple, a workshop, an engraving studio and a library. Each of the app’s sections became one of them.</p>
-            <p>The references I kept returning to were places where study and ritual are the same activity: a school of magic, a scholars’ tower, bronze instruments that still work after centuries. That gave me a test for every later choice. If a corner of the app feels out of step with the room it sits in, it gets redesigned or moved.</p>
-          </div>
-        </div>
+        <p>As the client used Astro-Map, they asked for more. They wanted a personal tool for documenting their notes and their spiritual journey in witchcraft, paganism and related paths. It had to be specific enough for their own practice. They also wanted to share it with close friends in their coven.</p>
+        <p>That coven includes witches, druids and pagans of different kinds. So the tool had to work for all of them, with specific features for each important part of a practice.</p>
+        <p>I wanted one more thing from it. The Sanctum should feel like your own private estate, where you reflect, do your work and learn. It should feel like a fun library, with none of the black-and-white flatness of a pile of notes. Recording a note should feel good enough that you want to come back.</p>
+        <p>Not every room is designed yet. I have designed the Celestial Realm and the Grimoire, and even those aren’t finished, because I’m still building the website. The client uses it now.</p>
       </div>
-      <figure class="story-figure"><img src="/assets/stories/sanctum/entrance.webp" alt="The Sanctum’s front hall today: a painted observatory above seven bronze plaques, one for each room of the estate" width="1320" height="540" loading="lazy" decoding="async"><figcaption>The front hall today. Seven plaques, seven rooms.</figcaption></figure>
+      <figure class="story-figure"><img src="/assets/stories/sanctum/entrance.webp" alt="The Sanctum’s front hall: a painted observatory above seven bronze plaques, one for each room of the estate" width="1320" height="540" loading="lazy" decoding="async"><figcaption>The front hall. Each bronze plaque opens one room. Sample data.</figcaption></figure>
+    </section>
+
+    <!-- Part 2: the Celestial Realm (the observatory and the Constellation Dome). -->
+    <section class="page-section" id="celestial" aria-labelledby="celestial-title">
+      <h2 id="celestial-title">The Celestial Realm</h2>
       <div class="prose">
-        <div class="decision">
-          <span class="num" aria-hidden="true">02</span>
-          <div>
-            <h3>One moment, three views</h3>
-            <p>The observatory shows a single moment three ways at once: a list of every planet, a bronze model of the solar system, and a chart wheel. Select something in one and the other two follow. Move the date and all three move together.</p>
-            <p>I kept the three views because each answers a different question. The list tells you where things are, the model shows why they appear there, and the wheel shows what that means against your own chart. Tying them to one clock is what makes it feel like an instrument.</p>
-          </div>
-        </div>
+        <h3>What they asked for</h3>
+        <p>The client wanted to understand their birth chart and astrology better. They wanted to learn about the major transits coming in their life and the ones already behind them. They wanted to compare their chart with friends, family and romantic interests. And they wanted a thorough explanation of the natal chart: what a Pisces sun means, and what each house means.</p>
+        <p>They wanted more than a place to store what they learned. They wanted the tool to teach, so it could help in general and not only hold their own notes.</p>
+        <p>Then there was the question of what a placement means. When someone says your Saturn is in Aries, the client wanted a visual that shows it. Many of them practise by the moon, so the moon phase had to be there. Their astrology is Hellenistic and modern. It covers the big planets, and it also covers points such as Black Moon Lilith and the North Node, and asteroids.</p>
+        <h3>What I built</h3>
+        <p>The observatory shows one moment three ways at once: a list of every planet, a bronze orrery of the solar system, and a chart wheel. Select something in one and the other two follow. Move the date and all three move together.</p>
+        <p>I kept the three views because each answers a different question. The list tells you where things are. The orrery shows why they appear there. The wheel shows what that means against your own chart. It has two rings: the inside is the birth chart and stays still, and the outside is the sky on the date you chose.</p>
+        <p>The client also wanted to see what the sky looks like from Earth when the planets sit in different places at different times. They wanted to see the planets as real bodies that move through the solar system, and to feel a connection between what they read and what they saw. For that I made the Constellation Dome, which is in preview.</p>
       </div>
-      <figure class="story-figure"><img src="/assets/stories/sanctum/observatory.webp" alt="The observatory: a list of planets with their birth and current positions, a bronze orrery in the middle and a chart wheel on the right" width="1320" height="620" loading="lazy" decoding="async"><figcaption>The observatory in the guest tour. The free-floating view became a grounded bronze instrument.</figcaption></figure>
+    </section>
+
+    <!-- Part 3: the Grimoire. -->
+    <section class="page-section" id="grimoire" aria-labelledby="grimoire-title">
+      <h2 id="grimoire-title">The Grimoire</h2>
       <div class="prose">
-        <div class="decision">
-          <span class="num" aria-hidden="true">03</span>
-          <div>
-            <h3>Ask for an audit early, then ship the answers small</h3>
-            <p>On the third day, at version 0.7, a friend who works as a front-end engineer audited it properly. The audit arrived alongside requests from the friends who use it, and I kept those two sources apart on purpose, because “this is confusing” and “I wish it could” need different responses.</p>
-            <p>The first fix followed almost at once: drafts that save themselves, so leaving a page no longer erased an unfinished entry. From there the app moved in small numbered versions, from 0.7 on 28 October to 0.36 on 9 November. Each release gets one plain-language line in the changelog and updates only the steps of the tour it touches.</p>
-          </div>
-        </div>
-        <div class="decision">
-          <span class="num" aria-hidden="true">04</span>
-          <div>
-            <h3>Turn pages into furniture</h3>
-            <p>The journal began as a list of entries. It’s now a book lying open on a desk: a timeline on the left page, the entry on the right, and tabs for each subject that travel from one side to the other as you turn through it.</p>
-            <p>One lesson from getting there: the book has to be painted straight on. A page that turns needs flat geometry, and the first, angled painting had to be redone.</p>
-          </div>
-        </div>
+        <h3>What they asked for</h3>
+        <p>The client called the Grimoire their main place for notes on the divinations they do. Most of them read tarot, so tarot came first.</p>
+        <h3>What I built</h3>
+        <p><strong>Decks and cards.</strong> You log your own decks and your own cards. The Grimoire gives you statistics on the cards you draw, so you can see whether certain ones keep coming up and spot synchronicities.</p>
+        <p><strong>Readings.</strong> Each reading has a time, a date, a description and the details of what was happening before you drew. You can customise a lot of it, so the log works as a visual record of every part of the reading. As you understand the cards better, you can reread an old reading and see what it was trying to tell you the first time.</p>
+        <p><strong>Dreams.</strong> The client wanted to see whether synchronicities show up between their dreams and their real life, so there is a dream journal.</p>
+        <p><strong>Heavens.</strong> This tab holds experiences that match a transit happening at the time. If Saturn opposes your midheaven, which can mean testing and responsibility, you have a place to log what happened to you during it and make sense of it.</p>
+        <p><strong>Journal and signs.</strong> The journal takes any thought or idea. The signs tab tracks angel numbers and when they appeared.</p>
+        <p><strong>Spell work.</strong> You record the spells you cast, what happened and the materials you used. It works as a digital grimoire that you can run data analysis on, and it stays easy to use.</p>
+        <p>The Grimoire itself began as a list of entries. It is now a book lying open on a desk: a timeline on the left page, the entry on the right, and tabs for each subject along the side. The book has to be painted straight on, because a page that turns needs flat geometry. The first, angled painting had to be redone.</p>
       </div>
       <figure class="story-figure"><img src="/assets/stories/sanctum/grimoire.webp" alt="The Grimoire as an open book on a desk, with a practice timeline of sample entries on the left page and subject tabs along the right edge" width="1320" height="580" loading="lazy" decoding="async"><figcaption>The Grimoire in the guest tour, with sample entries.</figcaption></figure>
     </section>
 
-    <!-- Part 3: before and after. -->
-    <section class="page-section" id="before-after" aria-labelledby="ba-title">
-      <p class="eyebrow">Before and after</p>
-      <h2 id="ba-title">The same feature, two and a half weeks apart</h2>
-      <div class="before-after">
-        <figure class=""><img src="/assets/stories/sanctum/astro-map.webp" alt="Astro-Map: a planet list, a plain solar-system view and a chart wheel on a flat dark page" width="1440" height="810" loading="lazy" decoding="async"><figcaption><strong>27 October.</strong> Everything is there, and nothing tells you where you are.</figcaption></figure>
-        <figure class=""><img src="/assets/stories/sanctum/observatory.webp" alt="The Sanctum’s observatory: the same planet list, solar-system model and chart wheel, now set in a bronze instrument inside a room" width="1320" height="620" loading="lazy" decoding="async"><figcaption><strong>Today.</strong> The same three views, now an instrument in a room you walked into.</figcaption></figure>
+    <!-- Part 4: the rooms that are asked for but not fully designed. Only what the client asked for is described here. -->
+    <section class="page-section" id="other-rooms" aria-labelledby="other-title">
+      <h2 id="other-title">The other rooms</h2>
+      <div class="prose">
+        <p>The client asked for four more rooms. I haven’t fully designed them yet, so here is what they asked for.</p>
+        <p><strong>Tradition.</strong> Practitioners reflect on the wheel of the year, the sacred calendar of different cultures. Each person follows a different lens. Some worship Hellenistic gods, some Norse, some Kemetic. They wanted to know the festivals of their own pantheon in ancient times, and a way to reflect on the wheel of the year.</p>
+        <p><strong>Temple.</strong> This room is for people who work with several gods. It holds their altars, when each was last cleaned, what sits on them and what it symbolizes, and the experiences and conversations they have had with each god.</p>
+        <p><strong>Workshop.</strong> This is where spells get prepared. It covers spell types, a planner that finds the best time to cast according to occult sources, and a shopping list for what you need to buy. Some practitioners wanted to make sigils, so it includes the history of sigils and a space to make them digitally, hang them up and try different versions.</p>
+        <p><strong>Archive.</strong> The client wanted somewhere to record what they already know and learn what they don’t yet: numerology, what each tarot card means, and the correspondences for each crystal, flower, herb, incense and color, with the intention behind each, linked to spells. Because some of them practise Hellenistic polytheism, it also holds Hellenistic astrology, and notes on how tarot cards relate to parts of the natal chart.</p>
       </div>
     </section>
 
-    <!-- Part 4: honest status and what's next. -->
-    <section class="page-section" id="next" aria-labelledby="next-title">
-      <p class="eyebrow">What’s next</p>
-      <h2 id="next-title">What’s built, and what isn’t yet</h2>
+    <!-- Part 5 (restored 2026-11-19 at NZ's request): the engineering audit and the version history. -->
+    <section class="page-section" id="audit" aria-labelledby="audit-title">
+      <h2 id="audit-title">The audit and the versions</h2>
+      <div class="prose">
+        <p>On the third day, at version 0.7, a friend who works as a front-end engineer audited the app properly. The audit arrived alongside requests from the people who use it. I kept those two sources apart on purpose, because “this is confusing” and “I wish it could” need different responses.</p>
+        <p>The first fix followed almost at once: drafts that save themselves, so leaving a page no longer erased an unfinished entry. From there the app moved in small numbered versions, from 0.7 on 28 October to 0.40 on 17 November. Each release gets one plain-language line in the changelog and updates only the steps of the tour it touches.</p>
+      </div>
+    </section>
+
+    <!-- Part 6: honest status. -->
+    <section class="page-section" id="status" aria-labelledby="status-title">
+      <h2 id="status-title">Where it stands</h2>
       <div class="built-planned">
         <div>
-          <span class="tag">Built</span>
-          <h3>In use by a few friends</h3>
+          <span class="tag">Designed</span>
+          <h3>In use by the client now</h3>
           <ul>
-            <li>All seven rooms, with accounts and syncing for invited members.</li>
-            <li>The bronze observatory, the Grimoire book and the temple.</li>
+            <li>The Celestial Realm: the observatory, with the Constellation Dome in preview.</li>
+            <li>The Grimoire, with decks, readings, dreams, heavens, journal, signs and spell work.</li>
             <li>A guest tour with a sample profile, where nothing is saved.</li>
           </ul>
           <p style="margin-top:14px"><a href="/sanctum/?guest=1">Look around as a guest</a>, or read <a href="/sanctum/about/">what’s inside</a>.</p>
         </div>
         <div>
-          <span class="tag tag-planned">Planned</span>
-          <h3>Designed, not built</h3>
+          <span class="tag tag-planned">Not yet</span>
+          <h3>Still to design and finish</h3>
           <ul>
-            <li>A constellation dome for the observatory.</li>
-            <li>A courtyard you pan across to reach each room, through doors that open.</li>
-            <li>Sound. The vision calls every action “an auditory and visual experience”, and so far only a few things make a sound.</li>
+            <li>The tradition, temple, workshop and archive rooms.</li>
+            <li>The finishing work on the Celestial Realm and the Grimoire, while I build the rest of the website.</li>
+            <li>A landing-page courtyard you pan across to reach each room, and sound. Both come later in development.</li>
           </ul>
         </div>
       </div>
       <div class="prose">
-        <p style="margin-top:22px">It’s a private tool for a small circle, so I don’t have usage numbers worth quoting. What I have is a list of things my friends asked for, and the versions in which each one arrived.</p>
-        <p>My part: product design and direction, and the build, with AI as a build partner. The paintings are AI-generated from my briefs, then cut and fitted into the interface.</p>
+        <p style="margin-top:22px">It’s a private tool for a small circle, so I don’t have usage numbers worth quoting. The paintings are AI-generated from my briefs, then cut and fitted into the interface.</p>
       </div>
     </section>
 
-    <!-- Ways onward: back to the project itself, then the other two stories. -->
-    <a class="next-card" href="/sanctum/about/"><span><span class="eyebrow">The project</span><strong>The Sanctum: take the guest tour</strong></span><span class="arrow" aria-hidden="true">→</span></a>
-    <a class="next-card" href="/stories/brazalete/" style="margin-top:18px"><span><span class="eyebrow">Design story</span><strong>How a conjugation chart became something you wear</strong></span><span class="arrow" aria-hidden="true">→</span></a>
-    <a class="next-card" href="/stories/hanyu-courtyard/" style="margin-top:18px"><span><span class="eyebrow">Design story</span><strong>How Hanyu Courtyard got its shape</strong></span><span class="arrow" aria-hidden="true">→</span></a>
-    
+    <!-- Ways onward. The small labels and arrows were removed at NZ's request. -->
+    <a class="next-card" href="/sanctum/about/"><span><strong>The Sanctum: take the guest tour</strong></span></a>
+    <a class="next-card" href="/stories/brazalete/" style="margin-top:18px"><span><strong>The Brazalete design story</strong></span></a>
+    <a class="next-card" href="/stories/the-scene/" style="margin-top:18px"><span><strong>The Scene design story</strong></span></a>
+    <a class="next-card" href="/stories/hanyu-courtyard/" style="margin-top:18px"><span><strong>How Hanyu Courtyard got its shape</strong></span></a>
+
   </main>
 
   <!-- Footer shared by every reading page. -->
-  <footer class="site-footer wrap"><a class="brand footer-brand" href="/">AEROLEX</a><p>© 2026 Noah Zepter-Martínez</p><nav aria-label="Footer navigation"><a href="/about/#contact">Get in touch</a><a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a><a href="#top" data-back-top>Back to top <span aria-hidden="true">↑</span></a></nav></footer>
+  <footer class="site-footer wrap"><a class="brand footer-brand" href="/">AEROLEX</a><p>© 2026 Noah Zepter-Martínez</p><nav aria-label="Footer navigation"><a href="/about/#contact">Get in touch</a><a href="/privacy/">Privacy</a><a href="#" data-action="cookie-settings">Cookie settings</a><a href="#top" data-back-top>Back to top</a></nav></footer>
 </body>
 </html>

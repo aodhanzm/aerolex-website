@@ -19,3 +19,6 @@
 .dial-choices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0 20px}.dial-choices button{min-height:48px;padding:13px 16px;white-space:normal}.dial-choices button[aria-pressed=true]{outline:2px solid #1783a8;outline-offset:1px}@media(max-width:420px){.dial-choices{grid-template-columns:1fr}}
 .gadget .ro.active .ro-name,.gadget .ro.active .ro-val{color:#144b79;text-shadow:none}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}[hidden]{display:none!important}
+
+/* Phones (2026-11-21): a header menu with three or more links wraps instead of pushing the page sideways (found on the new Scene pages). */
+@media(max-width:760px){.aero-bar nav{flex-wrap:wrap;row-gap:4px}.aero-bar nav a,.aero-bar nav button{padding:5px 12px}}

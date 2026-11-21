@@ -1,6 +1,7 @@
 // Checks the site's public pages in a real browser (Edge) at laptop and phone width, and saves a picture of each.
 // It looks for: sideways scrolling, pictures without a description, links that lead nowhere, script errors,
-// missing link-preview tags, and anything that points at The Scene from a public page.
+// missing link-preview tags, and the password-protected game address appearing in the sitemap. (Until 2026-11-21 it also flagged any public link to The Scene;
+// NZ then decided to publish The Scene's world page and design story, so only the private game path is guarded now.)
 //
 // Run from the website folder, with the local preview already running (default http://127.0.0.1:8766):
 //   node _tools/site-check.mjs                      -> checks every page in the list below
@@ -72,7 +73,7 @@ for (const page of pages) {
     if (facts.broken.length) problems.push(`${label}: pictures that did not load: ${facts.broken.join(', ')}`);
     if (facts.h1 !== 1) problems.push(`${label}: has ${facts.h1} main headings (wanted 1)`);
     if (errors.length) problems.push(`${label}: script errors: ${[...new Set(errors)].join(' | ').slice(0, 300)}`);
-    if (facts.scene && page !== '/resume/' && page !== '/about/') problems.push(`${label}: links to The Scene`);
+    // (Links to The Scene's public pages are allowed since 2026-11-21. The private game address is still guarded in the sitemap check below.)
     if (size.name === 'desktop') { // link and tag checks only need doing once per page
       for (const name of ['description', 'og:title', 'og:description', 'og:image', 'og:url', 'twitter:card']) if (!facts.meta[name]) problems.push(`${page}: missing ${name} tag`);
       if (facts.meta['og:image']) { const local = facts.meta['og:image'].replace('https://aerolex.dev', base); if (!(await exists(local))) problems.push(`${page}: preview image not found (${facts.meta['og:image']})`); }
@@ -105,9 +106,9 @@ for (const locked of ['/private/the-scene/', '/chinese/']) {
   else if (!state.box) problems.push(`${locked}: NOT LOCKED (no password box shown)`);
   await context.close();
 }
-// The Scene must not be offered to search engines.
+// The private game page must not be offered to search engines. (The Scene's public pages may be listed, since 2026-11-21.)
 const sitemap = await fetch(base + '/sitemap.xml').then(r => r.text()).catch(() => '');
-if (/the-scene|private/.test(sitemap.replace(/<!--[\s\S]*?-->/g, ''))) problems.push('sitemap.xml lists The Scene or a private page');
+if (/private/.test(sitemap.replace(/<!--[\s\S]*?-->/g, ''))) problems.push('sitemap.xml lists a private page');
 
 await browser.close();
 console.log(`Checked ${pages.length} page(s) at ${sizes.length} widths. Pictures: ${shots}`);
