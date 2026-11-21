@@ -1,0 +1,30 @@
+/* Shared look of "Play with the band" on the verb and pronoun pages (2026-11-20): the Explore / band switch, the quiz menu, the question card, the results card, and the compact band row.
+   The band's own pieces (instrument boxes, dots, ring) are styled in band.css. */
+/* The Explore / Play with the band switch. */
+.mode-switch{display:flex;gap:8px;justify-content:center}
+.mode-switch button{min-height:44px;padding:8px 22px;border:2px solid #fff;border-radius:999px;background:linear-gradient(#fff,#d3eef8);color:#154977;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 3px 8px #2d84a233}
+.mode-switch button[aria-pressed=true]{background:linear-gradient(#bff7ff,#35c3ee);color:#00436c;box-shadow:0 0 0 2px #6fd0ea,0 3px 8px #2d84a24d}
+/* The band row: settings, instruments, beat dots, combo ring, shouted word. */
+.band-row{display:grid;gap:10px;padding:12px;border:2px solid #fff;border-radius:22px;background:linear-gradient(150deg,#ffffffe0,#e2f6ffd0);box-shadow:inset 0 0 0 2px #c0e8f5}
+.band-meters{display:flex;gap:28px;align-items:center;justify-content:center;flex-wrap:wrap}
+/* Quiz menu, question and results cards. */
+.band-menu,.band-prompt,.band-results{width:100%;max-width:1000px;padding:18px;text-align:center}
+.band-menu h2,.band-results h2{margin:0 0 6px;font-size:26px;color:#103c7c}.band-menu p,.band-results p{color:#345b76}
+.bm-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0}
+.bm-card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid #fff;border-radius:18px;background:linear-gradient(white,#d9f2fc);color:#154977;font:inherit;text-align:left;box-shadow:inset 0 0 0 2px #c2e5f1;cursor:pointer}
+.bm-card strong{font-size:19px}.bm-card span{font-size:14px;line-height:1.4;color:#415f76}
+.bm-card:hover,.bm-card:focus-visible{box-shadow:inset 0 0 0 2px #6fd0ea,0 6px 14px #2d84a233}
+.bm-card.soon{opacity:.6;cursor:default;box-shadow:inset 0 0 0 2px #d6e5ec}.bm-card em{font-style:normal;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#608398}
+.bm-hints{display:inline-flex;align-items:center;gap:8px;min-height:44px}.bm-hints input{width:22px;height:22px;accent-color:#148eb6}
+.bp-progress{margin:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#4b7a9c}
+.band-prompt h2{margin:6px 0 10px;font-size:clamp(24px,4vw,36px);line-height:1.2;color:#103c7c}
+.bp-bank{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:10px}.bp-bank button{min-height:44px;padding:8px 18px;border:1px solid #99c7da;border-radius:15px;background:linear-gradient(white,#d9f2fc);color:#144e7d;font:inherit;font-weight:700;cursor:pointer}
+.bp-bank button[aria-pressed=true]{background:#b7e8f1;border-color:#1185ae}
+.bp-feedback{min-height:24px;margin:6px 0;font-weight:700}.bp-feedback.ok{color:#1d6a43}.bp-feedback.miss{color:#7a4a12}
+.bp-hint{padding:10px 14px;border-radius:12px;background:#e2f5fc;border-left:3px solid #22abd0;text-align:left;color:#345b76}
+.bp-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}.bp-actions button{min-height:44px;padding:8px 20px;border:1px solid #8fbcd3;border-radius:999px;background:linear-gradient(#fff,#d3eef8);color:#154977;font:inherit;font-weight:700;cursor:pointer}.bp-actions button:disabled{opacity:.5;cursor:default}
+
+/* Band row, compact version for the verb page (2026-11-20): smaller instrument boxes so the device is not pushed far down, and the beat dots sit beside the ring. */
+.band-row .band-instruments{grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:6px}
+.band-row .band-ibox{padding:4px 2px 3px}.band-row .band-ibox svg,.band-row .band-ibox img{width:38px;height:38px}.band-row .band-ibox .iname{font-size:9px;min-height:2.3em}
+.band-meters .band-ring{margin:0 0 22px}

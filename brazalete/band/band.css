@@ -1,0 +1,54 @@
+/* The Brazalete band's look (2026-11-20). Everything here is plain CSS around replaceable picture slots, so finished art from Codex can drop in without changing code.
+   Pieces: instrument boxes, beat dots, combo ring, the big shouted word, settings, and the volume panel. Colors match the site's pearl-and-blue-glass look. */
+
+/* ---- Instrument boxes: dim until the instrument joins, then full color. The border flashes yellow with the instrument's own sound (--glow is set by the script, 0 to 1). ---- */
+.band-instruments{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;margin:0 0 10px}
+.band-ibox{--glow:0;position:relative;display:block;padding:6px 3px 4px;text-align:center;cursor:pointer;font:inherit;color:#5b7f98;background:linear-gradient(#f4fcff,#d9eff8);border-radius:14px;
+  border:2px solid rgb(calc(150 + 94 * var(--glow)),calc(190 + 7 * var(--glow)),calc(210 - 144 * var(--glow)));box-shadow:0 0 calc(16px * var(--glow)) rgba(244,197,66,calc(.75 * var(--glow)))}
+.band-ibox svg,.band-ibox img{display:block;width:58px;height:58px;margin:0 auto 2px;object-fit:contain;opacity:.38;filter:grayscale(.85);transition:opacity .3s,filter .3s}
+.band-ibox .iname{display:block;font-size:10px;line-height:1.15;min-height:2.3em}
+.band-ibox.on{color:#143f72;background:linear-gradient(#fff,#e3f6fd)}
+.band-ibox.on svg,.band-ibox.on img{opacity:1;filter:none}
+.band-ibox.sel{outline:2px solid #1783a8;outline-offset:2px}
+.band-ibox .isolo{display:none;position:absolute;top:3px;right:4px;font-size:8px;background:#f4c542;color:#241a00;border-radius:999px;padding:0 5px}
+.band-ibox.solo .isolo{display:block}.band-ibox.solo svg,.band-ibox.solo img{opacity:1;filter:none}
+
+/* ---- The little panel under a box: volume and solo. ---- */
+.band-panel{max-width:260px;margin:-2px 0 10px;padding:10px 12px;border:2px solid #fff;border-radius:16px;background:linear-gradient(#f7ffff,#d2f0fa);box-shadow:inset 0 0 0 2px #b7deef,0 6px 16px #327f9b29;color:#143f72}
+.band-panel[hidden]{display:none}.band-panel .ptitle{font-weight:bold;margin-bottom:6px}
+.band-panel label{display:grid;gap:4px;font-size:12px}.band-panel input{width:100%;accent-color:#1783a8}
+.band-panel .pbtns{display:flex;gap:6px;margin-top:8px}.band-panel button{flex:1;min-height:36px;border:1px solid #8fbcd3;border-radius:999px;background:#eaf9ff;color:#174c77;font:inherit;font-size:12px;cursor:pointer}
+.band-panel .psolo[aria-pressed=true]{background:#f4c542;border-color:#f4c542;color:#241a00}
+
+/* ---- Beat dots: eight dots, lap one lights them one by one ("in the pocket"), later laps go soft with one calm dot circling. ---- */
+.band-timer{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.band-dots{display:flex;gap:7px}
+.band-dot{width:16px;height:16px;border-radius:50%;background:#b9dcf2;border:2px solid #fff;box-shadow:0 1px 3px #1a5f8a66}
+.band-dot.lit{background:#ffd24a;box-shadow:0 0 10px #ffd24a}
+.band-dot.now{background:#fff;box-shadow:0 0 0 3px #ffd24a,0 0 12px #ffd24a}
+.band-dot.soft{background:#cfe3f0;box-shadow:none}
+.band-lap{font-size:12px;color:#456a85;min-width:72px}
+
+/* ---- The combo ring (the "star ring"): a glowing ring around the streak number. More rays, faster spin and sparks as the streak grows. --rc is the level color. ---- */
+.band-ring{--rc:#9bb7c9;--spin:0s;--ray:0deg;position:relative;width:96px;height:96px;display:grid;place-items:center;margin:0 auto 22px}
+.band-ring .ring-rays{position:absolute;inset:0;border-radius:50%;background:repeating-conic-gradient(var(--rc) 0 var(--ray),transparent var(--ray) 30deg);-webkit-mask:radial-gradient(circle,transparent 46%,#000 48%,#000 70%,transparent 72%);mask:radial-gradient(circle,transparent 46%,#000 48%,#000 70%,transparent 72%);animation:ring-spin var(--spin) linear infinite;filter:drop-shadow(0 0 7px var(--rc))}
+.band-ring .ring-core{position:relative;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#fff,#e3f5ff 75%);border:3px solid var(--rc);box-shadow:0 0 16px var(--rc),inset 0 0 10px var(--rc);color:#123e78;font-size:24px}
+.band-ring .ring-name{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.12em;white-space:nowrap;color:var(--rc);text-shadow:0 0 4px #fff,0 0 2px #fff;font-weight:bold}
+.band-ring .ring-spark{position:absolute;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--rc);box-shadow:0 0 8px var(--rc);animation:ring-twinkle 1s ease-in-out infinite alternate}
+.band-ring.hit .ring-core{animation:ring-hit .35s ease-out}
+@keyframes ring-spin{to{transform:rotate(360deg)}}
+@keyframes ring-twinkle{from{opacity:.15;transform:scale(.6)}to{opacity:1;transform:scale(1.3)}}
+@keyframes ring-hit{0%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* ---- The big shouted word, popping up on the beat. ---- */
+.band-shout{min-height:58px;text-align:center;font-size:clamp(34px,7vw,56px);font-weight:900;letter-spacing:-.02em;color:#123e78;text-shadow:0 3px 0 #fff,0 0 18px #9fe3ff}
+.band-shout.pop{animation:shout-pop .45s ease-out}
+@keyframes shout-pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.18);opacity:1}100%{transform:scale(1)}}
+
+/* ---- Settings: version, speed, how often a new instrument joins, and the Music switch. ---- */
+.band-settings{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:center;font-size:13px;color:#143f72}
+.band-settings .bs-field{display:flex;align-items:center;gap:6px}.band-settings select{min-height:36px;border:1px solid #8fbcd3;border-radius:12px;background:#f0fbff;color:#143f72;padding:2px 8px;font:inherit}
+.band-settings .bs-check input{width:20px;height:20px;accent-color:#1783a8}
+
+@media(prefers-reduced-motion:reduce){.band-ring .ring-rays,.band-ring .ring-spark,.band-shout.pop,.band-ring.hit .ring-core{animation:none}}
+@media(max-width:640px){.band-instruments{grid-template-columns:repeat(auto-fill,minmax(70px,1fr))}.band-ibox svg,.band-ibox img{width:46px;height:46px}}

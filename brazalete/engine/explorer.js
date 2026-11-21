@@ -7,10 +7,11 @@
   try { prefs = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch { $('save-notice').textContent = 'This browser cannot restore saved settings. You can still use the tool.'; } // Continue when local saving is unavailable.
   const saved = { ...prefs }; // Snapshot restoration settings before the first device redraw saves defaults.
   let sound = prefs.sound === true; // A first visit is muted.
-  const library = [...Object.keys(VERBS).map(lemma => ({ kind: 'verb', lemma, en: VERBS[lemma].en })), ...Object.keys(ADJECTIVES).map(lemma => ({ kind: 'adj', lemma, en: ADJECTIVES[lemma].en }))]; // Search only the current supported words.
+  const library = Object.keys(VERBS).map(lemma => ({ kind: 'verb', lemma, en: VERBS[lemma].en })); /* Verbs only: adjectives moved to the agreement page (NZ, 2026-11-20). */ // Search only the current supported words.
   const strip = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); // Let searches find frío without requiring an accent.
   function save() { // Remember only safe explorer settings at this checkpoint.
     if (PublicTutorial.busy) return; // Never overwrite exploration preferences with a walkthrough example.
+    if ((window.BandPlay && BandPlay.active) || (window.PronounPlay && PronounPlay.active)) return; // Nor with a quiz question (2026-11-20).
     const value = { sound, variety: Gadget.variety, word: Gadget.word, verb: Gadget.word?.kind === 'verb' ? Gadget.dials : prefs.verb, adj: Gadget.word?.kind === 'adj' ? Gadget.dials : prefs.adj, neg: Gadget.negative, ending: Gadget.ending, role: Receiver.mode, person: Receiver.person, gender: Receiver.gender }; // Keep the selected word and device controls on this browser.
     prefs = value; // Retain the current preferences even when browser storage fails.
     try { localStorage.setItem(key, JSON.stringify(value)); } catch { $('save-notice').textContent = 'Your settings cannot be saved in this browser. The current session still works.'; } // Report the limit without interrupting practice.
@@ -39,6 +40,7 @@
     const focused = document.activeElement?.id, word = Gadget.word, dials = Gadget.dials; // Preserve the current keyboard location.
     $('loaded-word').textContent = `${word.lemma} · ${library.find(w => w.lemma === word.lemma).en}`; // Keep the collapsed phone picker informative.
     $('word-kind').textContent = word.kind === 'verb' ? 'Verbo' : 'Adjetivo'; // Identify the current device mode.
+    if ($('verb-name')) { $('verb-name').textContent = word.lemma; $('verb-gloss').textContent = library.find(w => w.lemma === word.lemma).en; } // Show the loaded verb on the big verb button (2026-11-20).
     // (The dropdown boxes under the device were removed at NZ's request, 2026-11-11: the device itself is the control.)
     $('device').querySelectorAll('[data-dial][data-stop]').forEach(el => { const disabled = !!optionsFor(+el.dataset.dial)[+el.dataset.stop]?.disabled; el.setAttribute('aria-disabled', String(disabled)); el.classList.toggle('locked', disabled); }); // Keep the physical drawing consistent with the available controls.
     $('device').querySelectorAll('.tense-label').forEach((el, i) => el.classList.toggle('locked', !availableTense(i))); // Keep inactive labels readable and gray.
@@ -81,9 +83,10 @@
   function confirm() { // Confirm exactly the form currently visible on the shared device.
     if (!PublicTutorial.allows('confirm')) return; // Require the current tutorial's explicit confirmation step.
     const piece = Gadget.eject(); // Let the maintained device validate availability and play its sound.
+    if (window.BandPlay && BandPlay.active) { BandPlay.answer(piece); return; } // In "Play with the band" the answer goes to the quiz, not to the Confirmed-form box (2026-11-20).
     if (piece) { $('confirmed').textContent = (piece.neg ? 'no ' : '') + piece.text; PublicTutorial.notify('confirm'); } // Teach confirmation through an intentional successful submission. // Add negation once to the complete phrase.
   } // Confirmation leaves all controls available for the next experiment.
-  function confirmPronoun() { if (!PublicTutorial.allows('rx-confirm')) return; $('pronoun-output').textContent = `${Receiver.form} · ${['direct object', 'indirect object', 'reflexive'][['vic', 'rec', 'ref'].indexOf(Receiver.mode)]}`; SFX.eject(); PublicTutorial.notify('rx-confirm'); } // Confirm both spelling and role without attaching another pronoun to a reflexive verb.
+  function confirmPronoun() { if (!PublicTutorial.allows('rx-confirm')) return; if (window.PronounPlay && PronounPlay.active) { PronounPlay.answer(); return; } /* In "Play with the band" the answer goes to the quiz (2026-11-20). */ $('pronoun-output').textContent = `${Receiver.form} · ${['direct object', 'indirect object', 'reflexive'][['vic', 'rec', 'ref'].indexOf(Receiver.mode)]}`; SFX.eject(); PublicTutorial.notify('rx-confirm'); } // Confirm both spelling and role without attaching another pronoun to a reflexive verb.
   function changeVariety(variety) { // Change informal singular address without loading the word again.
     Gadget.variety = variety; // Preserve mood, tense, person and polarity through the shared component.
     Receiver.configurePublic(variety); // Keep the pronoun te and update only its subject label.
@@ -108,14 +111,16 @@
   Receiver.reset(['vic', 'rec', 'ref'].includes(saved.role) ? saved.role : 'vic', Number.isInteger(saved.person) && saved.person >= 0 && saved.person < 6 ? saved.person : 0, saved.gender === 1 ? 1 : 0); // Ignore malformed saved pronoun controls.
   refreshPronouns(); // Populate the accessible disc controls after restoration.
   $('sound').textContent = sound ? 'Sound on' : 'Sound off'; $('sound').setAttribute('aria-pressed', String(sound)); // Show the actual sound preference.
-  const phone = matchMedia('(max-width: 740px)'); $('picker').open = !phone.matches; // Collapse the phone library without shrinking the device's controls.
-  phone.addEventListener('change', e => { $('picker').open = !e.matches; }); // Keep the picker appropriate when the layout changes size.
+  const phone = matchMedia('(max-width: 740px)'); $('picker').open = true; // The list lives in a pop-up now, so it is always open.
+   // Collapse the phone library without shrinking the device's controls.
+  /* (the phone collapse was removed: the list is in a pop-up) */ // Keep the picker appropriate when the layout changes size.
   $('search').addEventListener('input', renderLibrary); // Filter the list as visitors type.
+  $('verb-button')?.addEventListener('click', () => { if (!PublicTutorial.allows('load')) return; renderLibrary(); $('verb-dialog').showModal(); $('search').focus(); }); // The big verb button opens the word list (2026-11-20).
   document.addEventListener('pointerdown', unlock); document.addEventListener('keydown', unlock); // Respect browser audio gesture requirements.
   $('sound').addEventListener('click', () => { sound = !sound; SFX.setEnabled(sound); unlock(); $('sound').textContent = sound ? 'Sound on' : 'Sound off'; $('sound').setAttribute('aria-pressed', String(sound)); save(); }); // Let visitors opt into sound and remember that choice.
   document.addEventListener('click', event => { // Delegate stable page actions without replacing their event listeners on redraw.
     const result = event.target.closest('[data-lemma]'), type = event.target.closest('[data-filter]'), example = event.target.closest('[data-example]'), polarity = event.target.closest('[data-polarity]'); // Identify only this page's own actions.
-    if (result && PublicTutorial.allows('load')) { load(result.dataset.lemma); if (phone.matches) { $('picker').open = false; $('picker').querySelector('summary').focus(); } } // Return focus to the collapsed phone picker after a selection.
+    if (result && PublicTutorial.allows('load')) { load(result.dataset.lemma); $('verb-dialog')?.close(); } // Choosing a verb closes the pop-up (2026-11-20). // Return focus to the collapsed phone picker after a selection.
     if (type) { filter = type.dataset.filter; document.querySelectorAll('[data-filter]').forEach(b => b.setAttribute('aria-pressed', String(b === type))); renderLibrary(); } // Keep type filters and their pressed states aligned.
     if (polarity) Gadget.setNeg(polarity.dataset.polarity === '1'); // Reuse the physical SÍ / NO behaviour.
     if (example && PublicTutorial.allows('load')) { const lemma = example.dataset.example; load(lemma); if (Gadget.word.kind === 'verb') { Gadget.set(0, 0); Gadget.set(2, TENSE_HOME); Gadget.setNeg(false); } if (lemma === 'comer') { Gadget.set(1, 1); changeVariety('vos'); } if (lemma === 'nuevo') { Gadget.set(0, 1); Gadget.set(1, 1); } if (lemma === 'levantarse') Gadget.set(1, 3); } // Make each ready-to-try example show its promised form even after a visitor changes tense or polarity.
@@ -147,5 +152,5 @@
     restore(snapshot) { Gadget.restoreState(snapshot.gadget); Receiver.reset(snapshot.receiver.mode, snapshot.receiver.person, snapshot.receiver.gender); Receiver.configurePublic(snapshot.gadget.variety); prefs = snapshot.prefs; refresh(); refreshPronouns(); renderLibrary(); $('confirmed').textContent = snapshot.confirmed; $('pronoun-output').textContent = snapshot.pronounOutput; }, // Return without losing the visitor's work or confirming anything automatically.
     persist: save, // Save only after tutorial cleanup has restored genuine exploration state.
   }); // Quiz-specific pause and restore belongs to the later quiz checkpoint.
-if (!saved.word) { Gadget.clear(); $('loaded-word').textContent = 'Choose a verb'; $('picker').open = !phone.matches; renderLibrary(); $('form-help').textContent = 'Choose a word to bring the device to life.'; save(); } // Start a first visit with an accessible empty device, without saving the temporary default word.
+if (!saved.word) { Gadget.clear(); $('loaded-word').textContent = 'Choose a verb'; if ($('verb-name')) { $('verb-name').textContent = 'Choose a verb'; $('verb-gloss').textContent = ''; } $('picker').open = true; renderLibrary(); $('form-help').textContent = 'Choose a word to bring the device to life.'; save(); } // Start a first visit with an accessible empty device, without saving the temporary default word.
 })(); // Finish the local explorer with optional, independently replayable walkthroughs.

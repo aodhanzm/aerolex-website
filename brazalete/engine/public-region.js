@@ -12,4 +12,5 @@ const VOS_FORMS = { // Explicit Argentine/Uruguayan forms for the current suppor
   llamarse: { present: 'llamás', command: 'llamate' }, // Attach te to llamá and follow normal accent rules; the shared device supplies te for finite phrases.
   levantarse: { present: 'levantás', command: 'levantate' }, // Attach te to levantá without introducing an unnecessary accent.
   ver: { present: 'ves', command: 've' }, // RAE DLE ver uses these short forms for Vos too.
+  ir: { present: 'vas', command: 'andá' }, // Added 2026-11-20: Vos present is vas; the Vos command andá (from andar) is the usual Rioplatense form. DRAFT: NZ to confirm against the DLE.
 }; // Negative commands intentionally use the agreed present-subjunctive pattern; regional alternatives belong in help.

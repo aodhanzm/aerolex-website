@@ -29,3 +29,7 @@ Thumbs.db
 # Local-only working files
 .cache/
 .tmp/
+
+# Brazalete band music and voice files (2026-11-20): never commit these. They are large, and the repo is public. They are hosted separately; this folder is only a local test copy.
+brazalete/audio/
+.tmp/

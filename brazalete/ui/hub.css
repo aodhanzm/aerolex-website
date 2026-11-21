@@ -1,0 +1,41 @@
+/* Device chooser and pronoun page (2026-11-20). Loaded after release.css, so it reuses the same pearl-and-water look. */
+
+/* ---- The chooser: three equal glass cards in a row (agreement | verbs | pronouns). ---- */
+.hub{padding:34px 40px 30px;text-align:center}
+.hub h1{font-size:clamp(34px,4vw,50px);line-height:1.1;letter-spacing:-.04em;color:#103c7c;margin:0 0 12px}
+.hub .lead{font-size:19px;line-height:1.45;color:#34566e;max-width:520px;margin:0 auto 30px}
+.device-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:stretch}
+
+/* One card: a picture, a small status tag, the title, one sentence, and an Open button pinned to the bottom. */
+.device-card{display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 20px 20px;min-height:440px;text-align:center;text-decoration:none;color:#0b3b76;background:linear-gradient(150deg,#ffffffea,#e2f6ffdc);border:1px solid #fff;border-radius:28px;box-shadow:inset 0 0 0 2px #c0e8f5,0 6px 16px #4798bc2a;transition:transform .2s,box-shadow .2s}
+.device-card:hover,.device-card:focus-visible{transform:translateY(-4px);box-shadow:inset 0 0 0 2px #7fd3ec,0 14px 28px #2d84a24d}
+.device-card strong{font-size:23px;line-height:1.2;letter-spacing:-.02em}
+.card-copy{font-size:15px;line-height:1.5;color:#415f76;max-width:270px}
+.card-art{height:200px;width:100%;display:flex;align-items:center;justify-content:center}
+.card-art img{max-height:200px;max-width:100%;object-fit:contain;filter:drop-shadow(0 12px 9px #398caa33)}
+.card-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:#e8f4f9;border:1px solid #c1dce8;color:#4f7890}
+.card-go{margin-top:auto;padding:12px 28px;border-radius:999px;font-weight:900;font-size:17px;color:#10427d;border:1px solid #fff;background:linear-gradient(#fff,#cfeefb);box-shadow:inset 0 0 0 2px #b9e3f1}
+/* The middle (verbs) card is the main one: green "ready" tag and a blue-glass button. */
+.is-main{box-shadow:inset 0 0 0 3px #6fd0ea,0 8px 20px #2d84a238}
+.is-main .card-tag{background:#d6f6e4;border-color:#9fdcb8;color:#1d6a43}
+.is-main .card-go{color:#00436c;background:linear-gradient(#bff7ff,#35c3ee)}
+
+/* Card pictures drawn with CSS: the agreement phrase as three blue pills, and the pronoun disc, bigger than on the landing page. */
+.agree-art{gap:6px}
+.agree-art i{font-style:normal;font-weight:800;font-size:20px;color:#fff;padding:16px 13px;border-radius:22px;border:2px solid #fff;background:linear-gradient(#8cc8ff,#2c86ee);box-shadow:0 4px 8px #1a5f8a44;text-shadow:0 1px 2px #0005}
+.card-art .mini-disc{width:160px;height:160px;border-width:10px}
+.card-art .mini-disc:after{inset:42px}
+
+/* ---- Phones: one card per row, the verbs card first. ---- */
+@media(max-width:900px){.device-cards{grid-template-columns:1fr;gap:14px}.device-card{min-height:0;padding:18px 16px 16px}.is-main{order:-1}.card-art{height:130px}.card-art img{max-height:130px}.card-art .mini-disc{width:110px;height:110px;border-width:8px}.card-art .mini-disc:after{inset:28px}.agree-art i{font-size:16px;padding:12px 10px}.hub{padding:20px 14px 18px}.hub .lead{font-size:16px;margin-bottom:20px}.device-card strong{font-size:20px}}
+
+/* ---- The pronoun page: same engine as the verb page, but only the disc is shown. ---- */
+.pronoun-page .page{display:none}
+.pronoun-page .pronouns{display:block;max-width:760px;margin:14px auto 30px}
+.wip-note{display:inline-block;font-size:12px;border:1px solid #c1dce8;background:#e8f4f9;border-radius:999px;padding:5px 12px;color:#4f7890;margin:0 0 10px}
+
+/* Play with the band on the pronoun page (2026-11-20): the quiz explains nothing by itself, so the page's own explanation and the Confirmed-pronoun box are hidden while it runs. */
+.pronoun-page.band-mode #pronoun-help,.pronoun-page.band-mode .pronouns .confirmed{display:none}
+.pronoun-page .band-menu,.pronoun-page .band-prompt,.pronoun-page .band-results,.pronoun-page .band-row{max-width:none;margin:10px 0}
+.pronoun-page .gdot{display:inline-block;width:18px;height:18px;border-radius:50%;margin-left:10px;border:2px solid #fff;box-shadow:0 0 6px #0004;vertical-align:middle}
+.pronoun-page .pronouns{max-width:900px}

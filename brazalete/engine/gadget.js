@@ -815,7 +815,7 @@ const Gadget = (() => {
       // An adjective shows its @ form here too (encantad@): the ending is hers to dial, so the device
       // must not print the masculine as if it were already decided (the @ rule, 2026-09-23).
       ? `<span class="intake-word">${word.kind === 'adj' ? atForm(word.lemma) : word.lemma}</span><span class="intake-kind">${word.kind !== 'verb' ? 'adjetivo' : VERBS[word.lemma] && VERBS[word.lemma].reflexive ? 'verbo reflexivo' : 'verbo'}</span>`
-      : `<span class="intake-hint">drop a verb or adjective here</span>`;
+      : `<span class="intake-hint">drop a verb here</span>`;
     html += `</div>`;
 
     if (specs.length === 3) {
