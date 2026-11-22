@@ -1,0 +1,316 @@
+/* The verb page's one-screen stage (NZ, 2026-11-22). Loaded last on the verb page only, so it wins over the older layout rules.
+   Goal: everything visible and playable on one screen, no scrolling. Left: the band picture. Middle: the question line and the Brazalete, with the combo ring
+   glowing behind it and the beat lights in its frame. Right: settings (gear), the big combo number, the lap and the shouted word. On a phone it stacks into one column.
+   Decisions: vault specs "Brazalete Website Redesign, Combo Ring and Agreement Device — Decisions 2026-11-20", section 6. */
+
+/* ---------- The page frame: use the full height, no extra space ---------- */
+.verb-page{--head:82px}                                                          /* about how tall the top bar is, with its margin; used to size the device to the screen */
+.verb-page .page{max-width:1400px}                                               /* a wider frame so three columns fit beside each other */
+.verb-page .workspace{gap:8px}                                                   /* tighter gaps between the rows */
+.verb-page .verb-button{display:none}                                            /* the big verb button is replaced by the verb window on the device */
+
+/* ---------- The stage: one column in Explore, three columns with the band ---------- */
+.play-stage{width:100%;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:center;gap:16px}
+.stage-center{width:100%;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0}
+.verb-page.band-mode .play-stage{grid-template-columns:minmax(200px,290px) minmax(0,1fr) minmax(170px,230px)}   /* band picture | device | combo */
+/* While the quiz menu is showing, the stage waits underneath (the menu fits one screen on its own). */
+.verb-page.band-mode:has(#band-menu:not([hidden])) .play-stage{display:none}
+/* The results card replaces the device in the middle column, so the band stays on screen beside it. */
+.verb-page.band-mode:has(#band-results:not([hidden])) .device-wrap,.verb-page.band-mode:has(#band-results:not([hidden])) #band-prompt{display:none}
+
+/* ---------- The device: as big as the screen allows, and no card around it (so the ring can glow through) ---------- */
+.device-wrap{position:relative;width:100%;display:flex;justify-content:center}
+.verb-page .gadget-out{display:none}                                              /* the small screen + CONFIRM row under the device: the centre button does the same job (the hidden button still works for it and the keyboard) */
+.verb-page .device-wrap .instrument{position:relative;z-index:1;width:100%;max-width:100%;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none}
+.verb-page .device-wrap .gadget{padding:0;background:none;box-shadow:none;border:0}
+/* Device width from the screen height: the screen minus the top bar, the mode switch, the verb window and the dial readout (and the question line while playing).
+   The drawing is almost square (476 wide, 462 tall), so its width can be about the same as the height left over. */
+.verb-page .device-wrap .gadget .device{width:min(100%,calc((100dvh - var(--head) - 160px) * 1.03));max-width:none;margin:0 auto}
+.verb-page.band-mode .device-wrap .gadget .device{width:min(100%,calc((100dvh - var(--head) - 225px) * 1.03))}
+.verb-page .device-wrap .gadget .device{max-width:var(--fit-w,none)}              /* verb-stage.js narrows the device a little more if the page would still scroll */
+.verb-page .device-svg{overflow:visible}                                         /* lets the "rim" look of the beat lights sit just outside the drawing */
+.verb-page .device-readout{margin:2px 0 0}                                        /* the mood / tense / person words under the device, a little tighter */
+.verb-page .device-readout .ro{min-height:38px;padding:4px 10px}
+
+/* ---------- The verb window: a small screen at the top of the device, like a watch face ---------- */
+.verb-page .gadget-intake.verb-window{display:flex;position:relative;z-index:2;width:fit-content;min-width:210px;min-height:0;margin:0 auto 4px;padding:6px 20px;gap:10px;align-items:baseline;justify-content:center;
+  border-radius:999px;border:2px solid #fff;background:linear-gradient(#123a63,#1d5a8a);box-shadow:inset 0 2px 8px #0009,0 0 0 3px #b8e6f2,0 4px 12px #2d84a240}
+.verb-page .gadget-intake.verb-window .intake-word{color:#ffe9a8;font-size:22px;text-shadow:0 0 10px #ffd24a88}
+.verb-page .gadget-intake.verb-window .intake-kind{color:#9fd8ee;font-size:10px}
+.verb-page .gadget-intake.verb-window.can-change{cursor:pointer}
+.verb-page .gadget-intake.verb-window.can-change::after{content:'change ▾';font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#cdeefa}   /* says it can be tapped */
+.verb-page .gadget-intake.verb-window.can-change:hover,.verb-page .gadget-intake.verb-window.can-change:focus-visible{box-shadow:inset 0 2px 8px #0009,0 0 0 3px #6fd0ea,0 0 16px #6fd0ea}
+.verb-page .gadget-intake:not(.verb-window){visibility:hidden}                    /* the moment before the window is set up, so it never flashes in the old look */
+
+/* ---------- The combo ring, behind the device ---------- */
+body:not(.band-mode) #band-ring{display:none}
+.device-wrap #band-ring.band-ring{position:absolute;z-index:0;margin:0;pointer-events:none}   /* stage.js sets its size and position from the device */
+.device-wrap #band-ring .ring-core,.device-wrap #band-ring .ring-name{display:none}            /* the number now lives in the right column */
+/* The rays shine only in a band just outside the device's outer edge (the device covers the inside), so it looks like a halo the same size as the Brazalete. */
+.device-wrap #band-ring .ring-rays{-webkit-mask:radial-gradient(circle,transparent 84%,#000 86%,#000 97%,transparent 99%);mask:radial-gradient(circle,transparent 84%,#000 86%,#000 97%,transparent 99%)}
+.device-wrap #band-ring::before{content:'';position:absolute;inset:8%;border-radius:50%;box-shadow:0 0 34px 8px var(--rc);opacity:.55;transition:box-shadow .4s}   /* a soft glow in the level's colour, even before the rays appear */
+.device-wrap #band-ring.hit::before{animation:stage-ring-flash .45s ease-out}
+@keyframes stage-ring-flash{0%{opacity:1;transform:scale(1.04)}100%{opacity:.55;transform:scale(1)}}
+
+/* ---------- The polarity wheel (replaces the SÍ / NO switches, NZ 2026-11-22) ---------- */
+.polwheel{cursor:pointer}
+.polwheel .pol-hit{fill:transparent}
+.polwheel .pol-mount{stroke:#b9cfd8;stroke-width:6;stroke-linecap:round}
+.polwheel .pol-collar{fill:#dcebf1;stroke:#ffffff;stroke-width:2;filter:drop-shadow(0 2px 2px #0b2a3a66)}   /* pearl collar */
+.polwheel .pol-mark{font:800 9px 'Trebuchet MS',sans-serif;fill:#203844;text-anchor:middle;pointer-events:none}
+.polwheel .pol-seat{fill:#0a2a33}
+.polwheel .pol-face{transition:transform .25s ease}
+.polwheel .pol-disc{fill:#1fb07a;stroke:#9ff5c8;stroke-width:1.2;filter:drop-shadow(0 0 4px #5ee08a)}           /* emerald: affirmative */
+.polwheel .pol-line{stroke:#fff8e0;stroke-width:3.2;stroke-linecap:round}                                           /* the inlaid ivory line */
+.polwheel .pol-hub{fill:#fff8e0}
+.polwheel.neg .pol-face{transform:rotate(90deg)}                                                                   /* negative: a quarter-turn to the right, pointing at − */
+.polwheel.neg .pol-disc{fill:#e0405a;stroke:#ffb3c0;filter:drop-shadow(0 0 5px #ff5a6e)}                         /* ...and red */
+.polwheel.turned .pol-face{animation:pol-turn .3s ease-out}
+.polwheel.turned:not(.neg) .pol-face{animation-name:pol-turn-back}
+@keyframes pol-turn{from{transform:rotate(0)}to{transform:rotate(90deg)}}
+@keyframes pol-turn-back{from{transform:rotate(90deg)}to{transform:rotate(0)}}
+.polwheel:hover .pol-collar{fill:#eef7fb}
+.polwheel.dormant{opacity:.45;cursor:default}
+
+/* ---------- Gone from the device (NZ, 2026-11-22): the three mood / tense / person boxes under it and the PASADO / FUTURO labels ---------- */
+.verb-page .device-readout,.verb-page .axis-cap{display:none!important}
+
+/* ---------- The beat lights in the device's frame ---------- */
+body:not(.band-mode) .beat-lights{display:none}
+.beat-light{fill:#2b5a7e;stroke:#ffffff;stroke-width:1.2;transition:fill .08s}                 /* off: dark glass with a pearl edge */
+.beat-light.soft{fill:#a9cfe4}                                                                   /* later laps: the lights go pale... */
+.beat-light.lit{fill:#ffd24a;filter:drop-shadow(0 0 3px #ffd24a)}                                /* first lap: each beat lights one up (gold) */
+.beat-light.now{fill:#ffffff;stroke:#ffd24a;stroke-width:2;filter:drop-shadow(0 0 4px #ffd24a)}  /* ...and the current beat glows white */
+.beat-lights.look-hub .beat-light{stroke-width:.9}
+
+/* ---------- The question line ---------- */
+.verb-page .band-prompt{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:2px 14px;max-width:760px;padding:8px 16px;text-align:left}
+.verb-page .band-prompt[hidden]{display:none}
+.verb-page .band-prompt .bp-line{min-width:0}
+.verb-page .band-prompt h2{margin:0;font-size:clamp(20px,2.2vw,28px)}
+.verb-page .band-prompt .bp-actions{grid-column:2;grid-row:1;margin:0;flex-wrap:nowrap}   /* Hint and Finish sit to the right of the question, on the same line */
+.verb-page .band-prompt .bp-actions button{min-height:38px;padding:6px 14px}
+.verb-page .band-prompt .bp-bank,.verb-page .band-prompt .bp-feedback,.verb-page .band-prompt .bp-hint{grid-column:1/-1;margin:0}
+.verb-page .band-prompt .bp-bank{justify-content:flex-start}.verb-page .band-prompt .bp-bank button{min-height:36px;padding:4px 14px}
+.verb-page .band-prompt .bp-feedback{min-height:20px;font-size:14px}
+.verb-page .band-prompt .bp-hint{padding:6px 10px;font-size:14px}
+.verb-page .band-results{max-width:560px}
+
+/* ---------- The right column: settings, combo number, lap, shouted word ---------- */
+.stage-side{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;min-width:0}
+.stage-side[hidden]{display:none}
+.band-gear{position:relative;align-self:stretch}
+.band-gear>summary{list-style:none;display:flex;justify-content:center;align-items:center;gap:6px;min-height:40px;padding:6px 14px;border:2px solid #fff;border-radius:999px;background:linear-gradient(#fff,#d3eef8);color:#154977;font-weight:700;cursor:pointer;box-shadow:0 3px 8px #2d84a233}
+.band-gear>summary::-webkit-details-marker{display:none}
+.band-gear>summary::after{content:none!important}                                              /* the site's other drop-downs add a "+" here; the gear doesn't need one */
+.band-gear>summary::before{content:'⚙';font-size:18px;line-height:1}                          /* the gear */
+.band-gear[open]>summary{box-shadow:0 0 0 2px #6fd0ea,0 3px 8px #2d84a24d}
+.band-gear>div{position:absolute;z-index:20;top:calc(100% + 6px);right:0;width:240px;padding:12px;border:2px solid #fff;border-radius:18px;background:linear-gradient(#f7ffff,#d6f2fb);box-shadow:inset 0 0 0 2px #b7deef,0 10px 24px #2d84a24d}
+.band-gear .band-settings{flex-direction:column;align-items:stretch;gap:10px}
+.band-gear .band-settings .bs-field{justify-content:space-between}
+.band-combo{--rc:#9bb7c9;display:grid;justify-items:center;gap:2px}
+.band-combo .combo-label{font-size:12px;font-weight:800;letter-spacing:.22em;color:#4b7a9c}
+.band-combo .combo-num{font-size:clamp(64px,7vw,108px);line-height:.95;font-weight:900;color:#123e78;text-shadow:0 4px 0 #fff,0 0 22px var(--rc),0 0 6px var(--rc)}
+.band-combo .combo-name{font-size:13px;font-weight:800;letter-spacing:.14em;color:var(--rc);text-shadow:0 0 4px #fff,0 0 2px #fff,0 0 2px #fff}
+.band-combo.hit .combo-num{animation:ring-hit .35s ease-out}
+.stage-side .band-timer .band-dots{display:none}                                                 /* the dots are the lights inside the device now; only "lap 1 of 4" stays */
+.stage-side .band-lap{font-size:13px;min-width:0}
+.stage-side .band-shout{min-height:52px;font-size:clamp(26px,2.6vw,42px);white-space:nowrap}
+
+/* ---------- The band picture (placeholder stage until the finished picture arrives) ---------- */
+.stage-band{position:relative;width:100%}
+.stage-band[hidden]{display:none}
+.band-picture .bp-scene{position:relative;width:100%;aspect-ratio:3/4;max-height:calc(100dvh - var(--head) - 90px);margin:0 auto;border:2px solid #fff;border-radius:24px;overflow:hidden;
+  background:#9fe0f5;box-shadow:inset 0 0 0 2px #c0e8f5,0 8px 22px #2d84a233}
+.band-picture .bp-wall{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 105%,#ffffff 0 30%,transparent 31%),linear-gradient(#d9f6ff,#66cbe9 65%,#3fb1d8)}   /* sky-blue back wall with a pearl shell glow behind the band */
+.band-picture .bp-curtain{position:absolute;top:-4%;bottom:20%;width:13%;background:repeating-linear-gradient(90deg,#ffffffcc 0 5px,#c9effacc 5px 11px);box-shadow:0 0 12px #2d84a244}
+.band-picture .bp-curtain.l{left:-2%;border-radius:0 0 60% 0}.band-picture .bp-curtain.r{right:-2%;border-radius:0 0 0 60%}
+.band-picture .bp-floor{position:absolute;left:-15%;right:-15%;bottom:0;height:40%;border-radius:50% 50% 0 0/22% 22% 0 0;background:linear-gradient(#ffffff,#d3eef8 40%,#a9daea);box-shadow:inset 0 3px 0 #fff}   /* the pearl stage floor */
+.band-picture .bp-spot{position:absolute;inset:0;background:radial-gradient(ellipse 55% 40% at 50% 72%,#fff7c8aa,transparent 70%);opacity:0;transition:opacity .8s}
+.band-picture.playing .bp-spot{opacity:1}                                                         /* the stage light comes up when the music starts */
+.band-picture .bp-backdrop{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}     /* a finished backdrop picture, when one exists */
+/* Each member: stands at its spot, dim and grey until they join. */
+.band-picture .band-ibox.band-member{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1%);width:calc(var(--w) * 1%);aspect-ratio:1;transform:translate(-50%,-50%);
+  padding:0;border:0;border-radius:50%;background:none;box-shadow:none;cursor:pointer}
+.band-picture .band-member .bm-fig{display:block;width:100%;height:100%;transform-origin:50% 90%}
+.band-picture .band-member svg,.band-picture .band-member img{display:block;width:100%;height:100%;margin:0;opacity:.28;filter:grayscale(1) brightness(1.1);transition:opacity .4s,filter .4s;
+  scale:calc(1 + .14 * var(--glow))}                                                             /* swells a little with the instrument's own sound */
+.band-picture .band-member.on svg,.band-picture .band-member.on img,.band-picture .band-member.solo svg,.band-picture .band-member.solo img{opacity:1;filter:drop-shadow(0 2px 2px #0003) drop-shadow(0 0 calc(10px * var(--glow)) #ffd24a)}
+.band-picture .band-member .iname{display:none}                                                   /* the name shows on hover (the button's tooltip) */
+.band-picture .band-member.sel{outline:2px solid #1783a8;outline-offset:2px}
+.band-picture .band-member .isolo{top:-4px;right:-6px}
+/* Coming to life: four ways of moving to the beat, shared out round the band. They only move while the music plays. */
+.band-picture.playing .band-member.on .bm-fig{animation:bm-bob var(--beat) ease-in-out var(--beat-delay,0s) infinite}
+.band-picture.playing .band-member.on.move-1 .bm-fig{animation-name:bm-sway;animation-duration:calc(var(--beat) * 2)}
+.band-picture.playing .band-member.on.move-2 .bm-fig{animation-name:bm-hop}
+.band-picture.playing .band-member.on.move-3 .bm-fig{animation-name:bm-pump}
+@keyframes bm-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7%)}}
+@keyframes bm-sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes bm-hop{0%,60%,100%{transform:translateY(0) scaleY(1)}15%{transform:translateY(0) scaleY(.9)}35%{transform:translateY(-12%) scaleY(1.04)}}
+@keyframes bm-pump{0%,100%{transform:scale(1)}20%{transform:scale(1.1)}}
+/* Joining the band: a pop and a ring of light. */
+.band-picture .band-member.just{animation:bm-join .9s ease-out}
+.band-picture .band-member.just::before{content:'';position:absolute;inset:-20%;border-radius:50%;border:3px solid #ffd24a;animation:bm-join-ring .9s ease-out forwards;pointer-events:none}
+@keyframes bm-join{0%{scale:.4}45%{scale:1.45}100%{scale:1}}
+@keyframes bm-join-ring{0%{opacity:1;transform:scale(.5)}100%{opacity:0;transform:scale(1.6)}}
+/* The volume and solo panel opens over the bottom of the picture. */
+.stage-band .band-panel{position:absolute;z-index:15;left:50%;bottom:8px;transform:translateX(-50%);width:min(260px,92%);margin:0}
+
+/* ---------- Laptop screens that are short (768 px tall and under): a bit tighter ---------- */
+@media (max-height:800px) and (min-width:1024px){
+  .verb-page{--head:72px}
+  .verb-page .mode-switch button{min-height:38px;padding:5px 18px}
+  .stage-side{gap:8px}
+}
+
+/* ---------- Phones, tablets and narrow windows (under 1024 px wide): one column. Three columns squeezed the device into a sliver on a tablet. ---------- */
+@media (max-width:1023px){
+  .verb-page{--head:62px}
+  .verb-page.band-mode .play-stage{grid-template-columns:minmax(0,1fr);gap:6px}
+  /* The band picture becomes a thin strip of small members above the device. */
+  .verb-page.band-mode .stage-band{order:1}
+  .verb-page.band-mode .stage-side{order:2}
+  .verb-page.band-mode .stage-center{order:3}
+  .band-picture .bp-scene{aspect-ratio:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:1px 2px;padding:4px 6px;border-radius:16px}
+  .band-picture .bp-wall,.band-picture .bp-floor{inset:0;height:auto;border-radius:0}
+  .band-picture .bp-curtain,.band-picture .bp-spot{display:none}
+  .band-picture .band-ibox.band-member{position:relative;left:auto;top:auto;transform:none;width:20px;min-height:0;z-index:auto!important}   /* min-height 0: the site makes every button at least 44px tall, which doubled the strip */
+  .verb-page .mode-switch button{min-height:34px;padding:4px 16px;font-size:14px}                /* a slimmer Explore / band switch */
+  .verb-page .gadget-intake.verb-window{padding:3px 16px;margin-bottom:2px}                        /* a slimmer verb window */
+  .verb-page .gadget-intake.verb-window .intake-word{font-size:19px}
+  .verb-page .play-stage{overflow:clip}                                                            /* the ring's glow and sparkles may reach past the screen edges; never let them cause a scroll */
+  /* The right column becomes one row: settings, the combo number, the lap, the shouted word. */
+  .stage-side{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:4px 12px;width:100%}
+  .band-gear{align-self:center}.band-gear>summary{min-height:36px;padding:4px 10px;font-size:0}.band-gear>summary::before{font-size:20px}   /* just the gear icon */
+  .band-gear>div{left:0;right:auto}
+  .band-combo{grid-auto-flow:column;align-items:baseline;gap:6px}
+  .band-combo .combo-label{display:none}
+  .band-combo .combo-num{font-size:34px}
+  .band-combo .combo-name{font-size:10px}
+  .stage-side .band-shout{min-height:0;font-size:24px}
+  .verb-page.band-mode .device-readout{display:none}                                                /* the dial names are on the device itself; this saves a row on a small screen */
+  /* The question line on a phone: "Question 5 of 10" with Hint and Finish beside it, then the question across the full width (so it doesn't wrap into three lines). */
+  .verb-page .band-prompt{padding:6px 10px;gap:2px 8px}
+  .verb-page .band-prompt .bp-line{display:contents}
+  .verb-page .band-prompt .bp-progress{grid-column:1;grid-row:1;align-self:center}
+  .verb-page .band-prompt h2{grid-column:1/-1;grid-row:2;font-size:19px}
+  .verb-page .band-prompt .bp-actions{gap:6px}
+  .verb-page .band-prompt .bp-actions button{min-height:32px;padding:2px 10px;font-size:13px}
+  .verb-page .band-prompt .bp-feedback{min-height:18px;font-size:13px}
+  .verb-page .device-wrap .gadget .device{width:min(100%,calc((100dvh - 210px) * 1.03))}            /* full width, unless the phone is short: then sized to fit the height */
+  .verb-page.band-mode .device-wrap .gadget .device{width:min(100%,calc((100dvh - 384px) * 1.03))}
+  /* The quiz menu: two small cards per row, so it fits a phone screen too. */
+  .verb-page .band-menu{padding:12px}.verb-page .band-menu h2{font-size:21px}.verb-page .band-menu p{margin:4px 0;font-size:14px}
+  .verb-page .bm-cards{grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .verb-page .bm-card{padding:10px;gap:3px}.verb-page .bm-card strong{font-size:15px}.verb-page .bm-card span{font-size:12px;line-height:1.3}
+  .verb-page .bm-card.soon span{display:none}                                                      /* "coming soon" cards show just their name */
+}
+/* ---------- Tablets (761 to 1023 px wide): the same single column, with bigger pieces than on a phone ---------- */
+@media (min-width:761px) and (max-width:1023px){
+  .verb-page{--head:84px}
+  .verb-page .mode-switch button{min-height:42px;padding:6px 20px;font-size:16px}
+  .band-picture .band-ibox.band-member{width:34px}
+  .band-picture .bp-scene{gap:2px 4px;padding:6px 10px}
+  .band-gear>summary{font-size:15px}
+  .band-combo .combo-label{display:block;align-self:center}
+  .band-combo .combo-num{font-size:48px}.band-combo .combo-name{font-size:12px}
+  .stage-side .band-shout{font-size:32px}
+  .verb-page .band-prompt h2{font-size:24px}
+  .verb-page .bm-cards{grid-template-columns:repeat(3,1fr)}
+  .verb-page .bm-card.soon span{display:block}
+}
+@media (max-width:760px) and (max-height:720px){
+  .verb-page .band-menu>p:not([id]){display:none}                                                  /* short phones: drop the menu's one-line introduction so every card fits */
+  body.club-on.verb-page.band-mode .stage-band{height:64px}                                       /* a slimmer window onto the club's stage */
+  .verb-page .band-prompt .bp-progress{display:none}                                               /* "Question 7 of 10" goes; Hint and Finish sit beside the question instead */
+  .verb-page .band-prompt h2{grid-row:1;grid-column:1;align-self:center}
+}
+/* ---------- Club Night (2026-11-22): the club is the background, so the layout changes ---------- */
+/* Laptop: the combo-and-settings card on the left, the device in the middle, the right column left empty so the club's stage and musicians show through. */
+@media (min-width:1024px){
+  .club-on.verb-page.band-mode .play-stage{grid-template-columns:minmax(200px,1fr) minmax(0,2.4fr) minmax(200px,1fr)}
+  .club-on.verb-page.band-mode .stage-band{display:none}                                    /* the band picture column: the band is on the club's stage now */
+  .club-on.verb-page.band-mode .stage-side{order:-1}                                        /* combo card on the left, opposite the stage */
+}
+.club-on .stage-side{padding:14px 16px;border:2px solid #ffffffcc;border-radius:24px;background:linear-gradient(150deg,#ffffffe6,#dff4ffd9);box-shadow:0 10px 30px #00000055;backdrop-filter:blur(8px)}
+.club-on.verb-page .band-menu,.club-on.verb-page .band-results,.club-on.verb-page .band-prompt{background:linear-gradient(150deg,#ffffffeb,#e2f6ffe0);box-shadow:0 12px 34px #00000066}   /* solid glass over the dark club, so the words stay crisp */
+.club-on .device-readout .ro{background:#ffffffe0}
+/* Phone and tablet: the band strip becomes an empty window where the club's stage shows (club.js lines the stage up with it). */
+@media (max-width:1023px){
+  .club-on.verb-page.band-mode .stage-band{height:clamp(84px,15vh,170px)}
+  .club-on.verb-page.band-mode .stage-band #band-instruments{display:none}
+  .club-on .stage-side{padding:4px 10px;border-radius:16px;flex-wrap:nowrap;gap:4px 10px}            /* one line, always: a long shouted word shrinks instead of wrapping */
+  .club-on .stage-side .band-shout{min-width:0;overflow:hidden;text-overflow:clip;font-size:clamp(16px,5.4vw,24px)}
+  .club-on .stage-side .band-lap{white-space:nowrap;font-size:11px}
+}
+
+/* ---------- NZ's round of changes, 22 November 2026 ---------- */
+/* The verb slot: only the verb, big and centred; no "verbo", no "change" caption. Empty until a verb is loaded, glowing gently when it wants a tap. */
+.verb-page .gadget-intake.verb-window{min-width:220px;min-height:52px;justify-content:center;align-items:center;padding:6px 24px}
+.verb-page .gadget-intake.verb-window .intake-kind,.verb-page .gadget-intake.verb-window.can-change::after{display:none;content:none}
+.verb-page .gadget-intake.verb-window .intake-word{font-size:30px;line-height:1.1;letter-spacing:.02em}
+.verb-page .gadget-intake.verb-window.empty.can-change{animation:slot-call 1.6s ease-in-out infinite}
+@keyframes slot-call{50%{box-shadow:inset 0 2px 8px #0009,0 0 0 3px #ffd24a,0 0 22px #ffd24a}}
+
+/* The device before a verb is loaded: solid but dimmed (it was 38% see-through, which looked like a ghost over the club). */
+.club-on .device-off{opacity:1;filter:saturate(.35) brightness(.72)}
+
+/* Settings in the top bar (the gear), with a small Finish button inside. Opening it pauses the game. */
+.tool-head .band-gear{position:relative;align-self:center}
+.tool-head .band-gear[hidden]{display:none}
+.tool-head .band-gear>summary{min-height:40px;padding:6px 14px;border:1px solid #fff;font-size:14px}
+.tool-head .band-gear>div{top:calc(100% + 10px);right:0;width:260px;z-index:40}
+.band-mode .tool-head a.primary[href*="quiz"]{display:none}                                      /* "Practice" (the old quiz page) makes room for Settings while the band is on */
+.gear-paused{margin:0 0 10px;padding:4px 10px;border-radius:999px;background:#ffd24a;color:#3a2a00;font-weight:800;text-align:center;letter-spacing:.06em}
+.gear-finish{display:block;margin:12px auto 0;min-height:32px;padding:4px 14px;border:1px solid #c98a8a;border-radius:999px;background:#fff1f1;color:#7a2a2a;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.gear-finish[hidden]{display:none}
+.game-paused #band-ring,.game-paused #band-ring *,.game-paused .band-combo *{animation-play-state:paused!important}
+
+/* The progress bar right under the top bar, instead of "Question X of Y". */
+.band-progress{width:min(100%,900px);height:10px;margin:0 auto;border-radius:999px;background:#ffffff40;box-shadow:inset 0 1px 3px #0005,0 0 0 1px #ffffff70;overflow:hidden}
+.band-progress[hidden]{display:none}
+.band-progress i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#5fe7ff,#7dffb4,#ffd24a);box-shadow:0 0 10px #7dffb4;transition:width .6s ease}
+
+/* During a quiz the Explore / Play buttons disappear (Explore comes back on the end screen, on the results card). */
+.quiz-on .mode-switch,.quiz-end .mode-switch{display:none}
+
+/* The question: big, centred, in a narrow card; the hint is a small round "?" in its corner. */
+.verb-page .band-prompt{display:block;position:relative;width:fit-content;min-width:min(360px,100%);max-width:min(640px,100%);margin:0 auto;padding:10px 52px 8px;text-align:center}
+.verb-page .band-prompt[hidden]{display:none}
+.verb-page .band-prompt h2{margin:0;font-size:clamp(26px,2.8vw,40px);line-height:1.15}
+.verb-page .band-prompt .bp-hint-btn{position:absolute;top:8px;right:8px;width:34px;height:34px;min-height:0;padding:0;border:1px solid #8fbcd3;border-radius:50%;background:linear-gradient(#fff,#d3eef8);color:#154977;font:800 17px/1 'Trebuchet MS',sans-serif;cursor:pointer}
+.verb-page .band-prompt .bp-hint-btn[hidden]{display:none}
+.verb-page .band-prompt .bp-feedback{margin:4px 0 0;min-height:20px;font-size:14px;text-align:center}
+.verb-page .band-prompt .bp-hint{margin:6px 0 0;text-align:left;font-size:14px}
+
+/* The four-verb square: beside the device on a laptop, over the stage window on a phone. Never over the device. */
+.verb-pick{position:fixed;z-index:30;width:250px;padding:10px 12px 12px;border:2px solid #fff;border-radius:20px;background:linear-gradient(150deg,#ffffffef,#dff4ffe8);box-shadow:0 14px 34px #00000066;backdrop-filter:blur(8px)}
+.verb-pick[hidden]{display:none}
+.verb-pick p{margin:0 0 8px;text-align:center;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#4b7a9c}
+.vp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vp-grid button{min-height:58px;border:2px solid #fff;border-radius:16px;background:linear-gradient(#123a63,#1d5a8a);color:#ffe9a8;font:800 21px/1.1 'Trebuchet MS',sans-serif;box-shadow:inset 0 2px 6px #0008,0 0 0 2px #b8e6f2;cursor:pointer}
+.vp-grid button:hover,.vp-grid button:focus-visible{box-shadow:inset 0 2px 6px #0008,0 0 0 3px #ffd24a,0 0 14px #ffd24a}
+.vp-grid button[aria-pressed=true]{box-shadow:inset 0 2px 6px #0008,0 0 0 3px #7dffb4}
+.verb-pick.vp-phone{display:flex;flex-direction:column;padding:8px 10px}
+.verb-pick.vp-phone p{margin-bottom:4px;font-size:11px}
+.verb-pick.vp-phone .vp-grid{flex:1}
+.verb-pick.vp-phone .vp-grid button{min-height:0;font-size:19px}
+
+/* Phones: a bigger Brazalete (the Explore / Play buttons, the dial boxes and the gear are gone from the column, so there is more room). */
+@media (max-width:1023px){
+  .verb-page.band-mode .device-wrap .gadget .device{width:min(100%,calc((100dvh - 330px) * 1.03))}
+  body.club-on.verb-page.band-mode .stage-band{height:clamp(70px,12vh,140px)}
+  .verb-page .band-prompt{padding:6px 44px 6px;min-width:0}
+  .verb-page .band-prompt h2{font-size:clamp(21px,6vw,28px)}
+  .verb-page .band-prompt .bp-hint-btn{top:6px;right:6px;width:30px;height:30px;font-size:15px}
+  .tool-head .band-gear>summary{font-size:0;padding:4px 10px}.tool-head .band-gear>summary::before{font-size:20px}   /* just the gear icon */
+  .tool-head .band-gear>div{position:fixed;top:72px;right:10px;left:auto}
+}
+@media (max-width:760px) and (max-height:720px){
+  body.club-on.verb-page.band-mode .stage-band{height:56px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .verb-page .gadget-intake.verb-window.empty.can-change{animation:none}
+  .band-picture .band-member .bm-fig,.band-picture .band-member.just,.band-picture .band-member.just::before,.device-wrap #band-ring::before,.band-combo.hit .combo-num{animation:none!important}
+}

@@ -80,3 +80,28 @@ Boxes are shown dim (grayscale) until the instrument joins the band, then in ful
 - **Chooser card pictures:** one picture per device card on `/brazalete/use/`.
 
 Do not put music or voice files here. They live on separate hosting (see `brazalete/band/config.js`).
+
+## The band picture (verb page, 22 November 2026)
+
+On the verb page the instrument boxes are replaced by **one picture of the whole band** (NZ's choice). Each member is dim until they join, then appears in colour and moves to the beat. Until finished art exists, a placeholder stage is drawn with the instrument drawings standing on it. The pronoun and agreement pages still show the boxes.
+
+To put in a finished band picture (one per version, salsa and reggaeton):
+
+1. Make a **backdrop** (the stage and scenery, no players), portrait, about 600 by 800 pixels, WebP.
+2. Make **one picture per member** (player with instrument), transparent background, square, about 256 by 256, WebP. Each member must look good both dim and in colour.
+3. Save them in `brazalete/art/band/`.
+4. Fill in `brazalete/art/band/manifest.json`, for example:
+
+```json
+{
+  "salsa": {
+    "backdrop": "salsa-stage.webp",
+    "members": {
+      "base":  { "file": "salsa-base-player.webp",  "x": 50, "y": 80, "w": 20, "z": 10 },
+      "conga": { "file": "salsa-conga-player.webp", "x": 30, "y": 78, "w": 18, "z": 9 }
+    }
+  }
+}
+```
+
+`x` and `y` are where the member's centre stands, in percent of the picture's width and height; `w` is the member's width in percent of the picture's width; `z` decides who is drawn in front (bigger = in front). Use the member names from the slot lists above (the part after the slash). A member without an entry keeps its placeholder drawing and spot, so pictures can arrive one at a time. The motion (bobbing, swaying, hopping, pumping to the beat, and the pop when someone joins) is added by the page, so the pictures should be still.

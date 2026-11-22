@@ -126,7 +126,12 @@
   const gateFor = (l, i) => S.solo ? (l.id === S.solo ? 1 : 0) : (i < S.size ? 1 : 0);
   function setLayers() {
     if (S.ac) Object.values(S.bands).forEach(b => { if (b.ready && b.gate) b.m.layers.forEach((l, i) => b.gate[l.id].gain.setTargetAtTime(gateFor(l, i), S.ac.currentTime, 0.05)); });
-    document.querySelectorAll('.band-ibox').forEach((c, i) => { const l = S.layers[i]; c.classList.toggle('on', S.solo ? l && l.id === S.solo : i < S.size); c.classList.toggle('solo', !!S.solo && l && l.id === S.solo); });
+    document.querySelectorAll('.band-ibox').forEach((c, i) => {
+      const l = S.layers[i], on = S.solo ? !!l && l.id === S.solo : i < S.size;
+      if (on && !c.classList.contains('on') && S.sched === 'stems') { c.classList.add('just'); setTimeout(() => c.classList.remove('just'), 1100); }   // a member who has just joined does a little entrance (band picture)
+      if (!on && c.classList.contains('on') && S.sched === 'stems') { c.classList.add('leaving'); setTimeout(() => c.classList.remove('leaving'), 1400); }   // ...and one who drops out steps back into the shadow (club night)
+      c.classList.toggle('on', on); c.classList.toggle('solo', !!S.solo && l && l.id === S.solo);
+    });
     syncPanel(); emit('size', { size: S.size, total: S.layers.length, solo: S.solo });
   }
   function applyLevels() { if (!S.ac) return; Object.entries(S.bands).forEach(([k, b]) => { if (b.ready && b.trim) b.m.layers.forEach(l => b.trim[l.id].gain.setTargetAtTime(level(l.id, k), S.ac.currentTime, 0.02)); }); applyMaster(); }
@@ -142,6 +147,7 @@
     loadShouts(); startPulse(); return true;
   }
   function stopMusic() {
+    if (S.paused) resume();                                                                  // leaving while paused: unfreeze the clock first
     cancelQuestion(); S.outroTimers.forEach(clearTimeout); S.outroTimers = [];
     const b = S.cur && S.bands[S.cur];
     if (b && b.ready) { [...(b.outSrcs || []), ...(b.loopSrcs || [])].forEach(s => { try { s.stop(); } catch { /* already stopped */ } }); b.outSrcs = []; b.loopSrcs = []; }
@@ -267,10 +273,14 @@
     if (!startMusic()) return false;
     cancelQuestion(); S.size = 1; S.streak = 0; S.best = 0; S.asked = 0; S.right = 0; S.pocket = 0; S.times = []; S.roundOn = true; S.ending = false; S.solo = null;
     setLayers(); paintRing(); emit('round', { started: true });
-    setTimeout(() => { if (S.roundOn && onReady) onReady(); }, S.BEAT * 4 * 1000);      // one bar of drums to set the tempo
+    const go = () => { if (S.paused) { setTimeout(go, 200); return; } if (S.roundOn && onReady) onReady(); };   // (waits while the game is paused)
+    setTimeout(go, S.BEAT * 4 * 1000);                                                     // one bar of drums to set the tempo
     return true;
   }
-  const outroTime = b => { const barSec = 4 * S.BEAT, bars = Math.round(S.loopSec / barSec), starts = b.m.outro.start_bars; let m = Math.ceil((S.ac.currentTime + 0.35 - S.t0) / barSec); for (let i = 0; i <= bars; i++, m++) { if (starts.includes(((m % bars) + bars) % bars)) break; } return S.t0 + m * barSec; };   // the next bar line where the chord is Am, so the ending flows out of the groove
+  /* Pause (NZ, 2026-11-22: opening Settings freezes the game, music and everything). Suspending the audio clock stops the music AND the beat timer,
+     because the timer reads that same clock; resuming carries on exactly where it stopped, still in time. */
+  function pause() { if (!S.ac || S.paused) return; S.paused = true; S.ac.suspend(); emit('pause', { paused: true }); }
+  function resume() { if (!S.paused) return; S.paused = false; if (S.ac) S.ac.resume(); emit('pause', { paused: false }); }
   function stopOutro() {
     S.outroTimers.forEach(clearTimeout); S.outroTimers = [];
     const b = S.cur && S.bands[S.cur];
@@ -278,7 +288,12 @@
     if (S.sched === 'outro' || S.sched === 'stems') S.sched = null;
     S.ending = false;
   }
-  /* The ending: four bars of build, one big final hit, a ring-out. It plays only the instruments the player earned (opts.preview plays them all). */
+  /* The ending, shortened on 2026-11-22 (NZ: "it should end in the next 2-4 seconds"). The recorded ending is four bars of build, a big hit on beat 16, then about
+     four seconds of ring-out. Now it jumps straight into the LAST bar of that build (one bar of crescendo), lands the hit, holds it a moment and fades out fast.
+     It starts on the next beat instead of waiting for a particular bar line, so the whole finish takes about 3 to 4 seconds. Only the earned instruments play (opts.preview plays them all). */
+  const END_BUILD_BEATS = 4;                                                                 // how much of the recorded build is kept: one bar (4 beats) before the hit
+  const END_HOLD_SEC = 0.3, END_FADE_SEC = 0.7;                                              // after the hit: let it ring this long, then fade to silence over this long
+  const nextBeatTime = () => S.t0 + Math.ceil((S.ac.currentTime + 0.08 - S.t0) / S.BEAT) * S.BEAT;   // the next beat of the groove, so the ending still starts in time
   async function finishRound(opts = {}) {
     if (S.ending) return;
     S.ending = true; cancelQuestion();
@@ -288,10 +303,20 @@
     emit('ending', { stage: 'loading' });
     await loadOutro(S.cur);
     if (!S.ending || S.sched !== 'stems') return;                                           // the player started again while the ending was loading
-    const T = outroTime(b), hit = T + 16 * S.BEAT, endAt = T + b.m.outro.seconds + b.m.outro.tail;
-    b.loopSrcs.forEach(s => { try { s.stop(T); } catch { /* already stopped */ } });          // the groove stops at the bar line...
+    const T = nextBeatTime();                                                                // the ending starts on the next beat (no more waiting for a bar line)
+    const skip = (16 - END_BUILD_BEATS) * S.BEAT;                                            // where in the recording to start: one bar before its big hit on beat 16
+    const hit = T + END_BUILD_BEATS * S.BEAT;                                                // when the big hit lands
+    const fadeFrom = hit + END_HOLD_SEC, endAt = fadeFrom + END_FADE_SEC;                    // the short ring-out, then silence
+    b.loopSrcs.forEach(s => { try { s.stop(T); } catch { /* already stopped */ } });          // the groove stops on that beat...
     const open = opts.preview ? b.m.layers : b.m.layers.slice(0, S.size), openIds = new Set(open.map(l => l.id));
-    b.outSrcs = b.m.layers.filter(l => b.outs[l.id] && openIds.has(l.id)).map(l => { const s = S.ac.createBufferSource(); s.buffer = b.outs[l.id]; s.connect(b.trim[l.id]); s.start(T); return s; });   // ...and the ending starts into each earned layer's volume
+    b.outSrcs = b.m.layers.filter(l => b.outs[l.id] && openIds.has(l.id)).map(l => {        // ...and the ending starts into each earned layer's volume
+      const s = S.ac.createBufferSource(); s.buffer = b.outs[l.id];
+      const env = S.ac.createGain();                                                         // a volume envelope per layer, so the ring-out can be faded instead of playing for 4 more seconds
+      env.gain.setValueAtTime(1, T); env.gain.setValueAtTime(1, fadeFrom); env.gain.linearRampToValueAtTime(0, endAt);
+      s.connect(env); env.connect(b.trim[l.id]);
+      s.start(T, skip); s.stop(endAt + 0.05);                                                // start partway into the recording; stop once it has faded out
+      return s;
+    });
     S.sched = 'outro';
     const ms = t => Math.max(0, (t - S.ac.currentTime) * 1000);
     emit('ending', { stage: 'wait', seconds: ms(T) / 1000 });
@@ -312,11 +337,18 @@
     host.append(dots, el('div', 'band-lap', ''));
     S.ui.timer = host; paintDots(0);
   }
+  /* The look of each of the 8 dots for a given moment: 'lit', 'now', 'soft' or '' (off). Shared by the dot row and by the lights built into the device (2026-11-22). */
+  function dotStates(beats, finished) {
+    const b = Math.floor(beats), lap = Math.floor(beats / 8);
+    return Array.from({ length: 8 }, (_, i) => finished ? 'lit' : lap === 0 ? (i < b ? 'lit' : i === b ? 'now' : '') : (i === (b % 8) ? 'now' : 'soft'));
+  }
   function paintDots(beats, finished) {
+    const states = dotStates(beats, finished), lap = Math.floor(beats / 8), total = S.q ? Math.round(S.q.beats / 8) : 4;
+    const lapText = finished ? '' : (S.q ? 'lap ' + Math.min(total, lap + 1) + ' of ' + total : '');
+    emit('beat', { states, lapText, finished: !!finished });                                // a page can draw the dots anywhere it likes (the verb page puts them inside the device)
     const host = S.ui.timer; if (!host) return;
-    const dots = host.querySelectorAll('.band-dot'), b = Math.floor(beats), lap = Math.floor(beats / 8), total = S.q ? Math.round(S.q.beats / 8) : 4;
-    dots.forEach((d, i) => { let c = 'band-dot'; if (finished) c += ' lit'; else if (lap === 0) { if (i < b) c += ' lit'; else if (i === b) c += ' now'; } else c += i === (b % 8) ? ' now' : ' soft'; d.className = c; });
-    host.querySelector('.band-lap').textContent = finished ? '' : (S.q ? 'lap ' + Math.min(total, lap + 1) + ' of ' + total : '');
+    host.querySelectorAll('.band-dot').forEach((d, i) => { d.className = 'band-dot' + (states[i] ? ' ' + states[i] : ''); });
+    host.querySelector('.band-lap').textContent = lapText;
   }
   /* The combo ring (the "star ring" look NZ chose): a glowing ring around the streak, with rays and sparks that grow with the streak. */
   function mountRing(host) { host.classList.add('band-ring'); host.innerHTML = '<div class="ring-rays"></div><div class="ring-core"><b>0</b></div><div class="ring-name">NO STREAK</div>'; S.ui.ring = host; paintRing(); }
@@ -328,7 +360,14 @@
     host.querySelectorAll('.ring-spark').forEach(s => s.remove());
     for (let i = 0; i < lvl[2]; i++) { const a = i / lvl[2] * Math.PI * 2, sp = el('span', 'ring-spark'); sp.style.left = (50 + 52 * Math.cos(a)) + '%'; sp.style.top = (50 + 52 * Math.sin(a)) + '%'; sp.style.animationDelay = (i * .13) + 's'; host.append(sp); }
     host.classList.remove('hit'); void host.offsetWidth; if (n) host.classList.add('hit');
+    const combo = S.ui.combo;                                                                // the separate combo number (verb page, 2026-11-22), in the same colour as the ring
+    if (combo) {
+      combo.style.setProperty('--rc', lvl[1]); combo.querySelector('.combo-num').textContent = n; combo.querySelector('.combo-name').textContent = lvl[0];
+      combo.classList.remove('hit'); void combo.offsetWidth; if (n) combo.classList.add('hit'); // restart the little "pop" each time the streak changes
+    }
   }
+  /* The combo number on its own, away from the ring (NZ, 2026-11-22: the ring glows behind the device, the number sits to the right). */
+  function mountCombo(host) { host.classList.add('band-combo'); host.innerHTML = '<span class="combo-label">COMBO</span><b class="combo-num">0</b><span class="combo-name">NO STREAK</span>'; S.ui.combo = host; paintRing(); }
   /* The big shouted word. */
   function mountShout(host) { host.classList.add('band-shout'); S.ui.shout = host; }
 
@@ -340,10 +379,47 @@
     if (file) return '<img alt="" src="' + cfg().art + file + '">';                          // a finished picture from the art slot
     return window.BandArt ? window.BandArt.svg(S.cur, layerId) : '';                        // otherwise the placeholder drawing
   }
-  function mountInstruments(host) { host.classList.add('band-instruments'); S.ui.grid = host; drawInstruments(); }
+  /* opts.stage = true draws "the band picture" instead of a grid of boxes (NZ, 2026-11-22): the whole band on one stage, every member dim until they join,
+     then in colour and moving to the beat. The members are the same buttons as the boxes, so volume, solo and the flash-with-the-sound all still work. */
+  /* More options (club night, 2026-11-22): opts.scenery = false draws only the musicians (the club draws its own scenery); opts.spots(n) gives each member's spot;
+     opts.memberArt(band, id) can return a finished musician picture (or null for the placeholder drawing). */
+  function mountInstruments(host, opts = {}) { S.ui.stage = !!opts.stage; S.ui.stageOpts = opts; host.classList.add(S.ui.stage ? 'band-picture' : 'band-instruments'); S.ui.grid = host; drawInstruments(); }
+
+  /* Finished band pictures are a replaceable slot too: art/band/manifest.json can give, per version, a backdrop picture and a picture plus a position for each member
+     (see /brazalete/art/README.md). Without it, the placeholder stage below is used: plain CSS scenery with the instrument drawings standing on it. */
+  let bandArt = null;
+  const bandArtBase = () => cfg().art.replace(/instruments\/?$/, 'band/');                  // art/band/ sits next to art/instruments/
+  async function readBandArt() { if (bandArt) return bandArt; try { const r = await fetch(bandArtBase() + 'manifest.json'); bandArt = r.ok ? await r.json() : {}; } catch { bandArt = {}; } return bandArt; }
+  /* Where each member stands on the placeholder stage, in percent of the picture. The first instruments to join stand front and centre, so a small band already looks
+     like a band; later ones fill the rows behind, smaller and higher up, as if further back on the stage. */
+  function stageSpots(n) {
+    const rows = [4, 5, 5, 5, 6], spots = [];                                                // members per row, front row first (4+5+5+5+6 = 25)
+    rows.forEach((count, r) => {
+      const order = Array.from({ length: count }, (_, i) => i).sort((a, b) => Math.abs(a - (count - 1) / 2) - Math.abs(b - (count - 1) / 2));   // centre spots first, then outwards
+      order.forEach(i => spots.push({ x: 8 + (i + 0.5) * (84 / count) + (r % 2 ? 2 : -2), y: 86 - r * 15.5, w: 21 - r * 2, z: 10 - r }));          // x across, y up the stage, w = size, z = who is drawn in front
+    });
+    while (spots.length < n) spots.push({ x: 50, y: 20, w: 10, z: 1 });                     // more than 25 members: extras stand at the back (no version has this yet)
+    return spots;
+  }
   async function drawInstruments() {
-    const host = S.ui.grid; if (!host) return; await readArtManifest(); host.innerHTML = ''; closePanel();
-    S.layers.forEach(l => { const b = el('button', 'band-ibox', artHtml(l.id) + '<span class="iname"></span><span class="isolo">solo</span>'); b.type = 'button'; b.dataset.id = l.id; b.title = l.name + ': click for volume and solo'; b.querySelector('.iname').textContent = l.name; b.addEventListener('click', () => openPanel(l.id, b)); host.append(b); });
+    const host = S.ui.grid; if (!host) return; await readArtManifest(); if (S.ui.stage) await readBandArt(); host.innerHTML = ''; closePanel();
+    host.style.setProperty('--beat', S.BEAT + 's');                                          // the members move once per beat of this version's tempo
+    const so = S.ui.stageOpts || {};                                                         // the page's stage options (the club passes its own spots and pictures)
+    const art = S.ui.stage && bandArt && bandArt[S.cur] ? bandArt[S.cur] : null, spots = so.spots ? so.spots(S.layers.length) : stageSpots(S.layers.length);
+    let into = host;
+    if (S.ui.stage && so.scenery !== false) {                                                // the scenery behind the band (not when the club draws its own)
+      const scene = el('div', 'bp-scene' + (art && art.backdrop ? ' has-art' : ''));
+      scene.innerHTML = art && art.backdrop ? '<img class="bp-backdrop" alt="" src="' + bandArtBase() + art.backdrop + '">' : '<div class="bp-wall"></div><div class="bp-curtain l"></div><div class="bp-curtain r"></div><div class="bp-floor"></div><div class="bp-spot"></div>';
+      host.append(scene); into = scene;
+    }
+    S.layers.forEach((l, i) => {
+      const m = art && art.members && art.members[l.id], own = so.memberArt ? so.memberArt(S.cur, l.id, i) : null;
+      const pic = own || (m && m.file ? '<img alt="" src="' + bandArtBase() + m.file + '">' : artHtml(l.id));   // the club's musician picture, else the band-picture slot, else the instrument drawing
+      const b = el('button', 'band-ibox' + (S.ui.stage ? ' band-member move-' + (i % 4) : ''), (S.ui.stage ? '<span class="bm-fig">' + pic + '</span>' : pic) + '<span class="iname"></span><span class="isolo">solo</span>');
+      b.type = 'button'; b.dataset.id = l.id; b.title = l.name + ': click for volume and solo'; b.querySelector('.iname').textContent = l.name; b.addEventListener('click', () => openPanel(l.id, b));
+      if (S.ui.stage) { const p = m && m.x !== undefined ? { x: m.x, y: m.y, w: m.w || 16, z: m.z || 5 } : spots[i]; b.style.cssText = '--x:' + p.x + ';--y:' + p.y + ';--w:' + p.w + ';z-index:' + p.z; }   // where this member stands
+      into.append(b);
+    });
     if (!host.parentNode.querySelector('.band-panel')) { const p = el('div', 'band-panel', '<div class="ptitle"></div><label>Volume <span class="pval"></span><input type="range" min="0" max="200" step="1" class="pvol"></label><div class="pbtns"><button type="button" class="psolo">Solo</button><button type="button" class="pclose">Close</button></div>'); p.hidden = true; host.after(p); p.querySelector('.pvol').addEventListener('input', e => { if (!S.panelId) return; S.mix[mk(S.panelId)] = e.target.value / 100; applyLevels(); saveMix(); syncPanel(); }); p.querySelector('.psolo').addEventListener('click', () => { if (S.panelId) toggleSolo(S.panelId); }); p.querySelector('.pclose').addEventListener('click', closePanel); }
     setLayers();
   }
@@ -359,9 +435,11 @@
   /* The yellow border: each frame, every box reads the loudness of its instrument; a note makes the border flash, then it fades. */
   const pulseRef = {}, pulseBuf = new Float32Array(512);
   function startPulse() {
+    if (S.ui.grid && S.ac) { S.ui.grid.style.setProperty('--beat-delay', Math.max(0, S.t0 - S.ac.currentTime).toFixed(3) + 's'); S.ui.grid.classList.add('playing'); }   // the band picture starts moving on the first beat
     if (S.pulseId) return;
     S.pulseId = setInterval(() => { // A plain timer (about 30 times a second), so it also runs in background tabs.
       const b = S.cur ? S.bands[S.cur] : null; if (!b || !b.ready || !b.an) return;
+      if (S.sched === 'stems') { const n = Math.floor((S.ac.currentTime - S.t0) / S.BEAT); if (n >= 0 && n !== S.lastTick) { S.lastTick = n; emit('tick', { n, beat: S.BEAT, downbeat: n % 4 === 0 }); } }   // one signal per beat of the music (the club pulses with it, 2026-11-22)
       document.querySelectorAll('.band-ibox').forEach(box => {
         const id = box.dataset.id, an = b.an[id]; if (!an) return;
         an.getFloatTimeDomainData(pulseBuf); let s = 0; for (let i = 0; i < pulseBuf.length; i++) s += pulseBuf[i] * pulseBuf[i];
@@ -371,7 +449,7 @@
       });
     }, 33);
   }
-  function stopPulse() { clearInterval(S.pulseId); S.pulseId = 0; document.querySelectorAll('.band-ibox').forEach(b => { b.dataset.g = 0; b.style.setProperty('--glow', '0'); }); }
+  function stopPulse() { clearInterval(S.pulseId); S.pulseId = 0; if (S.ui.grid) S.ui.grid.classList.remove('playing');document.querySelectorAll('.band-ibox').forEach(b => { b.dataset.g = 0; b.style.setProperty('--glow', '0'); }); }
 
   /* Settings the player can change: the version, the speed, and how many right answers bring in a new instrument. */
   function mountSettings(host) {
@@ -389,11 +467,11 @@
 
   /* ---------- What a page can use ---------- */
   window.Band = {
-    unlock, load, listBands, startMusic, stopMusic, startRound, finishRound, beginQuestion, resolve, cancelQuestion, switchBand, shout,
-    mountTimer, mountRing, mountInstruments, mountShout, mountSettings,
+    unlock, load, listBands, startMusic, stopMusic, startRound, finishRound, beginQuestion, resolve, cancelQuestion, switchBand, shout, pause, resume,
+    mountTimer, mountRing, mountCombo, mountInstruments, mountShout, mountSettings,
     setPace: p => { if (PACE_BEATS[p]) { S.pace = p; emit('settings', {}); } }, setComboStep: n => { if ([1, 3, 5].includes(n)) { S.comboStep = n; emit('settings', {}); } },
     on: (name, fn) => { (S.listeners[name] = S.listeners[name] || []).push(fn); },
-    get state() { return { streak: S.streak, best: S.best, asked: S.asked, right: S.right, pocket: S.pocket, size: S.size, total: S.layers.length, band: S.cur, playing: S.sched, roundOn: S.roundOn, pace: S.pace, comboStep: S.comboStep, beat: S.BEAT, audio: S.ac ? S.ac.state : 'none' }; },
+    get state() { return { streak: S.streak, best: S.best, asked: S.asked, right: S.right, pocket: S.pocket, size: S.size, total: S.layers.length, band: S.cur, playing: S.sched, roundOn: S.roundOn, paused: !!S.paused, pace: S.pace, comboStep: S.comboStep, beat: S.BEAT, audio: S.ac ? S.ac.state : 'none' }; },
     PACE_BEATS
   };
 })();

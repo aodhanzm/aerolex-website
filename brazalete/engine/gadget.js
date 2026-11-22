@@ -703,18 +703,26 @@ const Gadget = (() => {
     // Two stalks rising off the rim with a round switch on each tip. Fixed
     // hardware: they do not turn with the mood ring. The lit one is the
     // polarity the word will come out in; SÍ is lit whenever a word loads.
-    s += `<g data-part="polarity" class="antennae${focusCls('polarity')}">`;
-    ANTENNAE.forEach(an => {
-      const on = !off && (an.neg ? state.neg : !state.neg);
-      const [bx, by] = pc(R_MOOD_OUT - 2, an.a), [tx, ty] = pc(ANT_TIP - ANT_R, an.a), [kx, ky] = pc(ANT_TIP, an.a);
-      const hit = off ? '' : ` data-neg="${an.neg ? 1 : 0}" role="button" aria-label="${an.neg ? 'negative' : 'affirmative'}"`;
-      s += `<line x1="${f2(bx)}" y1="${f2(by)}" x2="${f2(tx)}" y2="${f2(ty)}" class="ant-stalk${on ? ' on' : ''}" style="--ant:${an.colour}"/>`;
-      s += `<g class="ant${on ? ' on' : ''}" style="--ant:${an.colour}"${hit}>`;
-      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="${ANT_R + 5}" class="ant-hit"/>`;
-      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="${ANT_R}" class="ant-knob"/>`;
-      s += `<text x="${f2(kx)}" y="${f2(ky + 3.5)}" class="ant-label">${an.label}</text></g>`;
-    });
-    s += `</g>`;
+    // Website (2026-11-22, NZ): the two antennae are replaced by the POLARITY WHEEL from the Brazalete visual-upgrade sessions: one round dial on the
+    // upper-right rim, in a fixed collar etched with + (top) and − (right). Its emerald face carries an ivory line from the centre; tapping it turns the
+    // face a quarter-turn to the right and shifts it to red for negative. It still drives the same negation (state.neg) as the antennae did.
+    {
+      const [kx, ky] = pc(POL_AT.r, POL_AT.a), [bx, by] = pc(R_MOOD_OUT - 2, POL_AT.a), [mx, my] = pc(POL_AT.r - POL_COLLAR, POL_AT.a);   // the wheel's centre, and where its mount meets the rim
+      const neg = !off && state.neg, turned = !off && state.polWas !== undefined && state.polWas !== state.neg;   // turned = it just changed, so it animates this once
+      state.polWas = off ? state.polWas : state.neg;
+      const hit = off ? '' : ` data-neg="${state.neg ? 0 : 1}" role="button" aria-pressed="${state.neg}" aria-label="Negative wheel: ${state.neg ? 'negative (no). Tap for affirmative' : 'affirmative (sí). Tap for negative'}"`;
+      s += `<g data-part="polarity" class="polwheel${neg ? ' neg' : ''}${turned ? ' turned' : ''}${off ? ' dormant' : ''}${focusCls('polarity')}"${hit}>`;
+      s += `<line x1="${f2(bx)}" y1="${f2(by)}" x2="${f2(mx)}" y2="${f2(my)}" class="pol-mount"/>`;                     // the short arm joining the collar to the rim
+      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="${POL_COLLAR + 6}" class="pol-hit"/>`;                                  // a generous tap area
+      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="${POL_COLLAR}" class="pol-collar"/>`;                                   // the fixed collar
+      s += `<text x="${f2(kx)}" y="${f2(ky - POL_COLLAR + 7.5)}" class="pol-mark">+</text>`;                                 // the + etched at the top
+      s += `<text x="${f2(kx + POL_COLLAR - 5)}" y="${f2(ky + 3)}" class="pol-mark">−</text>`;                               // the − etched on the right
+      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="${POL_FACE + 1.5}" class="pol-seat"/>`;                                 // the dark seat the face turns in
+      s += `<g class="pol-face" style="transform-origin:${f2(kx)}px ${f2(ky)}px">`;                                         // the turning face
+      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="${POL_FACE}" class="pol-disc"/>`;
+      s += `<line x1="${f2(kx)}" y1="${f2(ky)}" x2="${f2(kx)}" y2="${f2(ky - POL_FACE + 3)}" class="pol-line"/>`;             // the inlaid line, from the centre outwards
+      s += `<circle cx="${f2(kx)}" cy="${f2(ky)}" r="2.6" class="pol-hub"/></g></g>`;
+    }
 
     if (state.publicForms) s += `<line x1="0" y1="${CY}" x2="${CX - R_MOOD_OUT + 3}" y2="${CY}" class="variety-stalk"/>`; // Mount the regional switch on the rim at the singular-you row.
     s += `</svg>`;
@@ -723,6 +731,8 @@ const Gadget = (() => {
   // Where the antennae stand: angles off 12 o'clock (clockwise), how far out
   // the knob sits, and its radius. SÍ nearer the top, NO below it.
   const ANT_TIP = 222, ANT_R = 13;
+  // The polarity wheel (website, 2026-11-22): 45° off 12 o'clock, just outside the mood ring; collar and face radii in drawing units.
+  const POL_AT = { a: 45, r: R_MOOD_OUT + 30 }, POL_COLLAR = 24, POL_FACE = 16;
   const ANTENNAE = [
     { a: 36, neg: false, label: 'SÍ', colour: '#5ee08a' },
     { a: 57, neg: true,  label: 'NO', colour: '#ff5a6e' },
